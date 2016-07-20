@@ -1,0 +1,37 @@
+[FaceID-SDK V1.0.0]
+时间:2015.7.1
+1.第一次正式发布
+
+[FaceID-SDK V1.0.1]
+时间:2015.7.2
+1.修正了THFeature.dll的一个潜在的error(当SDK调用程序和SDK和THFeature.dll不在同一个目录下可能会出现初始化失败）
+2.更新文件：THFeature.dll
+
+[FaceID-SDK V1.1.0]
+时间:2015.10.26
+1.提升了人证比对的识别率
+2.更新文件：THFeature.dll，去除了THFacialPos.dll
+3.SDK接口定义没有任何更新，但调用方式进行了更新，可参考“SDK1.1.x调用方式更新.txt"或SDK示例工程
+
+[FaceID-SDK V1.2.0]
+时间:2015.10.28
+1.更新了加密狗模式，使用独立的加密狗授权.
+2.更新文件:THFaceImage.dll,THFeature.dll
+
+[FaceID-SDK V2.0.0]
+时间:2016.3.18
+1.更新了算法引擎,提升了识别率
+2.更新文件:THFeature.dll，feadb.db3a代替feadb.db1
+
+[FaceID-SDK V2.1.0]
+时间:2016.4.19
+1.更新了算法引擎:大幅度增加了训练样本，提升了识别率
+2.解决了比对分数对称性问题。
+3.解决了多进程加载可能失败的问题
+4.FaceVerify.exe进行了更新：完善了身份证信息，记录验证失败的日志，支持自动搜索身份证读头(支持USB及串口读头）
+5.更新文件:THFeature.dll，FaceVerify工程
+
+[FaceID-SDK V2.2.0]
+时间:2016.7.10
+1.增加了对YT加密狗的支持,WIBU和YT会同时支持
+2.更新文件:THFaceImage.dll,THFeature.dll

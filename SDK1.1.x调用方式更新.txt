@@ -1,0 +1,26 @@
+SDK V1.1.x后续版本SDK调用更新：
+
+1.SDK接口定义没有变化
+
+2.调用方式
+
+A.在调用THFI_DetectFace接口时，需先为THFI_FacePos结构的dwReserved初始化一段512字节的内存，该内存用于存放提取特征的内部数据，如：
+
+	THFI_FacePos ptfp[10];
+	int k;
+	for(k=0;k<10;k++)
+	{
+		ptfp[k].dwReserved=(DWORD)new BYTE[512];
+	}
+
+注意需要为每个可能返回的人脸数据都分配对应的一段内存;另外THFI_FacePos使用完成后，应用程序需释放分配的内存。
+如：
+	for(k=0;k<10;k++)
+	{
+		delete [](BYTE*)ptfp[k].dwReserved;
+	}
+
+B.在调用EF_Extract接口时，直接传递THFI_FacePos指针,如：
+int ret=EF_Extract(0,pBGRBuf,nWidth,nHeight,3,(DWORD)&ptfp[0],pFeature);
+
+3.详细使用请参考SDK的示例工程
