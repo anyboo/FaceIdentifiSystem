@@ -1,0 +1,3 @@
+[submodule "duilib"]
+	path = duilib
+	url = https://github.com/duilib/duilib.git
