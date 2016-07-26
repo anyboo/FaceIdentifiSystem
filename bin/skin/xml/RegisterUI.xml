@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window size="1024,768" caption="0,0,0,0" roundcorner="4,4" showdirty="false">
+	<Font shared="true" id="1" name="微软雅黑" size="18" bold="false" />
+	<VerticalLayout bkimage="file='skin/bsbj.png'" height="765" inset="3,3,3,3" bordersize="3" bordercolor="0x12345678">
+		<HorizontalLayout width="1024" height="50" bkimage="file='skin/beijing.png'">
+			<Button name="close_btn" width="30" height="30" padding="10,10,0,0" tooltip="返回" foreimage="file='skin/xz.png' dest='6,2,20,29'" hotimage="file='skin/hsbj.png'"/>
+			<Label text="注册信息" font="1" padding="400,0,0,0" textcolor="#FFFFFFFF" align="center" />
+		</HorizontalLayout>
+		<HorizontalLayout height="600" bordersize="3" bordercolor="0x88888888" inset="3,3,3,3">
+			<VerticalLayout width="410" height="500" padding="80,40,0,0" inset="3,3,3,3" bordersize="3" bordercolor="0x88888888">
+				<Label text="请在此处输入您的信息：" font="1" width="410" height="40" align="center" padding="0,0,0,0" bkimage="file='skin/hsbj.png'"/>
+				<HorizontalLayout>
+					<VerticalLayout width="100">
+						<Label text="姓名：" font="1" width="90" height="40" align="left" padding="10,20,0,0"/>
+						<Label text="性别：" font="1" width="90" height="40" align="left" padding="10,10,0,0"/>
+						<Label text="出生年月：" font="1" width="90" height="40" align="left" padding="10,10,0,0"/>
+						<Label text="家庭住址：" font="1" width="90" height="40" align="left" padding="10,10,0,0"/>
+						<Label text="电话号码：" font="1" width="90" height="40" align="left" padding="10,10,0,0"/>
+						<Label text="证件编号：" font="1" width="90" height="40" align="left" padding="10,10,0,0"/>
+					</VerticalLayout>
+					<VerticalLayout width="310">
+						<Edit name="Edit_Name" width="290" height="40" font="1" bordersize="1" bordercolor="0x12345678" padding="0,20,0,0" />
+						<Edit name="Edit_Sex" width="290" height="40" font="1" bordersize="1" bordercolor="0x12345678" padding="0,10,0,0" />
+						<Edit name="Edit_Birth" width="290" height="40" font="1" bordersize="1" bordercolor="0x12345678" padding="0,10,0,0" />
+						<Edit name="Edit_Address" width="290" height="40" font="1" bordersize="1" bordercolor="0x12345678" padding="0,10,0,0" />
+						<Edit name="Edit_Phone" width="290" height="40" font="1" bordersize="1" bordercolor="0x12345678" padding="0,10,0,0" />
+						<Edit name="Edit_IDnumber" width="290" height="40" font="1" bordersize="1" bordercolor="0x12345678" padding="0,10,0,0" />
+					</VerticalLayout>
+				</HorizontalLayout>
+			</VerticalLayout>
+			<VerticalLayout width="400" height="500" padding="50,40,0,0" >
+				<VerticalLayout width="400" height="420" bordersize="2" bordercolor="0x88888888" >
+				</VerticalLayout>
+				<Button name="photo" width="160" height="60" padding="120,18,0,0" text="拍照" font="1" bordersize="2" bordercolor="0x88888888"/>
+			</VerticalLayout>
+		</HorizontalLayout>
+		<Button name="btn_ok" width="160" height="60" font="1" text="确认" padding="420,30,0,0" bkimage="file='skin/hsbj.png'" bordersize="2" bordercolor="0x88888888"/>
+	</VerticalLayout>
+</Window>

@@ -9,6 +9,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "THDetectDemo", "..\PhotoCom
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test", "..\Test-cam\Test.vcxproj", "{B1BCB579-2A09-425A-B30F-15A8B2ED2F62}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FaceRecognition", "..\..\FaceRecognition\ConsoleApplication1.vcxproj", "{EBF5723A-1E6C-4CB3-A4D8-957E6F1FE1B7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -27,6 +29,10 @@ Global
 		{B1BCB579-2A09-425A-B30F-15A8B2ED2F62}.Debug|Win32.Build.0 = Debug|Win32
 		{B1BCB579-2A09-425A-B30F-15A8B2ED2F62}.Release|Win32.ActiveCfg = Release|Win32
 		{B1BCB579-2A09-425A-B30F-15A8B2ED2F62}.Release|Win32.Build.0 = Release|Win32
+		{EBF5723A-1E6C-4CB3-A4D8-957E6F1FE1B7}.Debug|Win32.ActiveCfg = Debug|Win32
+		{EBF5723A-1E6C-4CB3-A4D8-957E6F1FE1B7}.Debug|Win32.Build.0 = Debug|Win32
+		{EBF5723A-1E6C-4CB3-A4D8-957E6F1FE1B7}.Release|Win32.ActiveCfg = Release|Win32
+		{EBF5723A-1E6C-4CB3-A4D8-957E6F1FE1B7}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
