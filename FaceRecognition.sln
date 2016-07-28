@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FaceRecognition", "FaceRecognition\ConsoleApplication1.vcxproj", "{EBF5723A-1E6C-4CB3-A4D8-957E6F1FE1B7}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test", "sample\Test-cam\Test.vcxproj", "{B1BCB579-2A09-425A-B30F-15A8B2ED2F62}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "THDetectDemo", "sample\PhotoCompare\THDetectDemo\THDetectDemo.vcxproj", "{9F5EF5C3-5484-44E4-AC13-BB4B22DE3735}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FaceAttendServer", "sample\FaceVerify1024-768\NVL-TEST.vcxproj", "{22D8896E-1206-470A-A9D6-54FC4239C0E6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EBF5723A-1E6C-4CB3-A4D8-957E6F1FE1B7}.Debug|Win32.ActiveCfg = Debug|Win32
+		{EBF5723A-1E6C-4CB3-A4D8-957E6F1FE1B7}.Debug|Win32.Build.0 = Debug|Win32
+		{EBF5723A-1E6C-4CB3-A4D8-957E6F1FE1B7}.Release|Win32.ActiveCfg = Release|Win32
+		{EBF5723A-1E6C-4CB3-A4D8-957E6F1FE1B7}.Release|Win32.Build.0 = Release|Win32
+		{B1BCB579-2A09-425A-B30F-15A8B2ED2F62}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B1BCB579-2A09-425A-B30F-15A8B2ED2F62}.Debug|Win32.Build.0 = Debug|Win32
+		{B1BCB579-2A09-425A-B30F-15A8B2ED2F62}.Release|Win32.ActiveCfg = Release|Win32
+		{B1BCB579-2A09-425A-B30F-15A8B2ED2F62}.Release|Win32.Build.0 = Release|Win32
+		{9F5EF5C3-5484-44E4-AC13-BB4B22DE3735}.Debug|Win32.ActiveCfg = Debug|Win32
+		{9F5EF5C3-5484-44E4-AC13-BB4B22DE3735}.Debug|Win32.Build.0 = Debug|Win32
+		{9F5EF5C3-5484-44E4-AC13-BB4B22DE3735}.Release|Win32.ActiveCfg = Release|Win32
+		{9F5EF5C3-5484-44E4-AC13-BB4B22DE3735}.Release|Win32.Build.0 = Release|Win32
+		{22D8896E-1206-470A-A9D6-54FC4239C0E6}.Debug|Win32.ActiveCfg = Debug|Win32
+		{22D8896E-1206-470A-A9D6-54FC4239C0E6}.Debug|Win32.Build.0 = Debug|Win32
+		{22D8896E-1206-470A-A9D6-54FC4239C0E6}.Release|Win32.ActiveCfg = Release|Win32
+		{22D8896E-1206-470A-A9D6-54FC4239C0E6}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

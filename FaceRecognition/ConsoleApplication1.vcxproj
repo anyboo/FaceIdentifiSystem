@@ -55,13 +55,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\duilib</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\duilib;$(ProjectDir)..\include-mt;$(ProjectDir)..\poco\Foundation\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>duilib_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>duilib_d.lib;TiCapture2.lib;THFaceImage.lib;THFeature.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\lib;$(ProjectDir)..\lib-mt</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -97,6 +97,8 @@
     <ClCompile Include="MainWnd.cpp" />
     <ClCompile Include="MatchUI.cpp" />
     <ClCompile Include="MonitoringUI.cpp" />
+    <ClCompile Include="OperatorWorker.cpp" />
+    <ClCompile Include="Picture.cpp" />
     <ClCompile Include="RegisterUI.cpp" />
     <ClCompile Include="SettingUI.cpp" />
     <ClCompile Include="stdafx.cpp">
