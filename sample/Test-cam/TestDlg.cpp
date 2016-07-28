@@ -14,7 +14,7 @@ static char THIS_FILE[] = __FILE__;
 
   */
 
-
+static void SaveBmp(BITMAPINFO& bi, BYTE* pDataBuf);
 /////////////////////////////////////////////////////////////////////////////
 // CAboutDlg dialog used for App About
 
@@ -207,12 +207,13 @@ HCURSOR CTestDlg::OnQueryDragIcon()
 
 BOOL CTestDlg::DestroyWindow() 
 {
-
+	//bool b = m_pCap->SetVideoFile("video.avi");
 	KillTimer(100);
 	Sleep(200);
 
 	THFI_Release();
 	EF_Release();
+	
 
 	try
 	{
@@ -253,6 +254,8 @@ void ContructBih(int nWidth,int nHeight,BITMAPINFOHEADER& bih)
 	bih.biClrUsed=0;
 	bih.biClrImportant=0;
 }
+
+#include <string>
 void DrawBmpBuf(BITMAPINFOHEADER& bih,BYTE* pDataBuf,HWND hShowWnd,BOOL bFitWnd)
 {
 	RECT rc;
@@ -265,6 +268,8 @@ void DrawBmpBuf(BITMAPINFOHEADER& bih,BYTE* pDataBuf,HWND hShowWnd,BOOL bFitWnd)
 	memcpy( &(bi.bmiHeader), &bih, sizeof(BITMAPINFOHEADER) );
 	int iWidth=bih.biWidth;
 	int iHeight=bih.biHeight;
+
+	SaveBmp(bi, pDataBuf);
 
 	// display bitmap
 	HDC hdcStill = ::GetDC( hShowWnd );
@@ -286,7 +291,42 @@ void DrawBmpBuf(BITMAPINFOHEADER& bih,BYTE* pDataBuf,HWND hShowWnd,BOOL bFitWnd)
 
 	::EndPaint( hShowWnd, &ps );
 	::ReleaseDC( hShowWnd, hdcStill );
+
 }
+
+
+void SaveBmp(BITMAPINFO& bi, BYTE* pDataBuf)
+{
+	
+	DWORD word = 0;
+	CString Path = "d:\\bmp\\";
+	CString name = "test";
+	CString ext = ".bmp";
+	name += std::to_string(::GetTickCount()).c_str();
+	Path.Append(name);
+	Path.Append(ext);
+	::OutputDebugStringA(Path + "\n");
+	HANDLE hfile = CreateFile(Path, GENERIC_WRITE, FILE_SHARE_READ, 0, OPEN_ALWAYS, 0, 0);
+	//fileheader
+	BITMAPFILEHEADER bmfh;                         // Other BMP header
+	int nBitsOffset = sizeof(BITMAPFILEHEADER) + bi.bmiHeader.biSize;
+	LONG lImageSize = bi.bmiHeader.biSizeImage;
+	LONG lFileSize = nBitsOffset + lImageSize;
+	bmfh.bfType = 'B' + ('M' << 8);
+	bmfh.bfOffBits = nBitsOffset;
+	bmfh.bfSize = lFileSize;
+	bmfh.bfReserved1 = bmfh.bfReserved2 = 0;
+	WriteFile(hfile, &bmfh, sizeof(BITMAPFILEHEADER), &word, 0);
+	//header
+	WriteFile(hfile, &bi.bmiHeader, sizeof(BITMAPINFOHEADER), &word, 0);
+	//info
+	//WriteFile(hfile, &bi, sizeof(BITMAPINFO), &word, 0);
+	//data
+	int bit = COLORONCOLOR;
+	WriteFile(hfile, pDataBuf, bi.bmiHeader.biWidth * bi.bmiHeader.biHeight * bit/*bih.biBitCount*/, &word, 0);
+	CloseHandle(hfile);
+}
+
 void TiDrawFaceRects(BYTE* pRgbBuf,int nBufWidth,int nBufHeight,
 				   RECT* pFaceRects,int nRectNum,
 				   COLORREF color,int nPenWidth)
@@ -587,6 +627,7 @@ void CTestDlg::OnStart()
 	m_capParam.szCap.cy=480;
 	m_capParam.eType=CAP_WDM;
 	m_capParam.lIndex=0;	
+	memset(&m_capParam, sizeof(m_capParam),0);
 	
 	m_pCap=CCapture::Create(&m_capParam);
 	
@@ -595,6 +636,14 @@ void CTestDlg::OnStart()
 		AfxMessageBox("Open camera device failed.");
 		return;
 	}
+	/*{
+		bool OK = m_pCap->SetVideoFile(_T("d:\\video.mp4"));
+		if (!OK)
+		{
+		AfxMessageBox("SetVideoFile Failed");
+		}
+		}*/
+	
 	BOOL bOK=m_pCap->InitCapture();
 	if(!bOK)
 	{
@@ -603,11 +652,18 @@ void CTestDlg::OnStart()
 		m_pCap=NULL;
 		return;
 	}
-	
+	/*{
+		bOK = m_pCap->SetVideoFile(_T("d:\\video.mp4"));
+		if (!bOK)
+		{
+		AfxMessageBox("SetVideoFile Failed");
+		}
+		}*/
 	m_pCap->Play();
 	// TODO: Add extra initialization here
 	
 	SetTimer(100,50,NULL);	
+
 
 	GetDlgItem(IDC_START)->EnableWindow(FALSE);
 	

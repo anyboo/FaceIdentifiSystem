@@ -17,7 +17,6 @@ class CTestDlg : public CDialog
 // Construction
 public:
 	CTestDlg(CWnd* pParent = NULL);	// standard constructor
-
 // Dialog Data
 	//{{AFX_DATA(CTestDlg)
 	enum { IDD = IDD_TEST_DIALOG };

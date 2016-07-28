@@ -3,7 +3,7 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "MainWnd.h"
-
+#include "OperatorWorker.h"
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpCmdLine*/, int nCmdShow)
 {
@@ -20,6 +20,11 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 	pFrame->SetIcon(IDI_ICON1);
 	pFrame->CenterWindow();
 	pFrame->ShowWindow(true);
+
+	OperatorWorker Obj;
+	Obj.InitCapture();
+	Obj.startCapture();
+	Obj.start();
 
 	CPaintManagerUI::MessageLoop();
 
