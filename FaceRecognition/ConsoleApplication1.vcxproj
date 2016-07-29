@@ -88,6 +88,7 @@
     <ClInclude Include="MainWnd.h" />
     <ClInclude Include="MatchUI.h" />
     <ClInclude Include="MonitoringUI.h" />
+    <ClInclude Include="Photo.h" />
     <ClInclude Include="Recorder.h" />
     <ClInclude Include="RegisterUI.h" />
     <ClInclude Include="Resource.h" />
@@ -100,6 +101,7 @@
     <ClCompile Include="MainWnd.cpp" />
     <ClCompile Include="MatchUI.cpp" />
     <ClCompile Include="MonitoringUI.cpp" />
+    <ClCompile Include="Photo.cpp" />
     <ClCompile Include="Recorder.cpp" />
     <ClCompile Include="RegisterUI.cpp" />
     <ClCompile Include="SettingUI.cpp" />
