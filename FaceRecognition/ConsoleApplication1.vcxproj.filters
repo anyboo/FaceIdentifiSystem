@@ -1,69 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="源文件">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="头文件">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
-    <Filter Include="资源文件">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="stdafx.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Resource.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="RegisterUI.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="SettingUI.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="MainWnd.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="MatchUI.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="MonitoringUI.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Recorder.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="RegisterInfo.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-<<<<<<< HEAD
-    <ClInclude Include="InitDevice.h">
-=======
-    <ClInclude Include="QMFileSqlite.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="BitMapCompare.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="DatabaseException.h">
->>>>>>> 484c19901e9c429bc6be2789d7cd29986db78d1d
-      <Filter>头文件</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="stdafx.cpp">
+    <ClCompile Include="App.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="BitMapCompare.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DatabaseException.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="InitDevice.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="MainWnd.cpp">
@@ -75,16 +25,7 @@
     <ClCompile Include="MonitoringUI.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="RegisterUI.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="SettingUI.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="App.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Camera.cpp">
+    <ClCompile Include="QMFileSqlite.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Recorder.cpp">
@@ -93,31 +34,76 @@
     <ClCompile Include="RegisterInfo.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-<<<<<<< HEAD
-    <ClCompile Include="InitDevice.cpp">
-=======
-    <ClCompile Include="BitMapCompare.cpp">
+    <ClCompile Include="RegisterUI.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="QMFileSqlite.cpp">
+    <ClCompile Include="SettingUI.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="DatabaseException.cpp">
->>>>>>> 484c19901e9c429bc6be2789d7cd29986db78d1d
+    <ClCompile Include="stdafx.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="small.ico">
-      <Filter>资源文件</Filter>
-    </Image>
-    <Image Include="ConsoleApplication1.ico">
-      <Filter>资源文件</Filter>
-    </Image>
+    <ClInclude Include="BitMapCompare.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DatabaseException.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="InitDevice.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MainWnd.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MatchUI.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Recorder.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="RegisterInfo.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="RegisterUI.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="SettingUI.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MonitoringUI.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="QMFileSqlite.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="ConsoleApplication1.rc">
-      <Filter>资源文件</Filter>
-    </ResourceCompile>
+    <ResourceCompile Include="ConsoleApplication1.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="ConsoleApplication1.ico" />
+    <Image Include="small.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{44a6662f-2889-4059-bed9-4dfa4cd14ced}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{fe15a7fe-9d8c-47dd-853e-b8744d46496b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>
