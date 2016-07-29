@@ -401,40 +401,40 @@ void TiDrawFaceRects(BYTE* pRgbBuf,int nBufWidth,int nBufHeight,
 #define WIDTHBYTES(bits)    (((bits) + 31) / 32 * 4)
 BOOL MirrorDIB(LPSTR lpDIBBits, LONG lWidth, LONG lHeight, BOOL bDirection,int nImageBits)
 {	 
-	 // ָ��Դͼ���ָ��
+	 // 指向源图像的指针
 	 LPSTR	lpSrc; 
-	 // ָ��Ҫ���������ָ��
+	 // 指向要复制区域的指针
 	 LPSTR	lpDst;	 
-	 // ָ����ͼ���ָ��
+	 // 指向复制图像的指针
 	 LPSTR	lpBits;
 	 HLOCAL	hBits;	 
-	 // ѭ������
+	 // 循环变量
 	 LONG	i;
 	 LONG	j;
-	 int nBits;//ÿ����ռ��λ��
-	 // ͼ��ÿ�е��ֽ���
+	 int nBits;//每像素占的位数
+	 // 图像每行的字节数
 	 LONG lLineBytes;
-	 // ����ͼ��ÿ�е��ֽ���
+	 // 计算图像每行的字节数
 	 lLineBytes = WIDTHBYTES(lWidth *nImageBits);
-	 // ��ʱ�����ڴ棬�Ա���һ��ͼ��
+	 // 暂时分配内存，以保存一行图像
 	 hBits = LocalAlloc(LHND, lLineBytes);
 	 if (hBits == NULL)
 	 {
-		 // �����ڴ�ʧ��
+		 // 分配内存失败
 		 return FALSE;
 	 }	 
-	 // �����ڴ�
+	 // 锁定内存
 	 lpBits = (char * )LocalLock(hBits);
 	 int nStep=nImageBits/8;
 	 long lCenter=lWidth/2*nStep;
-	 // �жϾ���ʽ
+	 // 判断镜像方式
 	 if (bDirection)
 	 {
-		 // ˮƽ����
-		 // ���ͼ��ÿ�н��в���
+		 // 水平镜像
+		 // 针对图像每行进行操作
 		 for(i = 0; i < lHeight; i++)
 		 {
-			 // ���ÿ��ͼ����벿�ֽ��в���
+			 // 针对每行图像左半部分进行操作
 			 for(j = 0; j < lCenter; j+=nStep)
 			 {
 				 for(nBits=0;nBits<nStep;nBits++)
@@ -452,27 +452,27 @@ BOOL MirrorDIB(LPSTR lpDIBBits, LONG lWidth, LONG lHeight, BOOL bDirection,int n
 	 }
 	 else
 	 {
-		 // ��ֱ����
-		 // ����ϰ�ͼ����в���
+		 // 垂直镜像
+		 // 针对上半图像进行操作
 		 for(i = 0; i < lHeight / 2; i++)
 		 {		 
-			 // ָ������i����������ָ��
+			 // 指向倒数第i行象素起点的指针
 			 lpSrc = (char *)lpDIBBits + lLineBytes * i;	 
-			 // ָ���i����������ָ��
+			 // 指向第i行象素起点的指针
 			 lpDst = (char *)lpDIBBits + lLineBytes * (lHeight - i - 1);		 
-			 // ����һ�У�����ΪlWidth
+			 // 备份一行，宽度为lWidth
 			 memcpy(lpBits, lpDst, lLineBytes);
-			 // ��������i�����ظ��Ƶ���i��
+			 // 将倒数第i行象素复制到第i行
 			 memcpy(lpDst, lpSrc, lLineBytes);
-			 // ����i�����ظ��Ƶ�������i��
+			 // 将第i行象素复制到倒数第i行
 			 memcpy(lpSrc, lpBits, lLineBytes);
 			 
 		 }
 	 }	 
-	 // �ͷ��ڴ�
+	 // 释放内存
 	 LocalUnlock(hBits);
 	 LocalFree(hBits);
-	 // ����
+	 // 返回
 	 return TRUE;
 }
 
@@ -603,7 +603,7 @@ void CTestDlg::OnTimer(UINT nIDEvent)
 	}
 
 	MirrorDIB((LPSTR)pCamBuf, nWidth, nHeight, FALSE,24);
-	//�ͷ���Դ,��ʾ��Ƶ֡
+	//释放资源,显示视频帧
 	BITMAPINFOHEADER bih;
 	ContructBih(nWidth,nHeight,bih);
 	
@@ -627,7 +627,7 @@ void CTestDlg::OnStart()
 	m_capParam.szCap.cy=480;
 	m_capParam.eType=CAP_WDM;
 	m_capParam.lIndex=0;	
-	memset(&m_capParam, sizeof(m_capParam),0);
+	//memset(&m_capParam, sizeof(m_capParam),0);
 	
 	m_pCap=CCapture::Create(&m_capParam);
 	

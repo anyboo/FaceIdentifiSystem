@@ -84,9 +84,11 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="MainWnd.h" />
     <ClInclude Include="MatchUI.h" />
     <ClInclude Include="MonitoringUI.h" />
+    <ClInclude Include="Recorder.h" />
     <ClInclude Include="RegisterUI.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SettingUI.h" />
@@ -94,11 +96,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="MainWnd.cpp" />
     <ClCompile Include="MatchUI.cpp" />
     <ClCompile Include="MonitoringUI.cpp" />
-    <ClCompile Include="OperatorWorker.cpp" />
-    <ClCompile Include="Picture.cpp" />
+    <ClCompile Include="Recorder.cpp" />
     <ClCompile Include="RegisterUI.cpp" />
     <ClCompile Include="SettingUI.cpp" />
     <ClCompile Include="stdafx.cpp">

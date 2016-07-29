@@ -3,11 +3,9 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "MainWnd.h"
-#include "OperatorWorker.h"
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpCmdLine*/, int nCmdShow)
 {
-
 	CPaintManagerUI::SetInstance(hInstance);
 	CPaintManagerUI::SetResourcePath(CPaintManagerUI::GetInstancePath() + _T("skin"));
 
@@ -21,13 +19,9 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 	pFrame->CenterWindow();
 	pFrame->ShowWindow(true);
 
-	OperatorWorker Obj;
-	Obj.InitCapture();
-	Obj.startCapture();
-	Obj.start();
-
 	CPaintManagerUI::MessageLoop();
 
 	::CoUninitialize();
+
 	return 0;
 }
