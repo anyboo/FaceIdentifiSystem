@@ -11,6 +11,7 @@
 #include <windows.h>
 
 // C 运行时头文件
+#include <string>
 #include <stdlib.h>
 #include <malloc.h>
 #include <memory.h>
@@ -32,15 +33,15 @@ using namespace DuiLib;
 #   endif
 #endif
 
-//#include "cv.h"
-//#include "cxcore.h"
-//#include "highgui.h"
-//
-//using namespace cv;
-//
-//#include "THFaceImage_i.h"
-//#pragma comment (lib, "THFaceImage.lib")
-//
-//#include "THFeature_i.h"
-//#pragma comment(lib,"THFeature.lib")
+#include "cv.h"
+#include "cxcore.h"
+#include "highgui.h"
+
+using namespace cv;
+
+#include "THFaceImage_i.h"
+#pragma comment (lib, "THFaceImage.lib")
+
+#include "THFeature_i.h"
+#pragma comment(lib,"THFeature.lib")
 // TODO:  在此处引用程序需要的其他头文件

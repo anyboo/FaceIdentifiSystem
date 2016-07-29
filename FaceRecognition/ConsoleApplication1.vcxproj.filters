@@ -45,7 +45,16 @@
     <ClInclude Include="Recorder.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Photo.h">
+    <ClInclude Include="RegisterInfo.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="QMFileSqlite.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BitMapCompare.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DatabaseException.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -77,7 +86,16 @@
     <ClCompile Include="Recorder.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Photo.cpp">
+    <ClCompile Include="RegisterInfo.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="BitMapCompare.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="QMFileSqlite.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DatabaseException.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

@@ -10,7 +10,9 @@ void BitMapCompare::CompareBitmap(BYTE *pFirst, BYTE *pSecond, long nFirstWidth,
 	int k;
 	//face detect
 	THFI_FacePos ptfp1[1];
-
+	BYTE* pFeature1 = NULL;
+	BYTE* pFeature2 = NULL;
+	
 	for (k = 0; k<1; k++)
 	{
 		ptfp1[k].dwReserved = (DWORD)new BYTE[512];
@@ -18,24 +20,26 @@ void BitMapCompare::CompareBitmap(BYTE *pFirst, BYTE *pSecond, long nFirstWidth,
 	//获取面部
 	int nNum1 = THFI_DetectFace(0, pFirst, 24, nFirstWidth, nFirstHeight, ptfp1, 1);//only process one face
 
-	//RECT rcFace = ptfp1[0].rcFace;
-	//第一副照片需要比较的内容
-	BYTE* pFeature1 = new BYTE[EF_Size()];
+	if (nNum1 > 0)
+	{
+		//第一副照片需要比较的内容
+		pFeature1 = new BYTE[EF_Size()];
 
-	//only extract the first face(max size face)获取面部信息
-	int ret = EF_Extract(0, pFirst, nFirstWidth, nFirstHeight, 3, (DWORD)&ptfp1[0], pFeature1);
-	if (ret)
-	{
+		//only extract the first face(max size face)获取面部信息
+		int ret = EF_Extract(0, pFirst, nFirstWidth, nFirstHeight, 3, (DWORD)&ptfp1[0], pFeature1);
+		if (ret)
+		{
 
-	}
-	else
-	{
-		delete[]pFeature1;
-		pFeature1 = NULL;
-	}
-	for (k = 0; k<1; k++)
-	{
-		delete[](BYTE*)ptfp1[k].dwReserved;
+		}
+		else
+		{
+			delete[]pFeature1;
+			pFeature1 = NULL;
+		}
+		for (k = 0; k<1; k++)
+		{
+			delete[](BYTE*)ptfp1[k].dwReserved;
+		}	
 	}
 
 	//face detect获取面部信息
@@ -45,27 +49,28 @@ void BitMapCompare::CompareBitmap(BYTE *pFirst, BYTE *pSecond, long nFirstWidth,
 		ptfp2[k].dwReserved = (DWORD)new BYTE[512];
 	}
 	int nNum2 = THFI_DetectFace(0, pSecond, 24, nSecondWidth, nSecondHeight, ptfp2, 1);
-	//rcFace = ptfp2[0].rcFace;
-
-	BYTE* pFeature2 = new BYTE[EF_Size()];
-
-	//only extract the first face(max size face)获取比较内容
-	ret = EF_Extract(0, pSecond, nSecondWidth, nSecondHeight, 3, (DWORD)&ptfp2[0], pFeature2);
-	if (ret)
+	if (nNum2 > 0)
 	{
+		pFeature2 = new BYTE[EF_Size()];
 
-	}
-	else
-	{
-		delete[]pFeature2;
-		pFeature2 = NULL;
-	}
+		//only extract the first face(max size face)获取比较内容
+		int ret = EF_Extract(0, pSecond, nSecondWidth, nSecondHeight, 3, (DWORD)&ptfp2[0], pFeature2);
+		if (ret)
+		{
 
-	for (k = 0; k<1; k++)
-	{
-		delete[](BYTE*)ptfp2[k].dwReserved;
-	}
+		}
+		else
+		{
+			delete[]pFeature2;
+			pFeature2 = NULL;
+		}
 
+		for (k = 0; k<1; k++)
+		{
+			delete[](BYTE*)ptfp2[k].dwReserved;
+		}
+	}
+	
 	if ((nNum1 > 0) && (nNum2 > 0))
 	{
 		float score = 0.0f;
@@ -90,10 +95,15 @@ Mat BitMapCompare::LoadBmpFile1(std::string strFilePath)
 	return im;
 }
 
-void run()
+void BitMapCompare::run()
 {
 	for (;;)
 	{
+		if (_break)
+		{
+			std::cout << "listen is break" << std::endl;
+			break;
+		}
 		//读取数据库内注册数据
 
 
@@ -104,6 +114,12 @@ void run()
 
 
 		//将大于0.6的数据写入数据库
-
+		
 	}
+}
+
+void BitMapCompare::onEvent(const void* pSender, bool& arg)
+{
+	std::cout << "arg : " << arg << std::endl;
+	_break = arg;
 }

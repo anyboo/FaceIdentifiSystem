@@ -42,7 +42,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)..\..\bin\</OutDir>
+    <OutDir>$(SolutionDir)\bin\</OutDir>
     <TargetName>$(ProjectName)_d</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -55,13 +55,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\duilib;$(ProjectDir)..\include-mt;$(ProjectDir)..\poco\Foundation\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\duilib;$(ProjectDir)..\include-mt;$(ProjectDir)..\poco\Foundation\include;$(SolutionDir)\poco\Data\SQLite\include;$(SolutionDir)\poco\Data\include;$(SolutionDir)\opencv231\build\include;$(SolutionDir)\opencv231\build\include\opencv</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>duilib_d.lib;TiCapture2.lib;THFaceImage.lib;THFeature.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\lib;$(ProjectDir)..\lib-mt</AdditionalLibraryDirectories>
+      <AdditionalDependencies>duilib_d.lib;TiCapture2.lib;THFaceImage.lib;THFeature.lib;opencv_core231.lib;opencv_imgproc231.lib;opencv_highgui231.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\lib;$(ProjectDir)..\lib-mt;$(SolutionDir)\opencv231\build\lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -84,12 +84,15 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BitMapCompare.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="DatabaseException.h" />
     <ClInclude Include="MainWnd.h" />
     <ClInclude Include="MatchUI.h" />
     <ClInclude Include="MonitoringUI.h" />
-    <ClInclude Include="Photo.h" />
+    <ClInclude Include="QMFileSqlite.h" />
     <ClInclude Include="Recorder.h" />
+    <ClInclude Include="RegisterInfo.h" />
     <ClInclude Include="RegisterUI.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SettingUI.h" />
@@ -97,12 +100,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
+    <ClCompile Include="BitMapCompare.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="DatabaseException.cpp" />
     <ClCompile Include="MainWnd.cpp" />
     <ClCompile Include="MatchUI.cpp" />
     <ClCompile Include="MonitoringUI.cpp" />
-    <ClCompile Include="Photo.cpp" />
+    <ClCompile Include="QMFileSqlite.cpp" />
     <ClCompile Include="Recorder.cpp" />
+    <ClCompile Include="RegisterInfo.cpp" />
     <ClCompile Include="RegisterUI.cpp" />
     <ClCompile Include="SettingUI.cpp" />
     <ClCompile Include="stdafx.cpp">

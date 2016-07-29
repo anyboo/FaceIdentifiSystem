@@ -299,14 +299,14 @@ void CompareBitmap(BYTE *pFirst, BYTE *pSecond, long nFirstWidth, long nSecondWi
 	{
 		ptfp1[k].dwReserved = (DWORD)new BYTE[512];
 	}
-	//获取面部
+	//��ȡ�沿
 	int nNum1 = THFI_DetectFace(0, pFirst, 24, nFirstWidth, nFirstHeight, ptfp1, 1);//only process one face
 
 	//RECT rcFace = ptfp1[0].rcFace;
-	//第一副照片需要比较的内容
+	//��һ����Ƭ��Ҫ�Ƚϵ�����
 	BYTE* pFeature1 = new BYTE[EF_Size()];
 
-	//only extract the first face(max size face)获取面部信息
+	//only extract the first face(max size face)��ȡ�沿��Ϣ
 	int ret = EF_Extract(0, pFirst, nFirstWidth, nFirstHeight, 3, (DWORD)&ptfp1[0], pFeature1);
 	if (ret)
 	{
@@ -322,7 +322,7 @@ void CompareBitmap(BYTE *pFirst, BYTE *pSecond, long nFirstWidth, long nSecondWi
 		delete[](BYTE*)ptfp1[k].dwReserved;
 	}
 
-	//face detect获取面部信息
+	//face detect��ȡ�沿��Ϣ
 	THFI_FacePos ptfp2[1];
 	for (k = 0; k<1; k++)
 	{
@@ -333,7 +333,7 @@ void CompareBitmap(BYTE *pFirst, BYTE *pSecond, long nFirstWidth, long nSecondWi
 
 	BYTE* pFeature2 = new BYTE[EF_Size()];
 
-	//only extract the first face(max size face)获取比较内容
+	//only extract the first face(max size face)��ȡ�Ƚ�����
 	ret = EF_Extract(0, pSecond, nSecondWidth, nSecondHeight, 3, (DWORD)&ptfp2[0], pFeature2);
 	if (ret)
 	{
@@ -514,40 +514,40 @@ void TiDrawFaceRects(BYTE* pRgbBuf,int nBufWidth,int nBufHeight,
 #define WIDTHBYTES(bits)    (((bits) + 31) / 32 * 4)
 BOOL MirrorDIB(LPSTR lpDIBBits, LONG lWidth, LONG lHeight, BOOL bDirection,int nImageBits)
 {	 
-	 // 鎸囧悜婧愬浘鍍忕殑鎸囬拡
+	 // 指向源图像的指针
 	 LPSTR	lpSrc; 
-	 // 鎸囧悜瑕佸鍒跺尯鍩熺殑鎸囬拡
+	 // 指向要复制区域的指针
 	 LPSTR	lpDst;	 
-	 // 鎸囧悜澶嶅埗鍥惧儚鐨勬寚閽?
+	 // 指向复制图像的指�?
 	 LPSTR	lpBits;
 	 HLOCAL	hBits;	 
-	 // 寰幆鍙橀噺
+	 // 循环变量
 	 LONG	i;
 	 LONG	j;
-	 int nBits;//姣忓儚绱犲崰鐨勪綅鏁?
-	 // 鍥惧儚姣忚鐨勫瓧鑺傛暟
+	 int nBits;//每像素占的位�?
+	 // 图像每行的字节数
 	 LONG lLineBytes;
-	 // 璁＄畻鍥惧儚姣忚鐨勫瓧鑺傛暟
+	 // 计算图像每行的字节数
 	 lLineBytes = WIDTHBYTES(lWidth *nImageBits);
-	 // 鏆傛椂鍒嗛厤鍐呭瓨锛屼互淇濆瓨涓€琛屽浘鍍?
+	 // 暂时分配内存，以保存一行图�?
 	 hBits = LocalAlloc(LHND, lLineBytes);
 	 if (hBits == NULL)
 	 {
-		 // 鍒嗛厤鍐呭瓨澶辫触
+		 // 分配内存失败
 		 return FALSE;
 	 }	 
-	 // 閿佸畾鍐呭瓨
+	 // 锁定内存
 	 lpBits = (char * )LocalLock(hBits);
 	 int nStep=nImageBits/8;
 	 long lCenter=lWidth/2*nStep;
-	 // 鍒ゆ柇闀滃儚鏂瑰紡
+	 // 判断镜像方式
 	 if (bDirection)
 	 {
-		 // 姘村钩闀滃儚
-		 // 閽堝鍥惧儚姣忚杩涜鎿嶄綔
+		 // 水平镜像
+		 // 针对图像每行进行操作
 		 for(i = 0; i < lHeight; i++)
 		 {
-			 // 閽堝姣忚鍥惧儚宸﹀崐閮ㄥ垎杩涜鎿嶄綔
+			 // 针对每行图像左半部分进行操作
 			 for(j = 0; j < lCenter; j+=nStep)
 			 {
 				 for(nBits=0;nBits<nStep;nBits++)
@@ -565,27 +565,27 @@ BOOL MirrorDIB(LPSTR lpDIBBits, LONG lWidth, LONG lHeight, BOOL bDirection,int n
 	 }
 	 else
 	 {
-		 // 鍨傜洿闀滃儚
-		 // 閽堝涓婂崐鍥惧儚杩涜鎿嶄綔
+		 // 垂直镜像
+		 // 针对上半图像进行操作
 		 for(i = 0; i < lHeight / 2; i++)
 		 {		 
-			 // 鎸囧悜鍊掓暟绗琲琛岃薄绱犺捣鐐圭殑鎸囬拡
+			 // 指向倒数第i行象素起点的指针
 			 lpSrc = (char *)lpDIBBits + lLineBytes * i;	 
-			 // 鎸囧悜绗琲琛岃薄绱犺捣鐐圭殑鎸囬拡
+			 // 指向第i行象素起点的指针
 			 lpDst = (char *)lpDIBBits + lLineBytes * (lHeight - i - 1);		 
-			 // 澶囦唤涓€琛岋紝瀹藉害涓簂Width
+			 // 备份一行，宽度为lWidth
 			 memcpy(lpBits, lpDst, lLineBytes);
-			 // 灏嗗€掓暟绗琲琛岃薄绱犲鍒跺埌绗琲琛?
+			 // 将倒数第i行象素复制到第i�?
 			 memcpy(lpDst, lpSrc, lLineBytes);
-			 // 灏嗙i琛岃薄绱犲鍒跺埌鍊掓暟绗琲琛?
+			 // 将第i行象素复制到倒数第i�?
 			 memcpy(lpSrc, lpBits, lLineBytes);
 			 
 		 }
 	 }	 
-	 // 閲婃斁鍐呭瓨
+	 // 释放内存
 	 LocalUnlock(hBits);
 	 LocalFree(hBits);
-	 // 杩斿洖
+	 // 返回
 	 return TRUE;
 }
 
@@ -726,7 +726,7 @@ void CTestDlg::OnTimer(UINT nIDEvent)
 	}	
 
 	MirrorDIB((LPSTR)pCamBuf, nWidth, nHeight, FALSE,24);
-	//閲婃斁璧勬簮,鏄剧ず瑙嗛甯?
+	//释放资源,显示视频�?
 	BITMAPINFOHEADER bih;
 	ContructBih(nWidth,nHeight,bih);
 	
