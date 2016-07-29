@@ -1,6 +1,8 @@
 #ifndef __OPERATORWORKER_H__
 #define __OPERATORWORKER_H__
 
+#include <atlstr.h>
+#include <windows.h>
 #include <iostream>
 #include <queue>
 
@@ -29,13 +31,18 @@ public:
 	void start();
 	void stop();
 
-	void getPhotography();
+	
+	void SaveBmp(BITMAPINFO& bi, BYTE* pDataBuf);
 
+	void SetHandle(HWND hWnd);
 	queue<Picture> getDataQueue()const;
 
 private:
+	void getPhotography();
+
  	BOOL MirrorDIB(LPSTR lpDIBBits, LONG lWidth, LONG lHeight, BOOL bDirection, int nImageBits);
  	void ContructBih(int nWidth, int nHeight, BITMAPINFOHEADER& bih);
+	void DrawBmpBuf(BITMAPINFOHEADER& bih, BYTE* pDataBuf, HWND hShowWnd, BOOL bFitWnd);
 private:
 	CCapture* m_pCap;
 	SCapParam m_capParam;
@@ -44,6 +51,7 @@ private:
 	std::queue<Picture> m_DataQueue;
 	
 	Activity<OperatorWorker> _activity;
+	HWND m_hWnd;
 };
 
 #endif 

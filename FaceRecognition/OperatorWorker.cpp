@@ -6,6 +6,20 @@ OperatorWorker::OperatorWorker():
 _activity(this, &OperatorWorker::getPhotography)
 {
 	m_pCap = NULL;
+	m_hWnd = NULL;
+
+	THFI_Param param;
+
+	param.nMinFaceSize = 50;
+	param.nRollAngle = 45;
+	param.bOnlyDetect = true;
+	THFI_Create(1, &param);
+
+	short ret = EF_Init(1);
+	if (ret == 1)
+	{
+		//AfxMessageBox("Feature init ok");
+	}
 	m_nFeatureSize = 0;
 }
 
@@ -22,6 +36,7 @@ void OperatorWorker::InitCapture()
 	m_capParam.szCap.cy = 480;
 	m_capParam.eType = CAP_WDM;
 	m_capParam.lIndex = 0;
+	memset(&m_capParam, sizeof(m_capParam), 0);
 
 	m_pCap = CCapture::Create(&m_capParam);
 
@@ -30,6 +45,7 @@ void OperatorWorker::InitCapture()
 		std::cout << "Open camera device failed." << endl;
 		return;
 	}
+
 	BOOL bOK = m_pCap->InitCapture();
 	if (!bOK)
 	{
@@ -191,15 +207,14 @@ void OperatorWorker::getPhotography()
 		Picture picture;
 		picture.m_pCamBuf = pCamBuf;
 		picture.m_bih = bih;
-		
+
+		DrawBmpBuf(bih, pCamBuf, m_hWnd, TRUE); 
 		m_DataQueue.push(picture);
 
 		//	DrawBmpBuf(bih, pCamBuf, hFrameWnd, TRUE);
-		// 	delete[]pCamBuf;
+	 	delete[]pCamBuf;
 	 	delete[]pFeature;
-		
 
-		Thread::sleep(50);
 	}//while	
 }
 
@@ -439,5 +454,79 @@ queue<Picture> OperatorWorker::getDataQueue()const
 {
 	return m_DataQueue;
 }
+
+void OperatorWorker::SetHandle(HWND hWnd)
+{
+	m_hWnd = hWnd;
+}
+
+void OperatorWorker::SaveBmp(BITMAPINFO& bi, BYTE* pDataBuf)
+{
+	DWORD word = 0;
+	CString Path = "d:\\bmp\\";
+	CString name = "test";
+	CString ext = ".bmp";
+	name += std::to_string(::GetTickCount()).c_str();
+	Path.Append(name);
+	Path.Append(ext);
+	::OutputDebugStringA(Path + "\n");
+	HANDLE hfile = CreateFileA(Path, GENERIC_WRITE, FILE_SHARE_READ, 0, OPEN_ALWAYS, 0, 0);
+	//fileheader
+	BITMAPFILEHEADER bmfh;                         // Other BMP header
+	int nBitsOffset = sizeof(BITMAPFILEHEADER) + bi.bmiHeader.biSize;
+	LONG lImageSize = bi.bmiHeader.biSizeImage;
+	LONG lFileSize = nBitsOffset + lImageSize;
+	bmfh.bfType = 'B' + ('M' << 8);
+	bmfh.bfOffBits = nBitsOffset;
+	bmfh.bfSize = lFileSize;
+	bmfh.bfReserved1 = bmfh.bfReserved2 = 0;
+	WriteFile(hfile, &bmfh, sizeof(BITMAPFILEHEADER), &word, 0);
+	//header
+	WriteFile(hfile, &bi.bmiHeader, sizeof(BITMAPINFOHEADER), &word, 0);
+	//info
+	//WriteFile(hfile, &bi, sizeof(BITMAPINFO), &word, 0);
+	//data
+	int bit = COLORONCOLOR;
+	WriteFile(hfile, pDataBuf, bi.bmiHeader.biWidth * bi.bmiHeader.biHeight * bit/*bih.biBitCount*/, &word, 0);
+	CloseHandle(hfile);
+}
+
+void OperatorWorker::DrawBmpBuf(BITMAPINFOHEADER& bih, BYTE* pDataBuf, HWND hShowWnd, BOOL bFitWnd)
+{
+	RECT rc;
+	::GetWindowRect(hShowWnd, &rc);
+	int nWidth = rc.right - rc.left - 2;
+	int nHeight = rc.bottom - rc.top - 2;
+
+	BITMAPINFO bi;
+	memset(&bi, 0, sizeof(bi));
+	memcpy(&(bi.bmiHeader), &bih, sizeof(BITMAPINFOHEADER));
+	int iWidth = bih.biWidth;
+	int iHeight = bih.biHeight;
+
+	//SaveBmp(bi, pDataBuf);
+
+	// display bitmap
+	HDC hdcStill = ::GetDC(hShowWnd);
+	PAINTSTRUCT ps;
+	::BeginPaint(hShowWnd, &ps);
+
+
+	::SetStretchBltMode(hdcStill, COLORONCOLOR);
+
+	if (bFitWnd)
+		::StretchDIBits(hdcStill, 0, 0, nWidth, nHeight,
+		0, 0, iWidth, iHeight, pDataBuf, &bi,
+		DIB_RGB_COLORS, SRCCOPY);
+	else
+		::StretchDIBits(hdcStill, 0, 0, iWidth, iHeight,
+		0, 0, iWidth, iHeight, pDataBuf, &bi,
+		DIB_RGB_COLORS, SRCCOPY);
+
+
+	::EndPaint(hShowWnd, &ps);
+	::ReleaseDC(hShowWnd, hdcStill);
+}
+
 
 
