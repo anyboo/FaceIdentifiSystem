@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window >
+	<Font shared="true" id="3" name="微软雅黑" size="14" bold="false" />
+	<Font shared="true" id="2" name="宋体" size="14" bold="false" />
+	<ListContainerElement height="140" width="250" bordersize="1" bordercolor="0x12345678" >
+		<HorizontalLayout >
+			<Control width="100" height="120" padding="10,10,10,10" bordersize="1" bordercolor="0x12345678">
+			</Control>
+			<VerticalLayout width="130">
+				<Label text="ID：" height="20" font="3" padding="0,10,0,0"/>
+				<Label text="100001" textcolor="#FFFF0000" height="20" font="2" />
+				<Label text="相似度：" height="20" font="3"  />
+				<Label text="85.00%" height="20" textcolor="#FFFF0000" font="2" />
+				<Label text="采集时间：" height="20" font="3" />
+				<Label text="2016-7-29 12:23:19" height="20" textcolor="#FFFF0000" font="2"/>
+			</VerticalLayout>
+		</HorizontalLayout>
+	</ListContainerElement>
+</Window>

@@ -4,11 +4,11 @@
 	<Font shared="true" id="9" name="微软雅黑" size="80" bold="false" />
 	<HorizontalLayout bkimage="file='skin/bsbj.png'" height="765" inset="4,4,4,4" bordersize="4" bordercolor="0x12345678">
 		<VerticalLayout width="200" bordersize="1" bordercolor="0x88888888" bkimage="file='skin/beijing.png'">
-			<Button name="bt_register" width="160" height="80" text="注册" font="0" bordersize="2" bordercolor="0x12345678" padding="20,40,20,20" bkimage="file='skin/hsbj.png'"/>
-			<Button name="bt_match" width="160" height="80" text="匹配" font="0" bordersize="2" bordercolor="0x12345678" padding="20,20,20,20" bkimage="file='skin/hsbj.png'"/>
-			<Button name="bt_monitoring" width="160" height="80" text="监控" font="0" bordersize="2" bordercolor="0x12345678" padding="20,20,20,20" bkimage="file='skin/hsbj.png'"/>
-			<Button name="bt_setting" width="160" height="80" text="设置" font="0" bordersize="2" bordercolor="0x12345678" padding="20,20,20,20" bkimage="file='skin/hsbj.png'"/>
-			<Button name="bt_close" width="160" height="80" text="退出" font="0" bordersize="2" bordercolor="0x12345678" padding="20,20,20,20" bkimage="file='skin/hsbj.png'"/>
+			<Button name="bt_register" width="160" height="80" text="注册" font="0" bordersize="2" bordercolor="0x12345678" padding="20,40,20,20" bkimage="file='skin/cxbt.png'" pushedimage="file='skin/add_push.png'" hotimage="file='skin/add_normal.png'"/>
+			<Button name="bt_match" width="160" height="80" text="匹配" font="0" bordersize="2" bordercolor="0x12345678" padding="20,20,20,20" bkimage="file='skin/cxbt.png'" pushedimage="file='skin/add_push.png'" hotimage="file='skin/add_normal.png'"/>
+			<Button name="bt_monitoring" width="160" height="80" text="监控" font="0" bordersize="2" bordercolor="0x12345678" padding="20,20,20,20" bkimage="file='skin/cxbt.png'" pushedimage="file='skin/add_push.png'" hotimage="file='skin/add_normal.png'"/>
+			<Button name="bt_setting" width="160" height="80" text="设置" font="0" bordersize="2" bordercolor="0x12345678" padding="20,20,20,20" bkimage="file='skin/cxbt.png'" pushedimage="file='skin/add_push.png'" hotimage="file='skin/add_normal.png'"/>
+			<Button name="bt_close" width="160" height="80" text="退出" font="0" bordersize="2" bordercolor="0x12345678" padding="20,20,20,20" bkimage="file='skin/cxbt.png'" pushedimage="file='skin/add_push.png'" hotimage="file='skin/add_normal.png'"/>
 		</VerticalLayout>
 		<VerticalLayout width="500" height="400" bordersize="4" bkimage="file='skin/hsbj.png'" bordercolor="0x88888888" padding="150,150,0,0" >
 			<Label text="人脸识别" font="9" width="500" height="200" align="center" />

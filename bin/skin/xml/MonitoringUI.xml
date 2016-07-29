@@ -1,32 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Window size="1024,768" caption="0,0,0,0" roundcorner="4,4" showdirty="false">
 	<Font shared="true" id="1" name="微软雅黑" size="18" bold="false" />
+		<Font shared="true" id="3" name="微软雅黑" size="14" bold="false" />
+	<Font shared="true" id="2" name="宋体" size="14" bold="false" />
+
 	<VerticalLayout bkimage="file='skin/bsbj.png'" height="765" inset="3,3,3,3" bordersize="3" bordercolor="0x12345678">
 		<HorizontalLayout width="1024" height="50" bkimage="file='skin/beijing.png'">
 			<Button name="close_btn2" width="30" height="30" padding="10,10,0,0" tooltip="返回" foreimage="file='skin/xz.png' dest='6,2,20,29'" hotimage="file='skin/hsbj.png'"/>
 			<Label text="信息监控" font="1" padding="400,0,0,0" textcolor="#FFFFFFFF" align="center" />
+			<Button name="test" width="30" height="30" padding="100,10,0,0" tooltip="返回" foreimage="file='skin/xz.png' dest='6,2,20,29'" hotimage="file='skin/hsbj.png'"/>
 		</HorizontalLayout>
 		<HorizontalLayout>
-			<VerticalLayout width="160" bkimage="file='skin/beijing.png'">
-				<Button name="bt_monitoring1" width="120" height="80" text="监控" font="0" bordersize="2" bordercolor="0x12345678" padding="20,20,20,20" bkimage="file='skin/hsbj.png'"/>
-				<Button name="bt_setting1" width="120" height="80" text="设置" font="0" bordersize="2" bordercolor="0x12345678" padding="20,20,20,20" bkimage="file='skin/hsbj.png'"/>
-			</VerticalLayout>
-			<HorizontalLayout width="864" >
-				<VerticalLayout width="400" height="500" bordersize="2" bordercolor="0x88888888" padding="40,60,40,0">
+			<HorizontalLayout width="1024" >
+				<VerticalLayout name="photo_video" width="400" height="500" bordersize="2" bordercolor="0x88888888" padding="40,60,40,0">
 				</VerticalLayout>
 				<Control width="4" bkcolor="0x12345678"/>
-				<VerticalLayout width="190" >
-					<List name="Refer_InfoList" width="190" headerbkimage="file='skin/lbl.png'" itemhotbkcolor="0x00000000" itemselectedbkcolor="0x22224822" vscrollbar="true">
+				<VerticalLayout width="270" >
+					<List name="Refer_InfoList" width="270" headerbkimage="file='skin/lbl.png'"  vscrollbar="true">
 						<ListHeader>
-							<ListHeaderItem text="参照信息列表" font="1" width="190" hotimage="file='skin/lbl.png'" pushedimage="file='skin/lbl.png'" sepimage="file='skin/lbl.png'" sepwidth="1" dragable="false"/>
+							<ListHeaderItem text="实际信息列表" font="1" width="270" hotimage="file='skin/lbl.png'" pushedimage="file='skin/lbl.png'" sepimage="file='skin/lbl.png'" sepwidth="1" dragable="false"/>
 						</ListHeader>
+							
 					</List>
 				</VerticalLayout>
 				<Control width="4" bkcolor="0x12345678"/>
-				<VerticalLayout width="190" >
-					<List name="Refer_InfoList" headerbkimage="file='skin/lbl.png'" itemhotbkcolor="0x00000000" itemselectedbkcolor="0x22224822" vscrollbar="true">
+				<VerticalLayout width="270" >
+					<List name="DB_InfoList" width="270" headerbkimage="file='skin/lbl.png'" itemhotbkcolor="0x00000000" itemselectedbkcolor="0x22224822" vscrollbar="true">
 						<ListHeader>
-							<ListHeaderItem text="参照信息列表" font="1" width="190" hotimage="file='skin/lbl.png'" pushedimage="file='skin/lbl.png'" sepimage="file='skin/lbl.png'" sepwidth="1" dragable="false"/>
+							<ListHeaderItem text="参照信息列表" font="1" width="270" hotimage="file='skin/lbl.png'" pushedimage="file='skin/lbl.png'" sepimage="file='skin/lbl.png'" sepwidth="1" dragable="false"/>
 						</ListHeader>
 					</List>
 				</VerticalLayout>

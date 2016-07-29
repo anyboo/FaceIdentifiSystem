@@ -518,18 +518,18 @@ BOOL MirrorDIB(LPSTR lpDIBBits, LONG lWidth, LONG lHeight, BOOL bDirection,int n
 	 LPSTR	lpSrc; 
 	 // 指向要复制区域的指针
 	 LPSTR	lpDst;	 
-	 // 指向复制图像的指针
+	 // 指向复制图像的指�?
 	 LPSTR	lpBits;
 	 HLOCAL	hBits;	 
 	 // 循环变量
 	 LONG	i;
 	 LONG	j;
-	 int nBits;//每像素占的位数
+	 int nBits;//每像素占的位�?
 	 // 图像每行的字节数
 	 LONG lLineBytes;
 	 // 计算图像每行的字节数
 	 lLineBytes = WIDTHBYTES(lWidth *nImageBits);
-	 // 暂时分配内存，以保存一行图像
+	 // 暂时分配内存，以保存一行图�?
 	 hBits = LocalAlloc(LHND, lLineBytes);
 	 if (hBits == NULL)
 	 {
@@ -575,9 +575,9 @@ BOOL MirrorDIB(LPSTR lpDIBBits, LONG lWidth, LONG lHeight, BOOL bDirection,int n
 			 lpDst = (char *)lpDIBBits + lLineBytes * (lHeight - i - 1);		 
 			 // 备份一行，宽度为lWidth
 			 memcpy(lpBits, lpDst, lLineBytes);
-			 // 将倒数第i行象素复制到第i行
+			 // 将倒数第i行象素复制到第i�?
 			 memcpy(lpDst, lpSrc, lLineBytes);
-			 // 将第i行象素复制到倒数第i行
+			 // 将第i行象素复制到倒数第i�?
 			 memcpy(lpSrc, lpBits, lLineBytes);
 			 
 		 }
@@ -726,7 +726,7 @@ void CTestDlg::OnTimer(UINT nIDEvent)
 	}	
 
 	MirrorDIB((LPSTR)pCamBuf, nWidth, nHeight, FALSE,24);
-	//释放资源,显示视频帧
+	//释放资源,显示视频�?
 	BITMAPINFOHEADER bih;
 	ContructBih(nWidth,nHeight,bih);
 	

@@ -11,6 +11,7 @@
 #include <windows.h>
 
 // C 运行时头文件
+#include <string>
 #include <stdlib.h>
 #include <malloc.h>
 #include <memory.h>

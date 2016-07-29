@@ -42,7 +42,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)..\..\bin\</OutDir>
+    <OutDir>$(SolutionDir)\bin\</OutDir>
     <TargetName>$(ProjectName)_d</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -89,6 +89,7 @@
     <ClInclude Include="MatchUI.h" />
     <ClInclude Include="MonitoringUI.h" />
     <ClInclude Include="Recorder.h" />
+    <ClInclude Include="RegisterInfo.h" />
     <ClInclude Include="RegisterUI.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SettingUI.h" />
@@ -101,6 +102,7 @@
     <ClCompile Include="MatchUI.cpp" />
     <ClCompile Include="MonitoringUI.cpp" />
     <ClCompile Include="Recorder.cpp" />
+    <ClCompile Include="RegisterInfo.cpp" />
     <ClCompile Include="RegisterUI.cpp" />
     <ClCompile Include="SettingUI.cpp" />
     <ClCompile Include="stdafx.cpp">

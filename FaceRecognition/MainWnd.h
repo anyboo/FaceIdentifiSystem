@@ -1,6 +1,8 @@
 #pragma once
 #include <DuiLib/UIlib.h>
 
+class CRegisterInfo;
+
 
 #define BT_CLOSEMWND		(_T("bt_close"))
 #define BT_RegisterWnd		(_T("bt_register"))
@@ -26,6 +28,7 @@ public:
 	void OnMonitoringWnd(TNotifyUI& msg);
 	void OnSettingWnd(TNotifyUI& msg);
 
+	CRegisterInfo* m_RegInfo;
 protected:
 	virtual LPCTSTR GetWindowClassName() const;
 	virtual CDuiString GetSkinFolder();

@@ -5,13 +5,17 @@
 #include "MonitoringUI.h"
 #include "SettingUI.h"
 
+#include "RegisterInfo.h"
+
 CMainWnd::CMainWnd()
 {
+	m_RegInfo = new CRegisterInfo;
 }
 
 
 CMainWnd::~CMainWnd()
 {
+
 }
 
 DUI_BEGIN_MESSAGE_MAP(CMainWnd, WindowImplBase)
@@ -60,11 +64,13 @@ void CMainWnd::OnRegisterWnd(TNotifyUI& msg)
 	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_FRAME, 0L, 1024, 768, 0, 0);
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
+
+	m_RegInfo = pDlg->GetRegisterInfo();
 }
 
 void CMainWnd::OnMatchWnd(TNotifyUI& msg)
 {
-	std::auto_ptr<MatchUI> pDlg(new MatchUI);
+	std::auto_ptr<MatchUI> pDlg(new MatchUI(m_RegInfo));
 	assert(pDlg.get());
 	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_FRAME, 0L, 1024, 768, 0, 0);
 	pDlg->CenterWindow();
