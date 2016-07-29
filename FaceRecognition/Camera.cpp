@@ -66,54 +66,62 @@ void Camera::GetFrame()
 	poco_assert(ret);
 }
 
-void SaveBmp(BITMAPINFO& bi, BYTE* pDataBuf)
-{
-	void ContructBih(int nWidth, int nHeight, BITMAPINFOHEADER& bih)
-	{
-		bih.biSize = 40; 						// header size
-		bih.biWidth = nWidth;
-		bih.biHeight = nHeight;
-		bih.biPlanes = 1;
-		bih.biBitCount = 24;					// RGB encoded, 24 bit
-		bih.biCompression = BI_RGB;			// no compression
-		bih.biSizeImage = nWidth*nHeight * 3;
-		bih.biXPelsPerMeter = 0;
-		bih.biYPelsPerMeter = 0;
-		bih.biClrUsed = 0;
-		bih.biClrImportant = 0;
-	}
-
-	BITMAPINFO bi;
-	memset(&bi, 0, sizeof(bi));
-	memcpy(&(bi.bmiHeader), &bih, sizeof(BITMAPINFOHEADER));
-	int iWidth = bih.biWidth;
-	int iHeight = bih.biHeight;
-
-	DWORD word = 0;
-	CString Path = "d:\\bmp\\";
-	CString name = "test";
-	CString ext = ".bmp";
-	name += std::to_string(::GetTickCount()).c_str();
-	Path.Append(name);
-	Path.Append(ext);
-	::OutputDebugStringA(Path + "\n");
-	HANDLE hfile = CreateFile(Path, GENERIC_WRITE, FILE_SHARE_READ, 0, OPEN_ALWAYS, 0, 0);
-	//fileheader
-	BITMAPFILEHEADER bmfh;                         // Other BMP header
-	int nBitsOffset = sizeof(BITMAPFILEHEADER)+bi.bmiHeader.biSize;
-	LONG lImageSize = bi.bmiHeader.biSizeImage;
-	LONG lFileSize = nBitsOffset + lImageSize;
-	bmfh.bfType = 'B' + ('M' << 8);
-	bmfh.bfOffBits = nBitsOffset;
-	bmfh.bfSize = lFileSize;
-	bmfh.bfReserved1 = bmfh.bfReserved2 = 0;
-	WriteFile(hfile, &bmfh, sizeof(BITMAPFILEHEADER), &word, 0);
-	//header
-	WriteFile(hfile, &bi.bmiHeader, sizeof(BITMAPINFOHEADER), &word, 0);
-	//info
-	//WriteFile(hfile, &bi, sizeof(BITMAPINFO), &word, 0);
-	//data
-	int bit = COLORONCOLOR;
-	WriteFile(hfile, pDataBuf, bi.bmiHeader.biWidth * bi.bmiHeader.biHeight * bit/*bih.biBitCount*/, &word, 0);
-	CloseHandle(hfile);
-}
+//class Photo
+//{
+//private:
+//	size_t width;
+//	size_t height;
+//	Buffer<char> fb(length);
+//};
+//
+//void SaveBmp(BITMAPINFO& bi, BYTE* pDataBuf)
+//{
+//	void ContructBih(int nWidth, int nHeight, BITMAPINFOHEADER& bih)
+//	{
+//		bih.biSize = 40; 						// header size
+//		bih.biWidth = nWidth;
+//		bih.biHeight = nHeight;
+//		bih.biPlanes = 1;
+//		bih.biBitCount = 24;					// RGB encoded, 24 bit
+//		bih.biCompression = BI_RGB;			// no compression
+//		bih.biSizeImage = nWidth*nHeight * 3;
+//		bih.biXPelsPerMeter = 0;
+//		bih.biYPelsPerMeter = 0;
+//		bih.biClrUsed = 0;
+//		bih.biClrImportant = 0;
+//	}
+//
+//	BITMAPINFO bi;
+//	memset(&bi, 0, sizeof(bi));
+//	memcpy(&(bi.bmiHeader), &bih, sizeof(BITMAPINFOHEADER));
+//	int iWidth = bih.biWidth;
+//	int iHeight = bih.biHeight;
+//
+//	DWORD word = 0;
+//	CString Path = "d:\\bmp\\";
+//	CString name = "test";
+//	CString ext = ".bmp";
+//	name += std::to_string(::GetTickCount()).c_str();
+//	Path.Append(name);
+//	Path.Append(ext);
+//	::OutputDebugStringA(Path + "\n");
+//	HANDLE hfile = CreateFile(Path, GENERIC_WRITE, FILE_SHARE_READ, 0, OPEN_ALWAYS, 0, 0);
+//	//fileheader
+//	BITMAPFILEHEADER bmfh;                         // Other BMP header
+//	int nBitsOffset = sizeof(BITMAPFILEHEADER)+bi.bmiHeader.biSize;
+//	LONG lImageSize = bi.bmiHeader.biSizeImage;
+//	LONG lFileSize = nBitsOffset + lImageSize;
+//	bmfh.bfType = 'B' + ('M' << 8);
+//	bmfh.bfOffBits = nBitsOffset;
+//	bmfh.bfSize = lFileSize;
+//	bmfh.bfReserved1 = bmfh.bfReserved2 = 0;
+//	WriteFile(hfile, &bmfh, sizeof(BITMAPFILEHEADER), &word, 0);
+//	//header
+//	WriteFile(hfile, &bi.bmiHeader, sizeof(BITMAPINFOHEADER), &word, 0);
+//	//info
+//	//WriteFile(hfile, &bi, sizeof(BITMAPINFO), &word, 0);
+//	//data
+//	int bit = COLORONCOLOR;
+//	WriteFile(hfile, pDataBuf, bi.bmiHeader.biWidth * bi.bmiHeader.biHeight * bit/*bih.biBitCount*/, &word, 0);
+//	CloseHandle(hfile);
+//}
