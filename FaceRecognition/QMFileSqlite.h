@@ -15,17 +15,13 @@ using Poco::Data::Session;
 using Poco::Data::Statement;
 using Poco::Data::Statement;
 
-//login infomation table
-#define CREATE_LOGIN_DEVICE_INFO_TABLE      "CREATE TABLE LoginDeviceInfo(type INTEGER, ip VARCHAR(30), port INTEGER, username VARCHAR(50), password VARCHAR(50), maxchannel INTEGER)"
-#define DROP_LOGIN_DEVICE_INFO_TABLE		"DROP TABLE IF EXISTS LoginDeviceInfo"
-#define DELETE_ALL_LOGIN_DEVICE_INFO		"DELETE from LoginDeviceInfo"
-#define DELETE_IP_LOGIN_DEVICE				"DELETE from LoginDeviceInfo where ip="
-#define SELECT_ALL_LOGIN_DEVICE_INFO		"SELECT * FROM LoginDeviceInfo"
-#define SELECT_IP_LOGIN_VIDEO				"SELECT * FROM LoginDeviceInfo where ip="
-#define INSERT_LOGIN_DEVICE_INFO			"INSERT INTO LoginDeviceInfo VALUES(:type, :ip, :port, :username, :password, :maxchannel)"
-typedef Poco::Tuple<int, std::string, int, std::string, std::string, int> LoginDeviceInfo;
-
-#define CREATE_LOGIN_DEVICE_INFO_TABLE
+#define CREATE_COMPARE_INFO_TABLE           "CREATE TABLE CompareInfo(id INTEGER PRIMARY KEY, num INTEGER, time VARCHAR(30), similarity float, picture BLOB)"
+#define DROP_COMPARE_INFO_TABLE				"DROP TABLE IF EXISTS CompareInfo"
+#define DELETE_COMPARE_INFO					"DELETE from CompareInfo"
+#define SELECT_ALL_COMPARE_INFO				"SELECT * FROM CompareInfo"
+#define INSERT_COMPARE_INFO					"INSERT INTO CompareInfo VALUES(:num, :time, :similarity, :picture)"
+typedef Poco::Tuple<int, int, std::string, float, std::string> readCompareInfo;
+typedef Poco::Tuple<int, std::string, float, std::string> writeCompareInfo;
 
 class QFileSqlite
 {
