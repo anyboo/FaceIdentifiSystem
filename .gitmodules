@@ -1,3 +1,6 @@
 [submodule "duilib"]
 	path = duilib
 	url = https://github.com/duilib/duilib.git
+[submodule "poco"]
+	path = poco
+	url = https://github.com/pocoproject/poco.git
