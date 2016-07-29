@@ -48,6 +48,15 @@
     <ClInclude Include="RegisterInfo.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="QMFileSqlite.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BitMapCompare.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DatabaseException.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -78,6 +87,15 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="RegisterInfo.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="BitMapCompare.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="QMFileSqlite.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DatabaseException.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
