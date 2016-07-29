@@ -85,6 +85,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="InitDevice.h" />
     <ClInclude Include="MainWnd.h" />
     <ClInclude Include="MatchUI.h" />
     <ClInclude Include="MonitoringUI.h" />
@@ -98,6 +99,7 @@
   <ItemGroup>
     <ClCompile Include="App.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="InitDevice.cpp" />
     <ClCompile Include="MainWnd.cpp" />
     <ClCompile Include="MatchUI.cpp" />
     <ClCompile Include="MonitoringUI.cpp" />

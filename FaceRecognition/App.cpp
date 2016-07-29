@@ -3,6 +3,9 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "MainWnd.h"
+#include "InitDevice.h"
+
+
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpCmdLine*/, int nCmdShow)
 {
@@ -11,6 +14,9 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 
 	HRESULT Hr = ::CoInitialize(NULL);
 	if (FAILED(Hr)) return 0;
+
+	CInitDevice	Init_Device;
+	Init_Device.InitStart();
 
 	std::auto_ptr<CMainWnd> pFrame(new CMainWnd);
 	assert(pFrame.get());
