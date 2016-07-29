@@ -5,6 +5,7 @@
 #include "Test.h"
 #include "TestDlg.h"
 #include <math.h>
+#include <iostream>
 /*
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -132,8 +133,8 @@ BOOL CTestDlg::OnInitDialog()
 
 	THFI_Param param;
 
-	param.nMinFaceSize=50;
-	param.nRollAngle=45;
+	param.nMinFaceSize=150;
+	param.nRollAngle=145;
 	param.bOnlyDetect=true;
 	THFI_Create(1,&param);
 
@@ -239,6 +240,37 @@ BOOL CTestDlg::DestroyWindow()
 	return CDialog::DestroyWindow();
 }
 
+BYTE* LoadBmpFile(std::string strFilePath, long& nlen, long& nWidth, long& nHeight)
+{	
+	Mat im1 = imread(strFilePath);
+
+	if (im1.empty())
+	{
+		std::cout << ("Load Photo1 File failed.") << std::endl;
+		return NULL;
+	}
+
+	nWidth = im1.cols;
+	nHeight = im1.rows;
+
+	nlen = im1.total();
+	if (nlen > 0)
+	{
+		BYTE *pdata = new BYTE[nlen];
+		memset(pdata, 0, nlen);
+		memcpy(pdata, im1.data, nlen);
+
+		return  pdata;
+	}
+	
+	return NULL;
+}
+
+Mat LoadBmpFile1(std::string strFilePath)
+{
+	Mat im =imread(strFilePath);
+	return im;
+}
 
 void ContructBih(int nWidth,int nHeight,BITMAPINFOHEADER& bih)
 {
@@ -255,6 +287,86 @@ void ContructBih(int nWidth,int nHeight,BITMAPINFOHEADER& bih)
 	bih.biClrImportant=0;
 }
 
+void CompareBitmap(BYTE *pFirst, BYTE *pSecond, long nFirstWidth, long nSecondWidth, long nFirstHeight, long nSecondHeight, float& fRet)
+{
+	long t_start, t_end;
+	t_start = GetTickCount();
+	int k;
+	//face detect
+	THFI_FacePos ptfp1[1];
+	
+	for (k = 0; k<1; k++)
+	{
+		ptfp1[k].dwReserved = (DWORD)new BYTE[512];
+	}
+	//»ñÈ¡Ãæ²¿
+	int nNum1 = THFI_DetectFace(0, pFirst, 24, nFirstWidth, nFirstHeight, ptfp1, 1);//only process one face
+
+	//RECT rcFace = ptfp1[0].rcFace;
+	//µÚÒ»¸±ÕÕÆ¬ÐèÒª±È½ÏµÄÄÚÈÝ
+	BYTE* pFeature1 = new BYTE[EF_Size()];
+
+	//only extract the first face(max size face)»ñÈ¡Ãæ²¿ÐÅÏ¢
+	int ret = EF_Extract(0, pFirst, nFirstWidth, nFirstHeight, 3, (DWORD)&ptfp1[0], pFeature1);
+	if (ret)
+	{
+
+	}
+	else
+	{
+		delete[]pFeature1;
+		pFeature1 = NULL;
+	}
+	for (k = 0; k<1; k++)
+	{
+		delete[](BYTE*)ptfp1[k].dwReserved;
+	}
+
+	//face detect»ñÈ¡Ãæ²¿ÐÅÏ¢
+	THFI_FacePos ptfp2[1];
+	for (k = 0; k<1; k++)
+	{
+		ptfp2[k].dwReserved = (DWORD)new BYTE[512];
+	}
+	int nNum2 = THFI_DetectFace(0, pSecond, 24, nSecondWidth, nSecondHeight, ptfp2, 1);
+	//rcFace = ptfp2[0].rcFace;
+
+	BYTE* pFeature2 = new BYTE[EF_Size()];
+
+	//only extract the first face(max size face)»ñÈ¡±È½ÏÄÚÈÝ
+	ret = EF_Extract(0, pSecond, nSecondWidth, nSecondHeight, 3, (DWORD)&ptfp2[0], pFeature2);
+	if (ret)
+	{
+
+	}
+	else
+	{
+		delete[]pFeature2;
+		pFeature2 = NULL;
+	}
+
+	for (k = 0; k<1; k++)
+	{
+		delete[](BYTE*)ptfp2[k].dwReserved;
+	}
+
+	if ((nNum1 > 0) && (nNum2 > 0))
+	{
+		float score = 0.0f;
+		score = EF_Compare(pFeature1, pFeature2);
+		fRet = score;
+		t_end = GetTickCount();		
+		char sztmp[50] = { 0 };
+		sprintf_s(sztmp, "compare result:%f, time: %d", score, t_end - t_start);
+		std::cout << sztmp << std::endl;
+	}
+	else
+	{		
+		char sztmp[50] = { 0 };
+		sprintf_s(sztmp, "first face num:%d, second face num:%d", nNum1, nNum2);
+		std::cout << sztmp << std::endl;
+	}
+}
 #include <string>
 void DrawBmpBuf(BITMAPINFOHEADER& bih,BYTE* pDataBuf,HWND hShowWnd,BOOL bFitWnd)
 {
@@ -300,13 +412,14 @@ void SaveBmp(BITMAPINFO& bi, BYTE* pDataBuf)
 	
 	DWORD word = 0;
 	CString Path = "d:\\bmp\\";
+	::CreateDirectory("d:\\bmp\\", NULL);
 	CString name = "test";
 	CString ext = ".bmp";
 	name += std::to_string(::GetTickCount()).c_str();
 	Path.Append(name);
 	Path.Append(ext);
 	::OutputDebugStringA(Path + "\n");
-	HANDLE hfile = CreateFile(Path, GENERIC_WRITE, FILE_SHARE_READ, 0, OPEN_ALWAYS, 0, 0);
+	HANDLE hfile = CreateFile(Path, GENERIC_WRITE, FILE_SHARE_READ, 0, CREATE_NEW, FILE_ATTRIBUTE_NORMAL, 0);
 	//fileheader
 	BITMAPFILEHEADER bmfh;                         // Other BMP header
 	int nBitsOffset = sizeof(BITMAPFILEHEADER) + bi.bmiHeader.biSize;
@@ -594,13 +707,23 @@ void CTestDlg::OnTimer(UINT nIDEvent)
 	}
 	else
 	{
-	//	SetWindowText("No Face!");
+		SetWindowText("No Face!");
 	}
 
 	for(k=0;k<1;k++)
 	{
 		delete [](BYTE*)ptfp[k].dwReserved;
 	}
+	Mat BmpMat = LoadBmpFile1("D:\\bmp\\test2019744.bmp");
+	//if ()
+	{
+		float fRet = 0.0;
+		CompareBitmap(pCamBuf, BmpMat.data, nWidth, BmpMat.cols, nHeight, BmpMat.rows, fRet);
+		char szRet[30] = { 0 };
+		sprintf_s(szRet, "ret:%f", fRet);
+		std::cout << szRet << std::endl;
+		//delete pMat;
+	}	
 
 	MirrorDIB((LPSTR)pCamBuf, nWidth, nHeight, FALSE,24);
 	//é‡Šæ”¾èµ„æº,æ˜¾ç¤ºè§†é¢‘å¸§
@@ -636,14 +759,7 @@ void CTestDlg::OnStart()
 		AfxMessageBox("Open camera device failed.");
 		return;
 	}
-	/*{
-		bool OK = m_pCap->SetVideoFile(_T("d:\\video.mp4"));
-		if (!OK)
-		{
-		AfxMessageBox("SetVideoFile Failed");
-		}
-		}*/
-	
+		
 	BOOL bOK=m_pCap->InitCapture();
 	if(!bOK)
 	{
@@ -652,17 +768,11 @@ void CTestDlg::OnStart()
 		m_pCap=NULL;
 		return;
 	}
-	/*{
-		bOK = m_pCap->SetVideoFile(_T("d:\\video.mp4"));
-		if (!bOK)
-		{
-		AfxMessageBox("SetVideoFile Failed");
-		}
-		}*/
+	
 	m_pCap->Play();
 	// TODO: Add extra initialization here
 	
-	SetTimer(100,50,NULL);	
+	SetTimer(100,1000,NULL);	
 
 
 	GetDlgItem(IDC_START)->EnableWindow(FALSE);
