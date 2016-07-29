@@ -328,17 +328,17 @@ void CTHDetectDemoDlg::OnBnClickedPlay()
 	UpdateData();
 
 	int i,j;
-
+	long t_start, t_end;
+	CString str;
+	t_start = GetTickCount();
+	//获取第一副照片
 	Mat im1=imread((LPCTSTR)m_strPhoto1File);
 	
 	if(im1.empty()) 
 	{
 		AfxMessageBox("Load Photo1 File failed.");
 		return ;
-	}
-
-	DWORD t1,t2;
-	t1=GetTickCount();
+	}	
 
 	int nWidth1=im1.cols;
 	int nHeight1=im1.rows;
@@ -350,18 +350,18 @@ void CTHDetectDemoDlg::OnBnClickedPlay()
 	{
 		ptfp1[k].dwReserved=(DWORD)new BYTE[512];
 	}
-
+	//获取面部
 	int nNum1=THFI_DetectFace(0,im1.data,24,nWidth1,nHeight1,ptfp1,1);//only process one face
 
 	RECT rcFace=ptfp1[0].rcFace;
-
+	//第一副照片需要比较的内容
 	BYTE* pFeature1=new BYTE[EF_Size()];
 
-	//only extract the first face(max size face)
+	//only extract the first face(max size face)获取面部信息
 	int ret=EF_Extract(0,im1.data,nWidth1,nHeight1,3,(DWORD)&ptfp1[0],pFeature1);
-	if(ret)
+	if (ret)
 	{
-
+		
 	}
 	else
 	{
@@ -372,19 +372,17 @@ void CTHDetectDemoDlg::OnBnClickedPlay()
 	{
 		delete [](BYTE*)ptfp1[k].dwReserved;
 	}
-
-	t2=GetTickCount();
-	CString str;
-
-	for (i=0;i<nNum1;i++)
+		
+	//绘制图像
+	/*for (i=0;i<nNum1;i++)
 	{
 		rectangle(im1, Point(ptfp1[i].rcFace.left,ptfp1[i].rcFace.top), Point(ptfp1[i].rcFace.right,ptfp1[i].rcFace.bottom),cvScalar(0,255,0),2,CV_AA,0);
 	}
 
 	imshow("Detect Photo1",im1);
-
-	waitKey(30);
-
+*/
+	//waitKey(30);
+	//读取第二副照片信息
 	Mat im2=imread((LPCTSTR)m_strPhoto2File);
 	if(im2.empty()) 
 	{
@@ -396,7 +394,7 @@ void CTHDetectDemoDlg::OnBnClickedPlay()
 	int nWidth2=im2.cols;
 	int nHeight2=im2.rows;
 
-	//face detect
+	//face detect获取面部信息
 	THFI_FacePos ptfp2[1];
 	for(k=0;k<1;k++)
 	{
@@ -409,9 +407,9 @@ void CTHDetectDemoDlg::OnBnClickedPlay()
 
 	BYTE* pFeature2=new BYTE[EF_Size()];
 
-	//only extract the first face(max size face)
+	//only extract the first face(max size face)获取比较内容
 	ret=EF_Extract(0,im2.data,nWidth2,nHeight2,3,(DWORD)&ptfp2[0],pFeature2);
-	if(ret)
+	if (ret)
 	{
 
 	}
@@ -420,25 +418,34 @@ void CTHDetectDemoDlg::OnBnClickedPlay()
 		delete []pFeature2;
 		pFeature2=NULL;
 	}
-
-	for (i=0;i<nNum2;i++)
+	//绘制第二副图像
+	/*for (i=0;i<nNum2;i++)
 	{
 		rectangle(im2, Point(ptfp2[i].rcFace.left,ptfp2[i].rcFace.top), Point(ptfp2[i].rcFace.right,ptfp2[i].rcFace.bottom),cvScalar(0,255,0),2,CV_AA,0);
-	}
+	}*/
 
 	for(k=0;k<1;k++)
 	{
 		delete [](BYTE*)ptfp2[k].dwReserved;
 	}
 
-	imshow("Detect Photo2",im2);
+	//imshow("Detect Photo2",im2);
 
-	waitKey(30);
-
-	float score=0.0f;
-	score=EF_Compare(pFeature1,pFeature2);
-	str.Format("s=%f",score);
-	AfxMessageBox(str);
+	//waitKey(30);
+	//开始比较
+	if ((nNum1 > 0) && (nNum2 > 0))
+	{
+		float score = 0.0f;
+		score = EF_Compare(pFeature1, pFeature2);
+		t_end = GetTickCount();
+		str.Format("s=%f, time=%d", score, t_end - t_start);
+		AfxMessageBox(str);
+	}
+	else
+	{
+		str.Format("nNum1=%d, nNum2=%d", nNum1, nNum2);
+		AfxMessageBox(str);
+	}
 
 	delete []pFeature1;
 	delete []pFeature2;
