@@ -2,21 +2,29 @@
 #include "Recorder.h"
 #include "Camera.h"
 
-Recorder::Recorder()
+Recorder::Recorder(ICamera& camera)
 :t(100, 50), tc(*this, &Recorder::onTimer),
-_camera(new Camera)
+_camera(camera)
 {
-	_camera->Open();
-	t.start(tc);
+	
 }
-
 
 Recorder::~Recorder()
 {
-	_camera->Close();
+}
+
+void Recorder::start()
+{
+	_camera.Open();
+	t.start(tc);
+}
+
+void Recorder::stop()
+{
+	_camera.Close();
 }
 
 void Recorder::onTimer(Poco::Timer& timer)
 {
-	_camera->GetFrame();
+	_camera.GetFrame();
 }

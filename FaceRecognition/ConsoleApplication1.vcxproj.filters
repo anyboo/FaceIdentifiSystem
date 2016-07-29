@@ -48,7 +48,17 @@
     <ClInclude Include="RegisterInfo.h">
       <Filter>头文件</Filter>
     </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="InitDevice.h">
+=======
+    <ClInclude Include="QMFileSqlite.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BitMapCompare.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DatabaseException.h">
+>>>>>>> 484c19901e9c429bc6be2789d7cd29986db78d1d
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -83,7 +93,17 @@
     <ClCompile Include="RegisterInfo.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="InitDevice.cpp">
+=======
+    <ClCompile Include="BitMapCompare.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="QMFileSqlite.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DatabaseException.cpp">
+>>>>>>> 484c19901e9c429bc6be2789d7cd29986db78d1d
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
