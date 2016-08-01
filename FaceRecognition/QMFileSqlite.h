@@ -21,6 +21,7 @@ using Poco::Data::Statement;
 #define DROP_USER_INFO_TABLE				"DROP TABLE IF EXISTS UserInfo"
 #define DELETE_USER_INFO_TABLE				"DELETE from UserInfo"
 #define SELECT_ALL_USER_INFO				"select * from UserInfo"
+#define SELECT_COUNT_USER_INFO				"select count(*) from UserInfo"
 #define INSERT_USET_INFO					"INSERT INTO UserInfo (name, age, gender, birthday, address, phone, certificate, audit, image) \
 											VALUES(:name, :age, :gender, :birthday, :address, :phone, :certificate, :audit, :image)"
 typedef Poco::Tuple<int, std::string, int, std::string, std::string, std::string, std::string, std::string, bool, Poco::Data::CLOB> readUserInfo;
