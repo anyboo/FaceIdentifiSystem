@@ -2,10 +2,10 @@
 <Window size="1024,768" caption="0,0,0,0" roundcorner="4,4" showdirty="false">
 	<Font shared="true" id="1" name="微软雅黑" size="18" bold="false" />
 	<Font shared="false" id="2" name="微软雅黑" size="26" bold="false" />
-	<VerticalLayout bkimage="file='skin/bsbj.png'" height="765" inset="3,3,3,3" bordersize="3" bordercolor="0x12345678">
-		<HorizontalLayout width="1024" height="50" bkimage="file='skin/beijing.png'">
+	<VerticalLayout bkimage="file='skin/RegBJ.png'" height="765" inset="3,3,3,3" bordersize="3" bordercolor="0x12345678">
+		<HorizontalLayout width="1024" height="70" >
 			<Button name="close_btn" width="30" height="30" padding="10,10,0,0" tooltip="返回" foreimage="file='skin/xz.png' dest='6,2,20,29'" hotimage="file='skin/hsbj.png'"/>
-			<Label text="注册信息" font="1" padding="400,0,0,0" textcolor="#FFFFFFFF" align="center" />
+			<Label text="注册信息" font="2" padding="400,0,0,0" textcolor="#FFFFFFFF" align="center" />
 		</HorizontalLayout>
 		<VerticalLayout height="610" bordersize="3" bordercolor="0x88888888" inset="3,0,3,3" padding="10,0,10,0">
 		<HorizontalLayout >
