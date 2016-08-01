@@ -2,6 +2,8 @@
 
 #include "stdafx.h"
 #include "BitMapCompare.h"
+#include <queue>
+#include "MonitoringUI.h"
 
 BitMapCompare::BitMapCompare(void *pthis)
 {
@@ -123,7 +125,12 @@ void BitMapCompare::run()
 
 
 		//将大于0.6的数据写入数据库
+		CMonitoringUI *pWnd = (CMonitoringUI *)_pWnd;
+		std::queue<readCompareInfo> pcompare = pWnd->getCompareQueue();
+		readCompareInfo rCompareInfo;
+		pcompare.push(rCompareInfo);
 		
+		Poco::Thread::sleep(200);
 	}
 }
 
