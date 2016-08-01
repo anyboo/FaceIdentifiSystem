@@ -15,13 +15,24 @@ using Poco::Data::Session;
 using Poco::Data::Statement;
 using Poco::Data::Statement;
 
-#define CREATE_COMPARE_INFO_TABLE           "CREATE TABLE CompareInfo(id INTEGER PRIMARY KEY, num INTEGER, time VARCHAR(30), similarity float, picture BLOB)"
+#define CREATE_USER_INFO_TABLE              "CREATE TABLE IF NOT EXISTS UserInfo(id INTEGER PRIMARY KEY, \
+											name VARCHAR(50), age INTEGER, gender VARCHAR(10), birthday VARCHAR(30), \
+											address VARCHAR(100), phone VARCHAR(20), certificate VARCHAR(30), audit BOOL, image BLOB)"
+#define DROP_USER_INFO_TABLE				"DROP TABLE IF EXISTS UserInfo"
+#define DELETE_USER_INFO_TABLE				"DELETE from UserInfo"
+#define SELECT_ALL_USER_INFO				"select * from UserInfo"
+#define INSERT_USET_INFO					"INSERT INTO UserInfo (name, age, gender, birthday, address, phone, certificate, audit, image) \
+											VALUES(:name, :age, :gender, :birthday, :address, :phone, :certificate, :audit, :image)"
+typedef Poco::Tuple<int, std::string, int, std::string, std::string, std::string, std::string, std::string, bool, Poco::Data::CLOB> readUserInfo;
+typedef Poco::Tuple<std::string, int, std::string, std::string, std::string, std::string, std::string, bool, Poco::Data::CLOB> writeUserInfo;
+
+#define CREATE_COMPARE_INFO_TABLE           "CREATE TABLE IF NOT EXISTS CompareInfo(id INTEGER PRIMARY KEY, num INTEGER, time VARCHAR(30), similarity float, picture BLOB)"
 #define DROP_COMPARE_INFO_TABLE				"DROP TABLE IF EXISTS CompareInfo"
 #define DELETE_COMPARE_INFO					"DELETE from CompareInfo"
 #define SELECT_ALL_COMPARE_INFO				"SELECT * FROM CompareInfo"
-#define INSERT_COMPARE_INFO					"INSERT INTO CompareInfo VALUES(:num, :time, :similarity, :picture)"
-typedef Poco::Tuple<int, int, std::string, float, std::string> readCompareInfo;
-typedef Poco::Tuple<int, std::string, float, std::string> writeCompareInfo;
+#define INSERT_COMPARE_INFO					"INSERT INTO CompareInfo (num, time, similarity, picture) VALUES(:num, :time, :similarity, :picture)"
+typedef Poco::Tuple<int, int, std::string, float, Poco::Data::CLOB> readCompareInfo;
+typedef Poco::Tuple<int, std::string, float, Poco::Data::CLOB> writeCompareInfo;
 
 class QFileSqlite
 {
