@@ -20,8 +20,8 @@ using Poco::Data::Statement;
 #define DELETE_COMPARE_INFO					"DELETE from CompareInfo"
 #define SELECT_ALL_COMPARE_INFO				"SELECT * FROM CompareInfo"
 #define INSERT_COMPARE_INFO					"INSERT INTO CompareInfo VALUES(:num, :time, :similarity, :picture)"
-typedef Poco::Tuple<int, int, std::string, float, std::string> readCompareInfo;
-typedef Poco::Tuple<int, std::string, float, std::string> writeCompareInfo;
+typedef Poco::Tuple<int, int, std::string, float, Poco::Data::CLOB> readCompareInfo;
+typedef Poco::Tuple<int, std::string, float, Poco::Data::CLOB> writeCompareInfo;
 
 class QFileSqlite
 {
