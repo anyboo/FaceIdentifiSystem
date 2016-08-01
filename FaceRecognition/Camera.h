@@ -1,24 +1,39 @@
 #pragma once
 #include <Poco/RefCountedObject.h>
+#include "Photo.h"
 
 class CCapture;
 struct SCapQuality;
 
+class ICamera
+{
+public:
+	virtual void Open() = 0;
+	virtual void Close() = 0;
+	virtual void GetFrame() = 0;
+};
+
 class Camera 
-	: public Poco::RefCountedObject
+	: public ICamera
 {
 public:
 	Camera();
 	~Camera();
 
-	void Open();
-	void Close();
-	void SetQuality(SCapQuality* pQuality);
-	void GetFrame();
+	virtual void Open();
+	virtual void Close();
+	virtual void GetFrame();
 
+	size_t width() const;
+	size_t height() const;
+
+protected:
+	void SetQuality(SCapQuality* pQuality);
+	void SaveBmp(char* pDataBuf);
 private:
 	CCapture* _camera;
 	size_t _width;
 	size_t _height;
+	bool isRunning;
 };
 

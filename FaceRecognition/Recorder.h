@@ -1,19 +1,23 @@
 #pragma once
 
 #include <Poco/Timer.h>
-#include <Poco/AutoPtr.h>
 
-class Camera;
+class ICamera;
+
 class Recorder
 {
 public:
-	Recorder();
+	Recorder(ICamera& camera);
 	~Recorder();
+
+	void start();
+	void stop();
+
 protected:
 	void onTimer(Poco::Timer& timer);
 private:
 	Poco::Timer t;
 	Poco::TimerCallback<Recorder> tc;
-	Poco::AutoPtr<Camera> _camera;
+	ICamera& _camera;
 };
 
