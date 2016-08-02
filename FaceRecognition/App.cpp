@@ -3,10 +3,6 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "MainWnd.h"
-
-#include "InitDevice.h"
-
-
 #include "Camera.h"
 #include "Recorder.h"
 
@@ -19,9 +15,6 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 	HRESULT Hr = ::CoInitialize(NULL);
 	if (FAILED(Hr)) return 0;
 
-	CInitDevice	Init_Device;
-	Init_Device.InitStart();
-
 	std::auto_ptr<CMainWnd> pFrame(new CMainWnd);
 	assert(pFrame.get());
 	pFrame->Create(NULL, NULL, UI_WNDSTYLE_DIALOG, WS_EX_WINDOWEDGE | WS_EX_ACCEPTFILES);
@@ -31,11 +24,11 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 	
 	Camera dev;
 	Recorder r(dev);//, p(dev);
-	r.start();
+	//r.start();
 	//p.start();
 
 	CPaintManagerUI::MessageLoop();
-	r.stop();
+	//r.stop();
 	//p.stop();
 	::CoUninitialize();
 

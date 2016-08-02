@@ -13,9 +13,6 @@
     <ClCompile Include="DatabaseException.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="InitDevice.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="MainWnd.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -43,6 +40,8 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Picture.cpp" />
+    <ClCompile Include="CaptureNotification.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BitMapCompare.h">
@@ -52,9 +51,6 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="DatabaseException.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="InitDevice.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="MainWnd.h">
@@ -87,6 +83,8 @@
     <ClInclude Include="QMFileSqlite.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Picture.h" />
+    <ClInclude Include="CaptureNotification.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ConsoleApplication1.rc" />
