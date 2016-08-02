@@ -1,15 +1,31 @@
-#ifndef __PICTURE_H__
-#define __PICTURE_H__
+#pragma once
+
+#include <Poco/AutoPtr.h>
+#include <Poco/Buffer.h>
+#include <Poco/RefCountedObject.h>
 
 class Picture
+	:public Poco::RefCountedObject
 {
 public:
-	Picture();
+	typedef Poco::AutoPtr<Picture> Ptr;
+
+	Picture(char* data, size_t len);
 	~Picture();
 
-	BITMAPINFOHEADER m_bih;
-	BYTE* m_pCamBuf;;
+	size_t width() const;
+	size_t height() const;
+
+	void SetWidth(size_t width);
+	void SetHeight(size_t height);
+
+protected:
+	void out2bmp();
+private:
+	Poco::Buffer<char> buffer;
+
+	size_t _width;
+	size_t _height;
 };
 
-#endif 
 

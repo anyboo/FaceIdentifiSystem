@@ -4,7 +4,7 @@
 
 Recorder::Recorder(ICamera& camera)
 :t(100, 50), tc(*this, &Recorder::onTimer),
-_camera(camera)
+_camera(camera), _running(false)
 {
 	
 }
@@ -15,16 +15,32 @@ Recorder::~Recorder()
 
 void Recorder::start()
 {
-	_camera.Open();
-	t.start(tc);
+	if (!_running)
+	{
+		_camera.Open();
+		t.start(tc);
+		sw.start();
+		_running = true;
+	}
 }
 
 void Recorder::stop()
 {
-	_camera.Close();
+	if (_running)
+	{
+		_camera.Close();
+		sw.stop();
+		sw.reset();
+		_running = false;
+	}
 }
 
 void Recorder::onTimer(Poco::Timer& timer)
 {
 	_camera.GetFrame();
+	
+	//FrameBuffer data(100);
+	/*sw.elapsed();
+	if (!bcompare)
+		comparePhoto();*/
 }

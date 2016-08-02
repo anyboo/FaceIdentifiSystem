@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Poco/Timer.h>
+#include <Poco/Stopwatch.h>
 
 class ICamera;
 
@@ -16,8 +17,10 @@ public:
 protected:
 	void onTimer(Poco::Timer& timer);
 private:
+	Poco::Stopwatch sw;
 	Poco::Timer t;
 	Poco::TimerCallback<Recorder> tc;
 	ICamera& _camera;
+	bool _running;
 };
 

@@ -1,6 +1,6 @@
 #pragma once
-#include <Poco/RefCountedObject.h>
-#include "Photo.h"
+#include <Poco/Buffer.h>
+#include "Picture.h"
 
 class CCapture;
 struct SCapQuality;
@@ -17,6 +17,7 @@ class Camera
 	: public ICamera
 {
 public:
+
 	Camera();
 	~Camera();
 
