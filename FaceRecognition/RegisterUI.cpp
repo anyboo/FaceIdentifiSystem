@@ -4,15 +4,19 @@
 
 #include "Camera.h"
 
+#include "LangueConfig.h"
+
 RegisterUI::RegisterUI()
 :m_photo_agin(false), r(new Camera)
 {
 	addObserver(*this);
+	r.start();
 }
 
 
 RegisterUI::~RegisterUI()
 {
+	r.stop();
 	removeObserver(*this);
 }
 
@@ -39,7 +43,6 @@ CDuiString RegisterUI::GetSkinFile()
 
 void RegisterUI::OnFinalMessage(HWND hWnd)
 {
-	r.stop();
 	WindowImplBase::OnFinalMessage(hWnd);
 }
 
@@ -55,28 +58,23 @@ void RegisterUI::OnCloseRWnd(TNotifyUI& msg)
 
 void RegisterUI::InitWindow()
 {	
-	r.start();
+	
 }
 
 void RegisterUI::OnFilishi(TNotifyUI& msg)
 {
-	CVerticalLayoutUI* vLyt = dynamic_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("lab_lyt")));
 	CLabelUI* lab_Prompt = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("lab_Prompt")));
 	bool bRet = SaveRegisterInfo();
 	if (!bRet)
 	{
-		CDialogBuilder builder;
-		CLabelUI* lab = (CLabelUI*)(builder.Create(_T("xml//labUI1.xml"), (UINT)0, NULL, &m_PaintManager));
-		vLyt->Remove(lab_Prompt);
-		vLyt->Add(lab);
+		std::string str = LangueConfig::GetShowText(1);
+		lab_Prompt->SetText(str.c_str());
 		return;
 	}
 	if (!m_photo_agin)
 	{
-		CDialogBuilder builder;
-		CLabelUI* lab = (CLabelUI*)(builder.Create(_T("xml//labUI2.xml"), (UINT)0, NULL, &m_PaintManager));
-		vLyt->Remove(lab_Prompt);
-		vLyt->Add(lab);
+		std::string str = LangueConfig::GetShowText(2);
+		lab_Prompt->SetText(str.c_str());
 		return;
 	}
 	Close();
@@ -84,22 +82,18 @@ void RegisterUI::OnFilishi(TNotifyUI& msg)
 
 void RegisterUI::OnGetPhoto(TNotifyUI& msg)
 {
-	CVerticalLayoutUI* vLyt = dynamic_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("vLyt")));
-	CButtonUI* bt_photo = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("photo")));
+	CLabelUI* lab_Prompt = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("lab_Prompt")));
+	CButtonUI* btn_photo = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("photo")));
 	if (m_photo_agin)
 	{
-		CDialogBuilder builder;
-		CLabelUI* btn = (CLabelUI*)(builder.Create(_T("xml//labUI3.xml"), (UINT)0, NULL, &m_PaintManager));
-		vLyt->Remove(bt_photo);
-		vLyt->Add(btn);
+		std::string str = LangueConfig::GetShowText(3);
+		btn_photo->SetText(str.c_str());
 		m_photo_agin = false;
 	}
 	else
 	{
-		CDialogBuilder builder;
-		CLabelUI* btn = (CLabelUI*)(builder.Create(_T("xml//labUI4.xml"), (UINT)0, NULL, &m_PaintManager));
-		vLyt->Remove(bt_photo);
-		vLyt->Add(btn);
+		std::string str = LangueConfig::GetShowText(4);
+		btn_photo->SetText(str.c_str());
 		m_photo_agin = true;
 	}
 }

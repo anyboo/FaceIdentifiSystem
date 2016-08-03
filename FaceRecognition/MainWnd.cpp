@@ -163,3 +163,15 @@ LRESULT CMainWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	if (m_PaintManager.MessageHandler(uMsg, wParam, lParam, lRes)) return lRes;
 	return CWindowWnd::HandleMessage(uMsg, wParam, lParam);
 }
+
+//LRESULT CMainWnd::OnGetHotKey(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+//{
+//	UINT fuModifiers = (UINT)LOWORD(lParam);  // key-modifier flags   
+//	UINT uVirtKey = (UINT)HIWORD(lParam);     // virtual-key code   
+//
+//	//判断响应了什么热键  
+//	if (MOD_CONTROL == fuModifiers && 'f' == uVirtKey)
+//	{
+//	}
+//	return 0;
+//}

@@ -74,15 +74,19 @@ size_t Camera::height() const
 	return _height;
 }
 
+#include <sstream>
+
 void Camera::GetFrame()
 {
+	if (!isRunning) return;
+
 	poco_check_ptr(_camera);
 
 	long len = _width* _height * 3;
 	char* data = new char[len];
 	
 	bool ret = _camera->GetFrame((BYTE*)data, len);
-	poco_assert(ret);
+	if(!ret) return;
 	MirrorDIB(data, _width, _height, true,24);
 
 	Picture::Ptr pic(new Picture(data, len));
