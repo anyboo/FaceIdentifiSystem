@@ -42,9 +42,4 @@ void Recorder::onTimer(Poco::Timer& timer)
 {
 	poco_check_ptr(_camera.get());
 	_camera->GetFrame();
-	
-	//FrameBuffer data(100);
-	/*sw.elapsed();
-	if (!bcompare)
-		comparePhoto();*/
 }

@@ -6,11 +6,12 @@
 #define BT_GETPHOTO			(_T("photo"))
 #define BT_OK_REGISTER		(_T("btn_ok"))
 
-#include <Poco/Notification.h>
 #include "Recorder.h"
+#include "CaptureNotify.h"
 
 class RegisterUI :
-	public WindowImplBase
+	public WindowImplBase,
+	public CaptureNotify
 {
 public:
 	RegisterUI();
@@ -23,7 +24,7 @@ public:
 	virtual LRESULT OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
 	virtual LRESULT HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-
+	virtual void handle1(Poco::Notification* pNf);
 	DUI_DECLARE_MESSAGE_MAP();
 
 	void OnCloseRWnd(TNotifyUI& msg);
@@ -45,8 +46,5 @@ protected:
 	virtual CDuiString GetSkinFolder();
 	virtual CDuiString GetSkinFile();
 
-	void handle1(Poco::Notification* pNf);
-	void addObserver();
-	void removeObserver();
 	Recorder r;//, p(dev);
 };
