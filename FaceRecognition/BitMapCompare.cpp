@@ -9,6 +9,8 @@ BitMapCompare::BitMapCompare(void *pthis)
 {
 	_pWnd = pthis;
 	_break = false;
+	_count = 0;
+	
 }
 
 BitMapCompare::~BitMapCompare()
@@ -111,8 +113,8 @@ Mat BitMapCompare::LoadBmpFile1(std::string strFilePath)
 void BitMapCompare::run()
 {
 	int i;
-	float fRet;
-
+	float fRet = 0.0;
+	
 	for (;;)
 	{
 		if (_break)
@@ -130,26 +132,30 @@ void BitMapCompare::run()
 		while (!pCapData->empty())
 		{
 			CapBitmapData Bitmapdata = pCapData->front();
-			//开始比对
-			for (i = 0; i < _vUserInfo.size(); i++)
+			_count++;
+			if (_count % 10 == 0)
 			{
-				fRet = 0.0;				
-				Poco::Data::CLOB pUserPic = _vUserInfo[i].get<9>();
-				CompareBitmap(Bitmapdata.data, (BYTE *)pUserPic.rawContent(), Bitmapdata.getWidth(), 640, Bitmapdata.getHeigth(), 480, fRet);
-
-				if (fRet > 0.6)
+				//开始比对
+				for (i = 0; i < _vUserInfo.size(); i++)
 				{
-					//将大于0.6的数据写入队列		
-					std::queue<writeCompareInfo> *pcompare = &pWnd->getCompareQueue();
-					writeCompareInfo rCompareInfo;
-					rCompareInfo.set<0>(true);				
+					fRet = 0.0;
+					Poco::Data::CLOB pUserPic = _vUserInfo[i].get<9>();
+					CompareBitmap(Bitmapdata.data, (BYTE *)pUserPic.rawContent(), Bitmapdata.getWidth(), 640, Bitmapdata.getHeigth(), 480, fRet);
 
-					rCompareInfo.set<1>(_vUserInfo[i].get<0>());
-					
-					pcompare->push(rCompareInfo);
+					if (fRet > 0.6)
+					{
+						//将大于0.6的数据写入队列		
+						std::queue<writeCompareInfo> *pcompare = &pWnd->getCompareQueue();
+						writeCompareInfo rCompareInfo;
+						rCompareInfo.set<0>(true);
+
+						rCompareInfo.set<1>(_vUserInfo[i].get<0>());
+
+						pcompare->push(rCompareInfo);
+					}
 				}
-			}
-
+			}	
+			
 			pCapData->pop();
 			Poco::Thread::sleep(20);
 		}

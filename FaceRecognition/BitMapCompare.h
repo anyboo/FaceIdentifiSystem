@@ -4,6 +4,12 @@
 #include "Poco/Thread.h"
 #include "QMFileSqlite.h"
 
+#include "cv.h"
+#include "cxcore.h"
+#include "highgui.h"
+#include "THFaceImage_i.h"
+#include "THFeature_i.h"
+
 struct CapBitmapData
 {
 	CapBitmapData()
@@ -101,11 +107,7 @@ struct CapBitmapData
 	long        height;         //Î»Í¼µÄ¸ß
 };
 
-#include "cv.h"
-#include "cxcore.h"
-#include "highgui.h"
-#include "THFaceImage_i.h"
-#include "THFeature_i.h"
+
 
 class BitMapCompare : public Poco::Runnable
 {
@@ -117,6 +119,7 @@ public:
 
 private:
 	void CompareBitmap(BYTE *pFirst, BYTE *pSecond, long nFirstWidth, long nSecondWidth, long nFirstHeight, long nSecondHeight, float& fRet);
+	void CompareBitmap1(BYTE *pFirst, BYTE *pSecond, long nFirstWidth, long nSecondWidth, long nFirstHeight, long nSecondHeight, float& fRet);
 	cv::Mat LoadBmpFile1(std::string strFilePath);
 	void getCamBuf();
 	void writeDB();
@@ -127,4 +130,5 @@ private:
 	bool             _break;
 	void *           _pWnd;
 	vector<readUserInfo> _vUserInfo;
+	int             _count;
 };

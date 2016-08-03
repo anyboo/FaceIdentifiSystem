@@ -8,6 +8,7 @@
 #include "Recorder.h"
 #include "CaptureNotify.h"
 
+
 #define BT_CLOSE_MonWnd		(_T("close_btn2"))
 
 

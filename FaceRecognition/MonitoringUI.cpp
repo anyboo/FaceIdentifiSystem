@@ -3,6 +3,7 @@
 
 #include "Poco/Delegate.h"
 #include "Picture.h"
+#include "BitMapCompare.h"
 
 
 CMonitoringUI::CMonitoringUI()
@@ -70,7 +71,7 @@ void CMonitoringUI::OnCloseWnd(TNotifyUI& msg)
 }
 
 void CMonitoringUI::InitWindow()
-{
+{		
 	::SetTimer(GetHWND(), 1, 50, nullptr);
 //	::SetTimer(GetHWND(), 2, 2000, nullptr);
 	
@@ -82,12 +83,12 @@ LRESULT CMonitoringUI::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
 	{
 		m_nBmp = m_nBmp + 1;
 		CVerticalLayoutUI* photo_Lyt = dynamic_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("photo_video")));
-
+		
 		if (!m_compare.empty())
 		{
 			writeCompareInfo wCompareInfo = m_compare.front();
 			//ΩÁ√Êœ‘ æ
-
+			cout << " get a face record" << endl;
 
 			m_compare.pop();
 		}
@@ -158,5 +159,6 @@ void CMonitoringUI::handle1(Poco::Notification* pNf)
 	//CaptureNotify::handle1(pNf);
 	CaptureNotify::handle1(pNf, &pImg);
 	CapBitmapData capdata((const BYTE *)pImg->data(), pImg->width() * pImg->height() * 3, pImg->width(), pImg->height());
-	m_capdata.push(capdata);
+	m_capdata.push(capdata);		
+	delete pImg;
 }
