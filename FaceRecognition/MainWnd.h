@@ -34,8 +34,7 @@ public:
 
 	void Show_HideTask(bool IsHide);
 
-	virtual LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
-//	LRESULT	OnGetHotKey(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+
 
 
 	CRegisterInfo* m_RegInfo;

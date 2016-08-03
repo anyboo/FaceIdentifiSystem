@@ -15,6 +15,8 @@ public:
 
 	virtual void handle1(Poco::Notification* pNf);
 
+	virtual void handle1(Poco::Notification* pNf, Picture **pImg);
+
 protected:
 	template <class C>
 	void addObserver(C& object)
