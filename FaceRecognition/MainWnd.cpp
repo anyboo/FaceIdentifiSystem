@@ -4,6 +4,7 @@
 #include "MatchUI.h"
 #include "MonitoringUI.h"
 #include "SettingUI.h"
+#include "SignOutUI.h"
 
 #include "RegisterInfo.h"
 
@@ -14,6 +15,7 @@
 CMainWnd::CMainWnd()
 {
 	m_RegInfo = new CRegisterInfo;
+
 }
 
 
@@ -28,6 +30,7 @@ DUI_ON_CLICK_CTRNAME(BT_RegisterWnd, OnRegisterWnd)
 DUI_ON_CLICK_CTRNAME(BT_MATCHWND, OnMatchWnd)
 DUI_ON_CLICK_CTRNAME(BT_Monitoring, OnMonitoringWnd)
 DUI_ON_CLICK_CTRNAME(BT_SETTINGWND, OnSettingWnd)
+DUI_ON_CLICK_CTRNAME(BT_SIGNOUTWND, OnSignOutWnd)
 DUI_END_MESSAGE_MAP()
 
 LPCTSTR CMainWnd::GetWindowClassName() const
@@ -69,12 +72,11 @@ void CMainWnd::OnRegisterWnd(TNotifyUI& msg)
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
 
-	m_RegInfo = pDlg->GetRegisterInfo();
 }
 
 void CMainWnd::OnMatchWnd(TNotifyUI& msg)
 {
-	std::auto_ptr<MatchUI> pDlg(new MatchUI(m_RegInfo));
+	std::auto_ptr<MatchUI> pDlg(new MatchUI());
 	assert(pDlg.get());
 	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_FRAME, 0L, 1024, 768, 0, 0);
 	pDlg->CenterWindow();
@@ -126,4 +128,38 @@ void CMainWnd::Show_HideTask(bool IsHide)
 		apBar.lParam = lParam;
 		SHAppBarMessage(ABM_SETSTATE, &apBar);
 	}
+}
+
+void CMainWnd::OnSignOutWnd(TNotifyUI& msg)
+{
+	std::auto_ptr<CSignOutUI> pDlg(new CSignOutUI);
+	assert(pDlg.get());
+	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_FRAME, 0L, 1024, 768, 0, 0);
+	pDlg->CenterWindow();
+	pDlg->ShowModal();
+}
+
+void CMainWnd::InitWindow()
+{
+	int nRet = RegisterHotKey(m_hWnd, 1, MOD_CONTROL, 'f');
+}
+
+
+
+LRESULT CMainWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+	LRESULT lRes = 0;
+	BOOL bHandled = TRUE;
+	switch (uMsg) {
+	case WM_CREATE:        lRes = OnCreate(uMsg, wParam, lParam, bHandled); break;
+
+	default:
+		bHandled = FALSE;
+	}
+
+	
+	if (bHandled) 
+		return lRes;
+	if (m_PaintManager.MessageHandler(uMsg, wParam, lParam, lRes)) return lRes;
+	return CWindowWnd::HandleMessage(uMsg, wParam, lParam);
 }

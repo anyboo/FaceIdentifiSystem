@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window >
+	<Font shared="true" id="4" name="微软雅黑" size="14" bold="false" />
+	<Font shared="true" id="5" name="宋体" size="14" bold="false" />
+	<Include source="skin/scrollbar.xml" />
+	<ListContainerElement height="140" width="1000" bordersize="1" bordercolor="0x12345678" >
+		<HorizontalLayout >
+			<option name="All" width="22" height="22" padding="8,10,0,4" normalimage="file='skin/quanxuan.png'" selectedimage="file='skin/quanxuanzhuangtai.png'"/>
+			<Control width="100" height="120" padding="10,10,10,10" bkimage="file='skin/aobama.png'" bordersize="1" bordercolor="0x12345678"/>
+			<Label text="奥巴马" width="100" font="5" align="center"/>
+			<Label text="46" width="100" font="5" align="center"/>
+			<Label text="男" width="100" font="5" align="center" />
+			<Label text="19700808" width="100" font="5" align="center"/>
+			<Label text="深圳福田" width="130" font="5" align="center"/>
+			<Label text="100001" width="100"  font="5" align="center"/>
+			<Label text="13888888888" width="100" font="5" align="center"/>
+			<Label text="已审核" width="100"  font="5" align="center"/>
+		</HorizontalLayout>
+	</ListContainerElement>
+</Window>

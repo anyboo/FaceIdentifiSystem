@@ -3,12 +3,35 @@
 #include "Poco/Runnable.h"
 #include "Poco/Thread.h"
 #include "QMFileSqlite.h"
+#include "Poco/AutoPtr.h"
+#include "Poco/Notification.h"  
+#include "Poco/NotificationQueue.h" 
 
 #include "cv.h"
 #include "cxcore.h"
 #include "highgui.h"
 #include "THFaceImage_i.h"
 #include "THFeature_i.h"
+
+class WorkNotification : public Poco::Notification
+	// The notification sent to worker threads.
+{
+public:
+	typedef Poco::AutoPtr<WorkNotification> Ptr;
+
+	WorkNotification(int workData) :
+		_data(workData)
+	{
+	}
+
+	int data() const
+	{
+		return _data;
+	}
+
+private:
+	int _data;
+};
 
 struct CapBitmapData
 {

@@ -50,6 +50,9 @@
     <ClCompile Include="CaptureNotify.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="SignOutUI.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BitMapCompare.h">
@@ -101,6 +104,7 @@
     <ClInclude Include="CaptureNotify.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="SignOutUI.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ConsoleApplication1.rc" />

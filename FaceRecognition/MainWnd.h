@@ -1,5 +1,6 @@
 #pragma once
 #include <DuiLib/UIlib.h>
+#include "winuser.h"
 
 class CRegisterInfo;
 
@@ -9,6 +10,7 @@ class CRegisterInfo;
 #define BT_MATCHWND			(_T("bt_match"))
 #define BT_Monitoring		(_T("bt_monitoring"))
 #define BT_SETTINGWND		(_T("bt_setting"))
+#define BT_SIGNOUTWND		(_T("bt_SignOut"))
 
 class CMainWnd :
 	public WindowImplBase
@@ -17,6 +19,7 @@ public:
 	CMainWnd();
 	~CMainWnd();
 
+	virtual void InitWindow();
 	virtual void OnFinalMessage(HWND hWnd);
 	virtual void Notify(TNotifyUI& msg);
 
@@ -27,9 +30,11 @@ public:
 	void OnMatchWnd(TNotifyUI& msg);
 	void OnMonitoringWnd(TNotifyUI& msg);
 	void OnSettingWnd(TNotifyUI& msg);
+	void OnSignOutWnd(TNotifyUI& msg);
 
 	void Show_HideTask(bool IsHide);
 
+	virtual LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 	CRegisterInfo* m_RegInfo;
 protected:

@@ -65,57 +65,12 @@ void CMonitoringUI::Notify(TNotifyUI& msg)
 
 void CMonitoringUI::OnCloseWnd(TNotifyUI& msg)
 {
-	::KillTimer(GetHWND(), 1);
-//	::KillTimer(GetHWND(), 2);
 	Close();
 }
 
 void CMonitoringUI::InitWindow()
-{		
-	::SetTimer(GetHWND(), 1, 50, nullptr);
-//	::SetTimer(GetHWND(), 2, 2000, nullptr);
+{
 	
-}
-
-LRESULT CMonitoringUI::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
-{
-	if (wParam == 1)
-	{
-		m_nBmp = m_nBmp + 1;
-		CVerticalLayoutUI* photo_Lyt = dynamic_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("photo_video")));
-		
-		if (!m_compare.empty())
-		{
-			writeCompareInfo wCompareInfo = m_compare.front();
-			//ΩÁ√Êœ‘ æ
-			cout << " get a face record" << endl;
-
-			m_compare.pop();
-		}
-
-		std::string strName = std::string(_T("file = 'bmp/test")) + std::to_string(m_nBmp) + std::string(".bmp'");
-		photo_Lyt->SetBkImage(strName.c_str());
-		if (m_nBmp == 150)
-		{
-			m_nBmp = 1;
-		}
-	}
-	if (wParam == 2)
-	{
-		ShowMonitInfoList();
-	}
-	return 0;
-}
-
-LRESULT CMonitoringUI::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
-{
-	LRESULT lRes = 0;
-	switch (uMsg)
-	{
-	case WM_TIMER: lRes = OnTimer(uMsg, wParam, lParam, bHandled); break;
-	}
-	bHandled = FALSE;
-	return 0;
 }
 
 void CMonitoringUI::ShowMonitInfoList()
@@ -140,11 +95,6 @@ void CMonitoringUI::ShowMonitInfoList()
 		SubList->SetBkColor(0xFFFFDDDD);
 	}
 	m_testID++;
-}
-
-std::queue<writeCompareInfo>& CMonitoringUI::getCompareQueue()
-{
-	return m_compare;
 }
 
 std::queue<CapBitmapData>& CMonitoringUI::getCapDataQueue()

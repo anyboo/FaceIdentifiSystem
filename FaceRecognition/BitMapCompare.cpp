@@ -3,6 +3,7 @@
 #include <queue>
 #include "MonitoringUI.h"
 
+
 using namespace cv;
 
 BitMapCompare::BitMapCompare(void *pthis)
@@ -145,13 +146,14 @@ void BitMapCompare::run()
 					if (fRet > 0.6)
 					{
 						//将大于0.6的数据写入队列		
-						std::queue<writeCompareInfo> *pcompare = &pWnd->getCompareQueue();
-						writeCompareInfo rCompareInfo;
-						rCompareInfo.set<0>(true);
-
-						rCompareInfo.set<1>(_vUserInfo[i].get<0>());
-
-						pcompare->push(rCompareInfo);
+						//std::queue<writeCompareInfo> *pcompare = &pWnd->getCompareQueue();
+						//writeCompareInfo rCompareInfo;
+						//rCompareInfo.set<0>(true);
+						//rCompareInfo.set<1>(_vUserInfo[i].get<0>());
+						//pcompare->push(rCompareInfo);
+						Poco::NotificationQueue queue;
+						queue.enqueueNotification(new WorkNotification(1));
+						
 					}
 				}
 			}	

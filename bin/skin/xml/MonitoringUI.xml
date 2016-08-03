@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Window size="1024,768" caption="0,0,0,0" roundcorner="4,4" showdirty="false">
 	<Font shared="true" id="1" name="微软雅黑" size="18" bold="false" />
-		<Font shared="true" id="7" name="微软雅黑" size="30" bold="false" />
-
-		<Font shared="true" id="3" name="微软雅黑" size="14" bold="false" />
+	<Font shared="true" id="7" name="微软雅黑" size="26" bold="false" />
+	<Font shared="true" id="3" name="微软雅黑" size="14" bold="false" />
 	<Font shared="true" id="2" name="宋体" size="14" bold="false" />
-
-	<VerticalLayout bkimage="file='skin/bsbj.png'" height="765" inset="3,3,3,3" bordersize="3" bordercolor="0x12345678">
-		<HorizontalLayout width="1024" height="50" bkimage="file='skin/bj.png'">
-			<Button name="close_btn2" width="30" height="30" padding="10,10,0,0" tooltip="返回" foreimage="file='skin/xz.png' dest='6,2,20,29'" hotimage="file='skin/hsbj.png'"/>
-			<Label text="信息监控" font="1" padding="400,0,0,0" textcolor="#FFFFFFFF" align="center" />
+	<VerticalLayout bkimage="file='skin/RegBJ.png'" height="765" inset="3,3,3,3" bordersize="3" bordercolor="0x12345678">
+		<HorizontalLayout width="1024" height="70">
+			<Button name="close_btn2" width="44" height="44" padding="10,10,0,0" tooltip="返回" normalimage="file='skin/back_normal.png'" hotimage="file='skin/back_hot.png'" pushedimage="file='skin/back_push.png'"/>
+			<Label text="信息监控" font="7" padding="400,0,0,0" textcolor="#FFFFFFFF" align="center" />
 		</HorizontalLayout>
 		<VerticalLayout name="photo_video" width="600" height="500" bordersize="2" bordercolor="0x88888888" padding="200,60,40,0">
 		</VerticalLayout>

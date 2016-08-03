@@ -1,66 +1,65 @@
 #include "stdafx.h"
-#include "MatchUI.h"
+#include "SignOutUI.h"
 #include "RegisterInfo.h"
 
-MatchUI::MatchUI()
+CSignOutUI::CSignOutUI()
 :m_nBmp(0)
 {
-
 }
 
 
-MatchUI::~MatchUI()
+CSignOutUI::~CSignOutUI()
 {
 }
 
 
-DUI_BEGIN_MESSAGE_MAP(MatchUI, WindowImplBase)
+DUI_BEGIN_MESSAGE_MAP(CSignOutUI, WindowImplBase)
 DUI_ON_CLICK_CTRNAME(BT_CLOSE_MatchWnd, OnCloseWnd)
 DUI_ON_CLICK_CTRNAME(BT_OK_FILISH, OnFilishMatch)
 DUI_END_MESSAGE_MAP()
 
-LPCTSTR MatchUI::GetWindowClassName() const
+LPCTSTR CSignOutUI::GetWindowClassName() const
 {
-	return _T("MatchUI");
+	return _T("CSignOutUI");
 }
 
-CDuiString MatchUI::GetSkinFolder()
+CDuiString CSignOutUI::GetSkinFolder()
 {
 	return _T("skin");
 }
 
-CDuiString MatchUI::GetSkinFile()
+CDuiString CSignOutUI::GetSkinFile()
 {
-	return _T("xml\\MatchUI.xml");
+	return _T("xml\\SignOutUI.xml");
 }
 
-void MatchUI::InitWindow()
+void CSignOutUI::InitWindow()
 {
-	
+
 }
 
-void MatchUI::OnFinalMessage(HWND hWnd)
+void CSignOutUI::OnFinalMessage(HWND hWnd)
 {
 	WindowImplBase::OnFinalMessage(hWnd);
 }
 
-void MatchUI::Notify(TNotifyUI& msg)
+void CSignOutUI::Notify(TNotifyUI& msg)
 {
 
 	WindowImplBase::Notify(msg);
 }
 
-void MatchUI::OnCloseWnd(TNotifyUI& msg)
+void CSignOutUI::OnCloseWnd(TNotifyUI& msg)
 {
 	Close();
 }
 
-void MatchUI::OnFilishMatch(TNotifyUI& msg)
+void CSignOutUI::OnFilishMatch(TNotifyUI& msg)
 {
 	Close();
 }
 
-void MatchUI::ShowMatchInfo()
+void CSignOutUI::ShowMatchInfo()
 {
 	if (m_RegInfo->GetSize() == 0)
 		return;

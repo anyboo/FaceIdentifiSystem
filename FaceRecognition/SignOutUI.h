@@ -7,12 +7,12 @@ class CRegisterInfo;
 #define BT_CLOSE_MatchWnd		(_T("close_btn1"))
 #define BT_OK_FILISH			(_T("btn_ok1"))
 
-class MatchUI :
+class CSignOutUI :
 	public WindowImplBase
 {
 public:
-	MatchUI();
-	~MatchUI();
+	CSignOutUI();
+	~CSignOutUI();
 	void InitWindow();
 	virtual void OnFinalMessage(HWND hWnd);
 	virtual void Notify(TNotifyUI& msg);
@@ -23,8 +23,6 @@ public:
 	void OnFilishMatch(TNotifyUI& msg);
 
 	void ShowMatchInfo();
-
-
 private:
 	int				m_nBmp;
 	CRegisterInfo*	m_RegInfo;
@@ -33,3 +31,4 @@ protected:
 	virtual CDuiString GetSkinFolder();
 	virtual CDuiString GetSkinFile();
 };
+
