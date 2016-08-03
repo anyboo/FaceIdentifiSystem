@@ -2,14 +2,7 @@
 #include "RegisterUI.h"
 #include "CaptureNotification.h"
 
-#include <Poco/AutoPtr.h>
-#include <Poco/Observer.h>
-#include <Poco/NotificationCenter.h>
 #include "Camera.h"
-
-using Poco::AutoPtr;
-using Poco::Observer;
-using Poco::NotificationCenter;
 
 RegisterUI::RegisterUI()
 :m_nbmp(0), m_photo_agin(false), r(new Camera)
@@ -17,7 +10,7 @@ RegisterUI::RegisterUI()
 	m_RegID = 100001;
 	m_RegisterInfo = new CRegisterInfo;
 
-	addObserver();
+	addObserver(*this);
 	r.start();
 }
 
@@ -26,7 +19,7 @@ RegisterUI::~RegisterUI()
 {
 	/*delete m_RegisterInfo;
 	m_RegisterInfo = nullptr;*/
-	removeObserver();
+	removeObserver(*this);
 	r.stop();
 }
 
@@ -68,7 +61,7 @@ void RegisterUI::OnCloseRWnd(TNotifyUI& msg)
 
 void RegisterUI::InitWindow()
 {
-	::SetTimer(GetHWND(), 1, 50, NULL);
+	//::SetTimer(GetHWND(), 1, 50, NULL);
 }
 
 void RegisterUI::OnFilishi(TNotifyUI& msg)
@@ -167,21 +160,12 @@ CRegisterInfo* RegisterUI::GetRegisterInfo()
 	return m_RegisterInfo;
 }
 
+#include <Poco/AutoPtr.h>
+
+using Poco::AutoPtr;
+
 void RegisterUI::handle1(Poco::Notification* pNf)
 {
 	poco_check_ptr(pNf);
-	AutoPtr<Notification> nf = pNf;
-}
-
-void RegisterUI::addObserver()
-{
-	NotificationCenter& nc = NotificationCenter::defaultCenter();
-	Observer<RegisterUI, Notification> o1(*this, &RegisterUI::handle1);
-	nc.addObserver(o1);
-}
-
-void RegisterUI::removeObserver()
-{
-	NotificationCenter& nc = NotificationCenter::defaultCenter();
-	nc.removeObserver(Observer<RegisterUI, Notification>(*this, &RegisterUI::handle1));
+	CaptureNotify::handle1(pNf);
 }

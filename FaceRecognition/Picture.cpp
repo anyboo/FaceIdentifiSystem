@@ -10,7 +10,6 @@ Picture::Picture(const char* data, size_t len)
 
 Picture::~Picture()
 {
-	out2bmp();
 }
 
 size_t Picture::width() const

@@ -9,8 +9,9 @@ class CaptureNotification
 	:public Poco::Notification
 {
 public:
+	typedef Poco::AutoPtr<CaptureNotification> Ptr;
 
-	CaptureNotification(const Picture::Ptr data);
+	CaptureNotification(Picture* data);
 	~CaptureNotification();
 
 	Picture* data();

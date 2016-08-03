@@ -21,7 +21,6 @@ public:
 	void SetWidth(size_t width);
 	void SetHeight(size_t height);
 
-protected:
 	void out2bmp();
 private:
 	Poco::Buffer<char> buffer;

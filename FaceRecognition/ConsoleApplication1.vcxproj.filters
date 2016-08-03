@@ -47,6 +47,9 @@
     <ClCompile Include="CaptureNotification.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="CaptureNotify.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BitMapCompare.h">
@@ -93,6 +96,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="CaptureNotification.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CaptureNotify.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
