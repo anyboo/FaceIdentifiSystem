@@ -2,14 +2,19 @@
 #include "MonitoringUI.h"
 
 #include "Poco/Delegate.h"
+#include "Picture.h"
+#include "BitMapCompare.h"
 
 
 CMonitoringUI::CMonitoringUI()
-:m_nBmp(0)
+	:m_nBmp(0), r(new Camera)
 {
 	m_testID = 100001;
 	m_pCompare = new BitMapCompare(this);
 	Poco::ThreadPool::defaultPool().start(*m_pCompare);
+
+	addObserver(*this);
+	r.start();
 }
 
 
@@ -20,6 +25,9 @@ CMonitoringUI::~CMonitoringUI()
 	m_theEvent -= Poco::delegate(m_pCompare, &BitMapCompare::onEvent);
 	//Poco::ThreadPool::defaultPool().joinAll();
 	delete m_pCompare;
+
+	removeObserver(*this);
+	r.stop();
 }
 
 DUI_BEGIN_MESSAGE_MAP(CMonitoringUI, WindowImplBase)
@@ -89,12 +97,18 @@ void CMonitoringUI::ShowMonitInfoList()
 	m_testID++;
 }
 
-std::queue<writeCompareInfo>& CMonitoringUI::getCompareQueue()
-{
-	return m_compare;
-}
-
 std::queue<CapBitmapData>& CMonitoringUI::getCapDataQueue()
 {
 	return m_capdata;
+}
+
+void CMonitoringUI::handle1(Poco::Notification* pNf)
+{
+	poco_check_ptr(pNf);
+	Picture *pImg = NULL;
+	//CaptureNotify::handle1(pNf);
+	CaptureNotify::handle1(pNf, &pImg);
+	CapBitmapData capdata((const BYTE *)pImg->data(), pImg->width() * pImg->height() * 3, pImg->width(), pImg->height());
+	m_capdata.push(capdata);		
+	delete pImg;
 }

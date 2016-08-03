@@ -104,7 +104,12 @@
     <ClInclude Include="CaptureNotify.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="SignOutUI.h" />
+    <ClInclude Include="SignOutUI.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="LangueConfig.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ConsoleApplication1.rc" />

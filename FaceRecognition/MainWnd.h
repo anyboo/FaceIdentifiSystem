@@ -34,7 +34,8 @@ public:
 
 	void Show_HideTask(bool IsHide);
 
-	virtual LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
+
+
 
 	CRegisterInfo* m_RegInfo;
 protected:

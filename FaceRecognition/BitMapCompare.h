@@ -3,6 +3,35 @@
 #include "Poco/Runnable.h"
 #include "Poco/Thread.h"
 #include "QMFileSqlite.h"
+#include "Poco/AutoPtr.h"
+#include "Poco/Notification.h"  
+#include "Poco/NotificationQueue.h" 
+
+#include "cv.h"
+#include "cxcore.h"
+#include "highgui.h"
+#include "THFaceImage_i.h"
+#include "THFeature_i.h"
+
+class WorkNotification : public Poco::Notification
+	// The notification sent to worker threads.
+{
+public:
+	typedef Poco::AutoPtr<WorkNotification> Ptr;
+
+	WorkNotification(int workData) :
+		_data(workData)
+	{
+	}
+
+	int data() const
+	{
+		return _data;
+	}
+
+private:
+	int _data;
+};
 
 struct CapBitmapData
 {
@@ -35,13 +64,13 @@ struct CapBitmapData
 		setPacketData(other.data, other.size);
 	}
 
-	CapBitmapData(const BYTE* data, const long len, const long BitmapWidth, const long BitmapHeight)
+	CapBitmapData(const BYTE* pdata, const long len, const long BitmapWidth, const long BitmapHeight)
 	{
 		size = len;
 		width = BitmapWidth;
 		height = BitmapHeight;
 		data = nullptr;
-		setPacketData((BYTE*)data, len);
+		setPacketData((BYTE*)pdata, len);
 	}
 
 
@@ -101,11 +130,7 @@ struct CapBitmapData
 	long        height;         //Î»Í¼µÄ¸ß
 };
 
-#include "cv.h"
-#include "cxcore.h"
-#include "highgui.h"
-#include "THFaceImage_i.h"
-#include "THFeature_i.h"
+
 
 class BitMapCompare : public Poco::Runnable
 {
@@ -117,6 +142,7 @@ public:
 
 private:
 	void CompareBitmap(BYTE *pFirst, BYTE *pSecond, long nFirstWidth, long nSecondWidth, long nFirstHeight, long nSecondHeight, float& fRet);
+	void CompareBitmap1(BYTE *pFirst, BYTE *pSecond, long nFirstWidth, long nSecondWidth, long nFirstHeight, long nSecondHeight, float& fRet);
 	cv::Mat LoadBmpFile1(std::string strFilePath);
 	void getCamBuf();
 	void writeDB();
@@ -127,4 +153,5 @@ private:
 	bool             _break;
 	void *           _pWnd;
 	vector<readUserInfo> _vUserInfo;
+	int             _count;
 };

@@ -145,21 +145,3 @@ void CMainWnd::InitWindow()
 }
 
 
-
-LRESULT CMainWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
-{
-	LRESULT lRes = 0;
-	BOOL bHandled = TRUE;
-	switch (uMsg) {
-	case WM_CREATE:        lRes = OnCreate(uMsg, wParam, lParam, bHandled); break;
-
-	default:
-		bHandled = FALSE;
-	}
-
-	
-	if (bHandled) 
-		return lRes;
-	if (m_PaintManager.MessageHandler(uMsg, wParam, lParam, lRes)) return lRes;
-	return CWindowWnd::HandleMessage(uMsg, wParam, lParam);
-}
