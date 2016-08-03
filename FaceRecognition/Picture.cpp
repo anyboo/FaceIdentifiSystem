@@ -3,7 +3,7 @@
 
 static void SaveBmp(char* data, int width, int height);
 
-Picture::Picture(char* data, size_t len)
+Picture::Picture(const char* data, size_t len)
 :buffer(data,len)
 {
 }

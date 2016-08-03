@@ -10,7 +10,7 @@ class Picture
 public:
 	typedef Poco::AutoPtr<Picture> Ptr;
 
-	Picture(char* data, size_t len);
+	Picture(const char* data, size_t len);
 	~Picture();
 
 	size_t width() const;

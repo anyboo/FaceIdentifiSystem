@@ -3,9 +3,6 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "MainWnd.h"
-#include "Camera.h"
-#include "Recorder.h"
-
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpCmdLine*/, int nCmdShow)
 {
@@ -21,15 +18,9 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 	pFrame->SetIcon(IDI_ICON1);
 	pFrame->CenterWindow();
 	pFrame->ShowWindow(true);
-	
-	Camera dev;
-	Recorder r(dev);//, p(dev);
-	//r.start();
-	//p.start();
 
 	CPaintManagerUI::MessageLoop();
-	//r.stop();
-	//p.stop();
+
 	::CoUninitialize();
 
 	return 0;

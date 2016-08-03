@@ -2,13 +2,12 @@
 
 #include <Poco/Timer.h>
 #include <Poco/Stopwatch.h>
-
-class ICamera;
+#include "Camera.h"
 
 class Recorder
 {
 public:
-	Recorder(ICamera& camera);
+	Recorder(ICamera::Ptr camera);
 	~Recorder();
 
 	void start();
@@ -20,7 +19,7 @@ private:
 	Poco::Stopwatch sw;
 	Poco::Timer t;
 	Poco::TimerCallback<Recorder> tc;
-	ICamera& _camera;
+	ICamera::Ptr _camera;
 	bool _running;
 };
 

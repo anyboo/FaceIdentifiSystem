@@ -3,6 +3,8 @@
 #include "Picture.h"
 #include <Poco/Notification.h>
 
+using Poco::Notification;
+
 class CaptureNotification
 	:public Poco::Notification
 {

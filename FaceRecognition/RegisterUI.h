@@ -6,6 +6,9 @@
 #define BT_GETPHOTO			(_T("photo"))
 #define BT_OK_REGISTER		(_T("btn_ok"))
 
+#include <Poco/Notification.h>
+#include "Recorder.h"
+
 class RegisterUI :
 	public WindowImplBase
 {
@@ -41,4 +44,9 @@ protected:
 	virtual LPCTSTR GetWindowClassName() const;
 	virtual CDuiString GetSkinFolder();
 	virtual CDuiString GetSkinFile();
+
+	void handle1(Poco::Notification* pNf);
+	void addObserver();
+	void removeObserver();
+	Recorder r;//, p(dev);
 };

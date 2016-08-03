@@ -1,12 +1,24 @@
 #include "stdafx.h"
 #include "RegisterUI.h"
+#include "CaptureNotification.h"
 
+#include <Poco/AutoPtr.h>
+#include <Poco/Observer.h>
+#include <Poco/NotificationCenter.h>
+#include "Camera.h"
+
+using Poco::AutoPtr;
+using Poco::Observer;
+using Poco::NotificationCenter;
 
 RegisterUI::RegisterUI()
-:m_nbmp(0), m_photo_agin(false)
+:m_nbmp(0), m_photo_agin(false), r(new Camera)
 {
 	m_RegID = 100001;
 	m_RegisterInfo = new CRegisterInfo;
+
+	addObserver();
+	r.start();
 }
 
 
@@ -14,8 +26,9 @@ RegisterUI::~RegisterUI()
 {
 	/*delete m_RegisterInfo;
 	m_RegisterInfo = nullptr;*/
+	removeObserver();
+	r.stop();
 }
-
 
 DUI_BEGIN_MESSAGE_MAP(RegisterUI, WindowImplBase)
 DUI_ON_CLICK_CTRNAME(BT_CLOSERWND, OnCloseRWnd)
@@ -65,12 +78,12 @@ void RegisterUI::OnFilishi(TNotifyUI& msg)
 	bool bRet = SaveRegisterInfo();
 	if (!bRet)
 	{
-		lab_Prompt->SetText(_T("注册信息输入不完整！"));
+		lab_Prompt->SetText(_T("娉ㄥ唽淇℃伅杈撳叆涓嶅畬鏁达紒"));
 		return;
 	}
-	if (bt_photo->GetText() == _T("拍照"))
+	if (bt_photo->GetText() == _T("鎷嶇収"))
 	{
-		lab_Prompt->SetText(_T("请先拍照!"));
+		lab_Prompt->SetText(_T("璇峰厛鎷嶇収!"));
 		return;
 	}
 	Close();
@@ -81,13 +94,13 @@ void RegisterUI::OnGetPhoto(TNotifyUI& msg)
 	CButtonUI* bt_photo = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("photo")));
 	if (m_photo_agin)
 	{
-		bt_photo->SetText(_T("拍照"));
+		bt_photo->SetText(_T("鎷嶇収"));
 		::SetTimer(GetHWND(), 1, 50, NULL);
 		m_photo_agin = false;
 	}
 	else
 	{
-		bt_photo->SetText(_T("重新拍照"));
+		bt_photo->SetText(_T("閲嶆柊鎷嶇収"));
 		::KillTimer(GetHWND(), 1);
 		m_photo_agin = true;
 	}
@@ -152,4 +165,23 @@ bool RegisterUI::SaveRegisterInfo()
 CRegisterInfo* RegisterUI::GetRegisterInfo()
 {
 	return m_RegisterInfo;
+}
+
+void RegisterUI::handle1(Poco::Notification* pNf)
+{
+	poco_check_ptr(pNf);
+	AutoPtr<Notification> nf = pNf;
+}
+
+void RegisterUI::addObserver()
+{
+	NotificationCenter& nc = NotificationCenter::defaultCenter();
+	Observer<RegisterUI, Notification> o1(*this, &RegisterUI::handle1);
+	nc.addObserver(o1);
+}
+
+void RegisterUI::removeObserver()
+{
+	NotificationCenter& nc = NotificationCenter::defaultCenter();
+	nc.removeObserver(Observer<RegisterUI, Notification>(*this, &RegisterUI::handle1));
 }
