@@ -70,7 +70,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 	//r.start();
 	//p.start();
 
-	Show_HideTask(true);
+//	Show_HideTask(true);
 
 	CPaintManagerUI::MessageLoop();
 	//r.stop();

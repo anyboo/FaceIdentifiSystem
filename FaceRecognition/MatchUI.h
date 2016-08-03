@@ -11,7 +11,7 @@ class MatchUI :
 	public WindowImplBase
 {
 public:
-	MatchUI(CRegisterInfo* RegInfo);
+	MatchUI();
 	~MatchUI();
 	void InitWindow();
 	virtual void OnFinalMessage(HWND hWnd);

@@ -9,6 +9,7 @@ class CRegisterInfo;
 #define BT_MATCHWND			(_T("bt_match"))
 #define BT_Monitoring		(_T("bt_monitoring"))
 #define BT_SETTINGWND		(_T("bt_setting"))
+#define BT_SIGNOUTWND		(_T("bt_SignOut"))
 
 class CMainWnd :
 	public WindowImplBase
@@ -27,8 +28,11 @@ public:
 	void OnMatchWnd(TNotifyUI& msg);
 	void OnMonitoringWnd(TNotifyUI& msg);
 	void OnSettingWnd(TNotifyUI& msg);
+	void OnSignOutWnd(TNotifyUI& msg);
 
 	void Show_HideTask(bool IsHide);
+
+	virtual LRESULT OnKeyDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
 
 	CRegisterInfo* m_RegInfo;

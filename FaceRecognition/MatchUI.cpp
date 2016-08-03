@@ -2,10 +2,10 @@
 #include "MatchUI.h"
 #include "RegisterInfo.h"
 
-MatchUI::MatchUI(CRegisterInfo* RegInfo)
+MatchUI::MatchUI()
 :m_nBmp(0)
 {
-	m_RegInfo = RegInfo;
+
 }
 
 

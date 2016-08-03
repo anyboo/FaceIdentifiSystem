@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window >
+	<Font shared="true" id="2" name="微软雅黑" size="26" bold="false" />
+	<Label text="信息匹配成功！" font="2" width="250" height="40" textcolor="#FFFF0000" align="left" padding="10,10,0,0"/>
+</Window>

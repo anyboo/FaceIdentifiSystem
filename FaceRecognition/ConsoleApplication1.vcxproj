@@ -103,6 +103,7 @@
     <ClInclude Include="RegisterUI.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SettingUI.h" />
+    <ClInclude Include="SignOutUI.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
@@ -122,6 +123,7 @@
     <ClCompile Include="RegisterInfo.cpp" />
     <ClCompile Include="RegisterUI.cpp" />
     <ClCompile Include="SettingUI.cpp" />
+    <ClCompile Include="SignOutUI.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

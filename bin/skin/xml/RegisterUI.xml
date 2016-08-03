@@ -17,7 +17,7 @@
 						<Label text="年龄：" font="1" width="90" height="40" align="left" padding="10,10,0,0"/>
 						<Label text="性别：" font="1" width="90" height="40" align="left" padding="10,10,0,0"/>
 						<Label text="出生年月：" font="1" width="90" height="40" align="left" padding="10,10,0,0"/>
-						<Label text="家庭住址：" font="1" width="90" height="40" align="left" padding="10,10,0,0"/>
+						<Label text="身份证号：" font="1" width="90" height="40" align="left" padding="10,10,0,0"/>
 						<Label text="电话号码：" font="1" width="90" height="40" align="left" padding="10,10,0,0"/>
 						<Label text="证件编号：" font="1" width="90" height="40" align="left" padding="10,10,0,0"/>
 					</VerticalLayout>
@@ -35,15 +35,17 @@
 					</VerticalLayout>
 				</HorizontalLayout>
 			</VerticalLayout>
-			<VerticalLayout width="400" height="500" padding="50,40,0,0" >
+			<VerticalLayout name="vLyt" width="400" height="500" padding="50,40,0,0" >
 				<VerticalLayout name="photo_wnd" width="391" height="421" inset="2,2,2,2" bordersize="2" bordercolor="0x88888888" bkimage="file='skin/photo.png'">
 				</VerticalLayout>
-				<Button name="photo" width="140" height="60" padding="120,18,0,0" text="拍照" font="1"  pushedimage="file='skin/push_photo.png'" normalimage="skin/normol_photo.png" hotimage="skin/hot_photo.png"/>
+				<Button name="photo" width="140" height="60" padding="120,18,0,0" text="拍照" font="1" textcolor="#FFFFFFFF" pushedimage="file='skin/push_photo.png'" normalimage="skin/normol_photo.png" hotimage="skin/hot_photo.png"/>
 			</VerticalLayout>
 		</HorizontalLayout>
-				<Label name="lab_Prompt" text="" font="2" textcolor="#FFFF0000" width="400" height="30" padding="310,0,0,20" align="center"/>
+		<VerticalLayout name="lab_lyt" height="30" padding="0,0,0,20">
+				<Label name="lab_Prompt" text="" font="2" textcolor="#FFFF0000" width="400" height="30" padding="310,0,0,0" align="center"/>
+		</VerticalLayout>
 		</VerticalLayout>
 		<Control height="3" bkimage="file='skin/hor.png'" />
-		<Button name="btn_ok" width="160" height="60" font="1" text="注册" padding="420,10,0,0" pushedimage="file='skin/regok_push.png'" normalimage="skin/regok_normal.png" hotimage="skin/regok_hot.png"/>
+		<Button name="btn_ok" width="160" height="60" font="1" text="注册" padding="420,10,0,0" textcolor="#FFFFFFFF" pushedimage="file='skin/regok_push.png'" normalimage="skin/regok_normal.png" hotimage="skin/regok_hot.png"/>
 	</VerticalLayout>
 </Window>
