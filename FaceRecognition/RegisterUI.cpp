@@ -7,13 +7,11 @@
 RegisterUI::RegisterUI()
 :m_photo_agin(false), r(new Camera)
 {
-	addObserver(*this);
 }
 
 
 RegisterUI::~RegisterUI()
 {
-	removeObserver(*this);
 }
 
 DUI_BEGIN_MESSAGE_MAP(RegisterUI, WindowImplBase)
@@ -39,6 +37,7 @@ CDuiString RegisterUI::GetSkinFile()
 
 void RegisterUI::OnFinalMessage(HWND hWnd)
 {
+	removeObserver(*this);
 	r.stop();
 	WindowImplBase::OnFinalMessage(hWnd);
 }
@@ -55,6 +54,7 @@ void RegisterUI::OnCloseRWnd(TNotifyUI& msg)
 
 void RegisterUI::InitWindow()
 {	
+	addObserver(*this);
 	r.start();
 }
 
@@ -88,18 +88,18 @@ void RegisterUI::OnGetPhoto(TNotifyUI& msg)
 	CButtonUI* bt_photo = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("photo")));
 	if (m_photo_agin)
 	{
-		CDialogBuilder builder;
+		/*CDialogBuilder builder;
 		CLabelUI* btn = (CLabelUI*)(builder.Create(_T("xml//labUI3.xml"), (UINT)0, NULL, &m_PaintManager));
 		vLyt->Remove(bt_photo);
-		vLyt->Add(btn);
+		vLyt->Add(btn);*/
 		m_photo_agin = false;
 	}
 	else
 	{
-		CDialogBuilder builder;
+		/*CDialogBuilder builder;
 		CLabelUI* btn = (CLabelUI*)(builder.Create(_T("xml//labUI4.xml"), (UINT)0, NULL, &m_PaintManager));
 		vLyt->Remove(bt_photo);
-		vLyt->Add(btn);
+		vLyt->Add(btn);*/
 		m_photo_agin = true;
 	}
 }
@@ -160,6 +160,13 @@ void RegisterUI::handle1(Poco::Notification* pNf)
 	HDC PaintDC = ::GetDC(GetHWND());
 	HDC hChildMemDC = ::CreateCompatibleDC(PaintDC);
 	HBITMAP hBitmap = CRenderEngine::CreateARGB32Bitmap(hChildMemDC, pic->width(), pic->height(), &data);
+	/*
+	static void DrawImage(HDC hDC, HBITMAP hBitmap, const RECT& rc, const RECT& rcPaint, \
+        const RECT& rcBmpPart, const RECT& rcScale9, bool alphaChannel, BYTE uFade = 255, 
+        bool hole = false, bool xtiled = false, bool ytiled = false);
+	*/
+	RECT rc, rcPaint, rcBmpPart, rcScale9;
+	//CRenderEngine::DrawImage(PaintDC, hBitmap, );
 
 	HDC hdcStill = ::GetDC(GetHWND());
 	PAINTSTRUCT ps;
