@@ -1,5 +1,6 @@
 #pragma once
 #include <DuiLib/UIlib.h>
+#include "winuser.h"
 
 class CRegisterInfo;
 
@@ -18,6 +19,7 @@ public:
 	CMainWnd();
 	~CMainWnd();
 
+	virtual void InitWindow();
 	virtual void OnFinalMessage(HWND hWnd);
 	virtual void Notify(TNotifyUI& msg);
 
@@ -32,8 +34,7 @@ public:
 
 	void Show_HideTask(bool IsHide);
 
-	virtual LRESULT OnKeyDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-
+	virtual LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 	CRegisterInfo* m_RegInfo;
 protected:

@@ -7,11 +7,13 @@
 RegisterUI::RegisterUI()
 :m_photo_agin(false), r(new Camera)
 {
+	addObserver(*this);
 }
 
 
 RegisterUI::~RegisterUI()
 {
+	removeObserver(*this);
 }
 
 DUI_BEGIN_MESSAGE_MAP(RegisterUI, WindowImplBase)
@@ -37,7 +39,6 @@ CDuiString RegisterUI::GetSkinFile()
 
 void RegisterUI::OnFinalMessage(HWND hWnd)
 {
-	removeObserver(*this);
 	r.stop();
 	WindowImplBase::OnFinalMessage(hWnd);
 }
@@ -53,24 +54,29 @@ void RegisterUI::OnCloseRWnd(TNotifyUI& msg)
 }
 
 void RegisterUI::InitWindow()
-{
-	addObserver(*this);
+{	
 	r.start();
 }
 
 void RegisterUI::OnFilishi(TNotifyUI& msg)
 {
+	CVerticalLayoutUI* vLyt = dynamic_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("lab_lyt")));
 	CLabelUI* lab_Prompt = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("lab_Prompt")));
-	CButtonUI* bt_photo = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("photo")));
 	bool bRet = SaveRegisterInfo();
 	if (!bRet)
 	{
-		lab_Prompt->SetText(_T("注册信息输入不完整！"));
+		CDialogBuilder builder;
+		CLabelUI* lab = (CLabelUI*)(builder.Create(_T("xml//labUI1.xml"), (UINT)0, NULL, &m_PaintManager));
+		vLyt->Remove(lab_Prompt);
+		vLyt->Add(lab);
 		return;
 	}
-	if (bt_photo->GetText() == _T("拍照"))
+	if (!m_photo_agin)
 	{
-		lab_Prompt->SetText(_T("请先拍照!"));
+		CDialogBuilder builder;
+		CLabelUI* lab = (CLabelUI*)(builder.Create(_T("xml//labUI2.xml"), (UINT)0, NULL, &m_PaintManager));
+		vLyt->Remove(lab_Prompt);
+		vLyt->Add(lab);
 		return;
 	}
 	Close();
@@ -78,17 +84,22 @@ void RegisterUI::OnFilishi(TNotifyUI& msg)
 
 void RegisterUI::OnGetPhoto(TNotifyUI& msg)
 {
+	CVerticalLayoutUI* vLyt = dynamic_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("vLyt")));
 	CButtonUI* bt_photo = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("photo")));
 	if (m_photo_agin)
 	{
-		bt_photo->SetText(_T("拍照"));
-		
+		CDialogBuilder builder;
+		CLabelUI* btn = (CLabelUI*)(builder.Create(_T("xml//labUI3.xml"), (UINT)0, NULL, &m_PaintManager));
+		vLyt->Remove(bt_photo);
+		vLyt->Add(btn);
 		m_photo_agin = false;
 	}
 	else
 	{
-		bt_photo->SetText(_T("重新拍照"));
-		
+		CDialogBuilder builder;
+		CLabelUI* btn = (CLabelUI*)(builder.Create(_T("xml//labUI4.xml"), (UINT)0, NULL, &m_PaintManager));
+		vLyt->Remove(bt_photo);
+		vLyt->Add(btn);
 		m_photo_agin = true;
 	}
 }
@@ -98,7 +109,7 @@ bool RegisterUI::SaveRegisterInfo()
 	CVerticalLayoutUI* photo_lyt = dynamic_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("photo_wnd")));
 	CEditUI* edit_name = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_Name")));
 	CEditUI* edit_age = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_Age")));
-	CEditUI* edit_sex = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_Sex")));
+	CComboUI* combo_sex = dynamic_cast<CComboUI*>(m_PaintManager.FindControl(_T("combo_sex")));
 	CEditUI* edit_birth = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_Birth")));
 	CEditUI* edit_address = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_Address")));
 	CEditUI* edit_phone = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_Phone")));
@@ -107,7 +118,7 @@ bool RegisterUI::SaveRegisterInfo()
 	IdentityInfo* Item = new IdentityInfo;
 	Item->strName = edit_name->GetText();
 	Item->strAge = edit_age->GetText();
-	Item->strSex = edit_sex->GetText();
+	Item->strSex = combo_sex->GetText();
 	Item->strBirth = edit_birth->GetText();
 	Item->strAdress = edit_address->GetText();
 	Item->strPhone = edit_phone->GetText();
@@ -130,6 +141,7 @@ using Poco::AutoPtr;
 void RegisterUI::handle1(Poco::Notification* pNf)
 {
 	if (m_photo_agin) return;
+
 	poco_check_ptr(pNf);
 	//CaptureNotify::handle1(pNf);
 	Notification::Ptr pf(pNf);
@@ -139,6 +151,7 @@ void RegisterUI::handle1(Poco::Notification* pNf)
 	Picture::Ptr pic(nf->data());
 	poco_check_ptr(pic.get());
 
+	//CVerticalLayoutUI* photo_Lyt = dynamic_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("photo_wnd")));
 	CVerticalLayoutUI* Image = dynamic_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("photo_wnd")));
 	poco_check_ptr(Image);
 	COLORREF* data = (COLORREF*)pic->data();
@@ -147,7 +160,7 @@ void RegisterUI::handle1(Poco::Notification* pNf)
 	HDC PaintDC = ::GetDC(GetHWND());
 	HDC hChildMemDC = ::CreateCompatibleDC(PaintDC);
 	HBITMAP hBitmap = CRenderEngine::CreateARGB32Bitmap(hChildMemDC, pic->width(), pic->height(), &data);
-	
+
 	HDC hdcStill = ::GetDC(GetHWND());
 	PAINTSTRUCT ps;
 	::BeginPaint(GetHWND(), &ps);
