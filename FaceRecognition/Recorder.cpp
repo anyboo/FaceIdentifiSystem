@@ -31,6 +31,7 @@ void Recorder::stop()
 	{
 		poco_check_ptr(_camera.get());
 		_camera->Close();
+		t.stop();
 		sw.stop();
 		sw.reset();
 		_running = false;

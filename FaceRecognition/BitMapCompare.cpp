@@ -1,9 +1,9 @@
-
-
 #include "stdafx.h"
 #include "BitMapCompare.h"
 #include <queue>
 #include "MonitoringUI.h"
+
+using namespace cv;
 
 BitMapCompare::BitMapCompare(void *pthis)
 {
@@ -29,15 +29,15 @@ void BitMapCompare::CompareBitmap(BYTE *pFirst, BYTE *pSecond, long nFirstWidth,
 	{
 		ptfp1[k].dwReserved = (DWORD)new BYTE[512];
 	}
-	//»ñÈ¡Ãæ²¿
+	//è·å–é¢éƒ¨
 	int nNum1 = THFI_DetectFace(0, pFirst, 24, nFirstWidth, nFirstHeight, ptfp1, 1);//only process one face
 
 	if (nNum1 > 0)
 	{
-		//µÚÒ»¸±ÕÕÆ¬ĞèÒª±È½ÏµÄÄÚÈİ
+		//ç¬¬ä¸€å‰¯ç…§ç‰‡éœ€è¦æ¯”è¾ƒçš„å†…å®¹
 		pFeature1 = new BYTE[EF_Size()];
 
-		//only extract the first face(max size face)»ñÈ¡Ãæ²¿ĞÅÏ¢
+		//only extract the first face(max size face)è·å–é¢éƒ¨ä¿¡æ¯
 		int ret = EF_Extract(0, pFirst, nFirstWidth, nFirstHeight, 3, (DWORD)&ptfp1[0], pFeature1);
 		if (ret)
 		{
@@ -54,7 +54,7 @@ void BitMapCompare::CompareBitmap(BYTE *pFirst, BYTE *pSecond, long nFirstWidth,
 		}	
 	}
 
-	//face detect»ñÈ¡Ãæ²¿ĞÅÏ¢
+	//face detectè·å–é¢éƒ¨ä¿¡æ¯
 	THFI_FacePos ptfp2[1];
 	for (k = 0; k<1; k++)
 	{
@@ -65,7 +65,7 @@ void BitMapCompare::CompareBitmap(BYTE *pFirst, BYTE *pSecond, long nFirstWidth,
 	{
 		pFeature2 = new BYTE[EF_Size()];
 
-		//only extract the first face(max size face)»ñÈ¡±È½ÏÄÚÈİ
+		//only extract the first face(max size face)è·å–æ¯”è¾ƒå†…å®¹
 		int ret = EF_Extract(0, pSecond, nSecondWidth, nSecondHeight, 3, (DWORD)&ptfp2[0], pFeature2);
 		if (ret)
 		{
@@ -116,15 +116,15 @@ void BitMapCompare::run()
 			std::cout << "listen is break" << std::endl;
 			break;
 		}
-		//¶ÁÈ¡Êı¾İ¿âÄÚ×¢²áÊı¾İ		
+		//è¯»å–æ•°æ®åº“å†…æ³¨å†Œæ•°æ®		
 		getUserInfo();
 
-		//»ñÈ¡ÉãÏñÍ·Êı¾İ
+		//è·å–æ‘„åƒå¤´æ•°æ®
 
-		//¿ªÊ¼±È¶Ô
+		//å¼€å§‹æ¯”å¯¹
 
 
-		//½«´óÓÚ0.6µÄÊı¾İĞ´ÈëÊı¾İ¿â
+		//å°†å¤§äº0.6çš„æ•°æ®å†™å…¥æ•°æ®åº“
 		CMonitoringUI *pWnd = (CMonitoringUI *)_pWnd;
 		std::queue<readCompareInfo> pcompare = pWnd->getCompareQueue();
 		readCompareInfo rCompareInfo;
