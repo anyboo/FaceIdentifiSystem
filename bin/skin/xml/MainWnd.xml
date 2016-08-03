@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Window size="1024,768" caption="0,0,0,0" roundcorner="4,4" showdirty="false">
-	<Font shared="true" id="0" name="微软雅黑" size="30" bold="false" />
+	<Font shared="true" id="0" name="微软雅黑" size="24" bold="false" />
 	<Font shared="true" id="9" name="微软雅黑" size="80" bold="false" />
-	<HorizontalLayout bkimage="file='skin/bsbj.png'" height="765" inset="4,4,4,4" bordersize="4" bordercolor="0x12345678">
-		<VerticalLayout width="200" bordersize="1" bordercolor="0x88888888" bkimage="file='skin/beijing.png'">
-			<Button name="bt_register" width="160" height="80" text="注册" font="0" bordersize="2" bordercolor="0x12345678" padding="20,40,20,20" bkimage="file='skin/cxbt.png'" pushedimage="file='skin/add_push.png'" hotimage="file='skin/add_normal.png'"/>
-			<Button name="bt_match" width="160" height="80" text="匹配" font="0" bordersize="2" bordercolor="0x12345678" padding="20,20,20,20" bkimage="file='skin/cxbt.png'" pushedimage="file='skin/add_push.png'" hotimage="file='skin/add_normal.png'"/>
-			<Button name="bt_monitoring" width="160" height="80" text="监控" font="0" bordersize="2" bordercolor="0x12345678" padding="20,20,20,20" bkimage="file='skin/cxbt.png'" pushedimage="file='skin/add_push.png'" hotimage="file='skin/add_normal.png'"/>
-			<Button name="bt_setting" width="160" height="80" text="设置" font="0" bordersize="2" bordercolor="0x12345678" padding="20,20,20,20" bkimage="file='skin/cxbt.png'" pushedimage="file='skin/add_push.png'" hotimage="file='skin/add_normal.png'"/>
-			<Button name="bt_close" width="160" height="80" text="退出" font="0" bordersize="2" bordercolor="0x12345678" padding="20,20,20,20" bkimage="file='skin/cxbt.png'" pushedimage="file='skin/add_push.png'" hotimage="file='skin/add_normal.png'"/>
+	<VerticalLayout bkimage="file='skin/beijing.png'" height="765" inset="4,4,4,4" bordersize="4" bordercolor="0x12345678">
+		<VerticalLayout width="679" height="425" bkimage="skin/1.png" padding="173,120,0,0">
+			<Label text="人脸识别系统" font="9" width="679" height="425" align="center"/>
 		</VerticalLayout>
-		<VerticalLayout width="500" height="400" bordersize="4" bkimage="file='skin/hsbj.png'" bordercolor="0x88888888" padding="150,150,0,0" >
-			<Label text="人脸识别" font="9" width="500" height="200" align="center" />
-			<Label text="系统" font="9" width="500" height="200" align="center"/>
-		</VerticalLayout>
-	</HorizontalLayout>
+		<HorizontalLayout height="200" >
+			<Button name="bt_register" width="100" height="100" text="注册" font="0" textpadding="0,46,0,0" foreimage="file='skin/2.png' dest='22,10,78,51'"  padding="20,80,10,20" normalimage="file='skin/push.png'" pushedimage="file='skin/hotimage.png'" hotimage="file='skin/normal.png'"/>
+			<Button name="bt_match" width="100" height="100" text="签到" font="0" textpadding="0,46,0,0" foreimage="file='skin/3.png' dest='22,10,78,51'"  padding="20,80,10,20" normalimage="file='skin/push.png'" pushedimage="file='skin/hotimage.png'" hotimage="file='skin/normal.png'"/>
+			<Button name="bt_qtui" width="100" height="100" text="签退" font="0" textpadding="0,46,0,0" foreimage="file='skin/3.png' dest='22,10,78,51'"  padding="20,80,10,20" normalimage="file='skin/push.png'" pushedimage="file='skin/hotimage.png'" hotimage="file='skin/normal.png'"/>
+			<Button name="bt_monitoring" width="100" height="100" text="监控" font="0" textpadding="0,46,0,0" foreimage="file='skin/4.png' dest='22,10,78,51'"  padding="20,80,10,20" normalimage="file='skin/push.png'" pushedimage="file='skin/hotimage.png'" hotimage="file='skin/normal.png'"/>
+			<Button name="bt_setting" width="100" height="100" text="设置" font="0" textpadding="0,46,0,0" foreimage="file='skin/5.png' dest='22,10,78,51'"  padding="20,80,10,20" normalimage="file='skin/push.png'" pushedimage="file='skin/hotimage.png'" hotimage="file='skin/normal.png'"/>
+			<Button name="bt_close" width="100" height="100" text="退出" font="0" textpadding="0,46,0,0" foreimage="file='skin/6.png' dest='22,10,78,51'"  padding="250,80,10,20" normalimage="file='skin/push.png'" pushedimage="file='skin/hotimage.png'" hotimage="file='skin/normal.png'"/>
+		</HorizontalLayout>
+	</VerticalLayout>
 </Window>

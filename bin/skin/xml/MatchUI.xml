@@ -3,9 +3,9 @@
 	<Font shared="true" id="1" name="微软雅黑" size="18" bold="false" />
 	<Font shared="false" id="2" name="微软雅黑" size="26" bold="false" />
 	<VerticalLayout bkimage="file='skin/bsbj.png'" height="765" bordersize="3" bordercolor="0x12345678">
-		<HorizontalLayout width="1024" height="50" bkimage="file='skin/beijing.png'">
+		<HorizontalLayout width="1024" height="50" bkimage="file='skin/bj.png'">
 			<Button name="close_btn1" width="30" height="30" padding="10,10,0,0" tooltip="返回" foreimage="file='skin/xz.png' dest='6,2,20,29'" hotimage="file='skin/hsbj.png'"/>
-			<Label text="信息匹配" font="1" padding="400,0,0,0" textcolor="#FFFFFFFF" align="center" />
+			<Label text="职员签到" font="1" padding="400,0,0,0" textcolor="#FFFFFFFF" align="center" />
 		</HorizontalLayout>
 		<HorizontalLayout bordersize="3" bordercolor="0x88888888" padding="20,0,20,40">
 			<HorizontalLayout name="photo_video" width="410" height="500" padding="80,60,0,0" inset="3,3,3,3" bordersize="3" bordercolor="0x88888888">
@@ -23,7 +23,7 @@
 					<Label text="证件编号：" font="1" width="90" height="40" align="left" padding="10,10,0,0"/>
 				</VerticalLayout>
 				<VerticalLayout width="310" padding="0,0,0,0">
-					<Label text="匹配成功！" font="2" width="250" height="40" textcolor="#FFFF0000" align="left" padding="10,10,0,0"/>
+					<Label text="签到成功！" font="2" width="250" height="40" textcolor="#FFFF0000" align="left" padding="10,10,0,0"/>
 					<Edit name="Edit_Name" width="290" height="40" font="1" readonly="true" bordersize="1" bordercolor="0x12345678" padding="0,20,0,0" />
 					<Edit name="Edit_Age" width="290" height="40" font="1" readonly="true" bordersize="1" bordercolor="0x12345678" padding="0,10,0,0" />
 					<Edit name="Edit_Sex" width="290" height="40" font="1" readonly="true" bordersize="1" bordercolor="0x12345678" padding="0,10,0,0" />

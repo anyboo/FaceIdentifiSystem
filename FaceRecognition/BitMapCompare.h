@@ -101,6 +101,12 @@ struct CapBitmapData
 	long        height;         //Î»Í¼µÄ¸ß
 };
 
+#include "cv.h"
+#include "cxcore.h"
+#include "highgui.h"
+#include "THFaceImage_i.h"
+#include "THFeature_i.h"
+
 class BitMapCompare : public Poco::Runnable
 {
 public:
@@ -111,7 +117,7 @@ public:
 
 private:
 	void CompareBitmap(BYTE *pFirst, BYTE *pSecond, long nFirstWidth, long nSecondWidth, long nFirstHeight, long nSecondHeight, float& fRet);
-	Mat LoadBmpFile1(std::string strFilePath);
+	cv::Mat LoadBmpFile1(std::string strFilePath);
 	void getCamBuf();
 	void writeDB();
 	

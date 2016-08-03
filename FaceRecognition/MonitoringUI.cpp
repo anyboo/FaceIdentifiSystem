@@ -50,7 +50,7 @@ void CMonitoringUI::Notify(TNotifyUI& msg)
 {
 	if (msg.sType == DUI_MSGTYPE_CLICK && msg.pSender->GetName() == _T("test"))
 	{
-		ShowMonitInfoList();
+	//	ShowMonitInfoList();
 	}
 	WindowImplBase::Notify(msg);
 }
@@ -58,14 +58,14 @@ void CMonitoringUI::Notify(TNotifyUI& msg)
 void CMonitoringUI::OnCloseWnd(TNotifyUI& msg)
 {
 	::KillTimer(GetHWND(), 1);
-	::KillTimer(GetHWND(), 2);
+//	::KillTimer(GetHWND(), 2);
 	Close();
 }
 
 void CMonitoringUI::InitWindow()
 {
 	::SetTimer(GetHWND(), 1, 50, nullptr);
-	::SetTimer(GetHWND(), 2, 2000, nullptr);
+//	::SetTimer(GetHWND(), 2, 2000, nullptr);
 	
 }
 

@@ -1,9 +1,9 @@
-
-
 #include "stdafx.h"
 #include "BitMapCompare.h"
 #include <queue>
 #include "MonitoringUI.h"
+
+using namespace cv;
 
 BitMapCompare::BitMapCompare(void *pthis)
 {
@@ -29,15 +29,15 @@ void BitMapCompare::CompareBitmap(BYTE *pFirst, BYTE *pSecond, long nFirstWidth,
 	{
 		ptfp1[k].dwReserved = (DWORD)new BYTE[512];
 	}
-	//获取面部
+	//
 	int nNum1 = THFI_DetectFace(0, pFirst, 24, nFirstWidth, nFirstHeight, ptfp1, 1);//only process one face
 
 	if (nNum1 > 0)
 	{
-		//第一副照片需要比较的内容
+		//
 		pFeature1 = new BYTE[EF_Size()];
 
-		//only extract the first face(max size face)获取面部信息
+		//only extract the first face(max size face)
 		int ret = EF_Extract(0, pFirst, nFirstWidth, nFirstHeight, 3, (DWORD)&ptfp1[0], pFeature1);
 		if (ret)
 		{
@@ -54,7 +54,7 @@ void BitMapCompare::CompareBitmap(BYTE *pFirst, BYTE *pSecond, long nFirstWidth,
 		}	
 	}
 
-	//face detect获取面部信息
+	//face detect
 	THFI_FacePos ptfp2[1];
 	for (k = 0; k<1; k++)
 	{
@@ -65,7 +65,7 @@ void BitMapCompare::CompareBitmap(BYTE *pFirst, BYTE *pSecond, long nFirstWidth,
 	{
 		pFeature2 = new BYTE[EF_Size()];
 
-		//only extract the first face(max size face)获取比较内容
+		//only extract the first face(max size face)
 		int ret = EF_Extract(0, pSecond, nSecondWidth, nSecondHeight, 3, (DWORD)&ptfp2[0], pFeature2);
 		if (ret)
 		{
@@ -119,6 +119,7 @@ void BitMapCompare::run()
 			std::cout << "listen is break" << std::endl;
 			break;
 		}
+
 		//读取数据库内注册数据			
 		getUserInfo();
 
