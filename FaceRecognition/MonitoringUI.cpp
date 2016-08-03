@@ -8,17 +8,18 @@ CMonitoringUI::CMonitoringUI()
 :m_nBmp(0)
 {
 	m_testID = 100001;
-	m_pCompare.reset( new BitMapCompare(this));
-	Poco::ThreadPool::defaultPool().start(*m_pCompare.get());
+	m_pCompare = new BitMapCompare(this);
+	Poco::ThreadPool::defaultPool().start(*m_pCompare);
 }
 
 
 CMonitoringUI::~CMonitoringUI()
 {
-	m_theEvent += Poco::delegate(m_pCompare.get(), &BitMapCompare::onEvent);
+	m_theEvent += Poco::delegate(m_pCompare, &BitMapCompare::onEvent);
 	fireEvent(true);
-	m_theEvent -= Poco::delegate(m_pCompare.get(), &BitMapCompare::onEvent);
-	Poco::ThreadPool::defaultPool().joinAll();
+	m_theEvent -= Poco::delegate(m_pCompare, &BitMapCompare::onEvent);
+	//Poco::ThreadPool::defaultPool().joinAll();
+	delete m_pCompare;
 }
 
 DUI_BEGIN_MESSAGE_MAP(CMonitoringUI, WindowImplBase)
@@ -124,7 +125,12 @@ void CMonitoringUI::ShowMonitInfoList()
 	m_testID++;
 }
 
-std::queue<readCompareInfo>& CMonitoringUI::getCompareQueue()
+std::queue<writeCompareInfo>& CMonitoringUI::getCompareQueue()
 {
 	return m_compare;
+}
+
+std::queue<CapBitmapData>& CMonitoringUI::getCapDataQueue()
+{
+	return m_capdata;
 }
