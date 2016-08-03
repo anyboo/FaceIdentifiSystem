@@ -13,9 +13,6 @@
     <ClCompile Include="DatabaseException.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="InitDevice.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="MainWnd.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -43,6 +40,13 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="InitDevice.cpp" />
+    <ClCompile Include="Picture.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CaptureNotification.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BitMapCompare.h">
@@ -52,9 +56,6 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="DatabaseException.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="InitDevice.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="MainWnd.h">
@@ -85,6 +86,13 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="QMFileSqlite.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="InitDevice.h" />
+    <ClInclude Include="Picture.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CaptureNotification.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
