@@ -7,11 +7,13 @@
 RegisterUI::RegisterUI()
 :m_photo_agin(false), r(new Camera)
 {
+	addObserver(*this);
 }
 
 
 RegisterUI::~RegisterUI()
 {
+	removeObserver(*this);
 }
 
 DUI_BEGIN_MESSAGE_MAP(RegisterUI, WindowImplBase)
@@ -37,7 +39,6 @@ CDuiString RegisterUI::GetSkinFile()
 
 void RegisterUI::OnFinalMessage(HWND hWnd)
 {
-	removeObserver(*this);
 	r.stop();
 	WindowImplBase::OnFinalMessage(hWnd);
 }
@@ -53,9 +54,8 @@ void RegisterUI::OnCloseRWnd(TNotifyUI& msg)
 }
 
 void RegisterUI::InitWindow()
-{
-	//addObserver(*this);
-	//r.start();
+{	
+	r.start();
 }
 
 void RegisterUI::OnFilishi(TNotifyUI& msg)
@@ -140,6 +140,8 @@ using Poco::AutoPtr;
 
 void RegisterUI::handle1(Poco::Notification* pNf)
 {
+	if (m_photo_agin) return;
+
 	poco_check_ptr(pNf);
 	//CaptureNotify::handle1(pNf);
 	Notification::Ptr pf(pNf);
@@ -158,11 +160,6 @@ void RegisterUI::handle1(Poco::Notification* pNf)
 	HDC PaintDC = ::GetDC(GetHWND());
 	HDC hChildMemDC = ::CreateCompatibleDC(PaintDC);
 	HBITMAP hBitmap = CRenderEngine::CreateARGB32Bitmap(hChildMemDC, pic->width(), pic->height(), &data);
-	/*CRenderEngine::DrawRect(PaintDC, Image->GetClientPos(), 5, 0x00FF0000);
-	CRenderEngine::DrawImage(PaintDC, hBitmap, Image->GetClientPos(), Image->GetClientPos(), \
-		Image->GetClientPos(), Image->GetClientPos(), false);*/
-
-	//
 
 	HDC hdcStill = ::GetDC(GetHWND());
 	PAINTSTRUCT ps;

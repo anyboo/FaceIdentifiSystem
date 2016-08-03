@@ -39,5 +39,5 @@ protected:
 	virtual CDuiString GetSkinFolder();
 	virtual CDuiString GetSkinFile();
 
-	Recorder r;//, p(dev);
+	Recorder r;
 };
