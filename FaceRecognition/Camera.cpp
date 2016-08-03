@@ -8,6 +8,8 @@
 using Poco::NotificationCenter;
 using Poco::Buffer;
 
+static void MirrorDIB(const char* lpDIBBits, long lWidth, long lHeight, bool bDirection, int nImageBits);
+
 #pragma warning(disable:4800)
 
 Camera::Camera()
@@ -81,6 +83,7 @@ void Camera::GetFrame()
 	
 	bool ret = _camera->GetFrame((BYTE*)data, len);
 	poco_assert(ret);
+	MirrorDIB(data, _width, _height, true,24);
 
 	Picture::Ptr pic(new Picture(data, len));
 	poco_check_ptr(pic);
@@ -89,4 +92,58 @@ void Camera::GetFrame()
 	NotificationCenter::defaultCenter().postNotification(new CaptureNotification(pic));
 
 	delete data;
+}
+
+#define WIDTHBYTES(bits)    (((bits) + 31) / 32 * 4)
+void MirrorDIB(const char* lpDIBBits, long lWidth, long lHeight, bool bDirection, int nImageBits)
+{
+	LPSTR	lpSrc;
+	LPSTR	lpDst;
+	LPSTR	lpBits;
+	HLOCAL	hBits;
+	LONG	i;
+	LONG	j;
+	int nBits;
+	LONG lLineBytes;
+	lLineBytes = WIDTHBYTES(lWidth *nImageBits);
+	hBits = LocalAlloc(LHND, lLineBytes);
+	if (hBits == NULL) return;
+
+	lpBits = (char *)LocalLock(hBits);
+	int nStep = nImageBits / 8;
+	long lCenter = lWidth / 2 * nStep;
+
+	if (bDirection)
+	{
+		for (i = 0; i < lHeight; i++)
+		{
+			for (j = 0; j < lCenter; j += nStep)
+			{
+				for (nBits = 0; nBits<nStep; nBits++)
+				{
+					lpSrc = (char *)lpDIBBits + lLineBytes * i + lCenter - j + nBits;
+					lpDst = (char *)lpDIBBits + lLineBytes * i + lCenter + j + nBits;
+					*lpBits = *lpDst;
+					*lpDst = *lpSrc;
+					*lpSrc = *lpBits;
+				}
+
+			}
+
+		}
+	}
+	else
+	{
+		for (i = 0; i < lHeight / 2; i++)
+		{
+			lpSrc = (char *)lpDIBBits + lLineBytes * i;
+			lpDst = (char *)lpDIBBits + lLineBytes * (lHeight - i - 1);
+			memcpy(lpBits, lpDst, lLineBytes);
+			memcpy(lpDst, lpSrc, lLineBytes);
+			memcpy(lpSrc, lpBits, lLineBytes);
+
+		}
+	}
+	LocalUnlock(hBits);
+	LocalFree(hBits);
 }
