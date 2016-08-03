@@ -82,13 +82,13 @@ void RegisterUI::OnGetPhoto(TNotifyUI& msg)
 	if (m_photo_agin)
 	{
 		bt_photo->SetText(_T("拍照"));
-		::SetTimer(GetHWND(), 1, 50, NULL);
+		
 		m_photo_agin = false;
 	}
 	else
 	{
 		bt_photo->SetText(_T("重新拍照"));
-		::KillTimer(GetHWND(), 1);
+		
 		m_photo_agin = true;
 	}
 }
@@ -129,6 +129,7 @@ using Poco::AutoPtr;
 
 void RegisterUI::handle1(Poco::Notification* pNf)
 {
+	if (m_photo_agin) return;
 	poco_check_ptr(pNf);
 	//CaptureNotify::handle1(pNf);
 	Notification::Ptr pf(pNf);
@@ -138,7 +139,6 @@ void RegisterUI::handle1(Poco::Notification* pNf)
 	Picture::Ptr pic(nf->data());
 	poco_check_ptr(pic.get());
 
-	//CVerticalLayoutUI* photo_Lyt = dynamic_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("photo_wnd")));
 	CVerticalLayoutUI* Image = dynamic_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("photo_wnd")));
 	poco_check_ptr(Image);
 	COLORREF* data = (COLORREF*)pic->data();
@@ -147,12 +147,7 @@ void RegisterUI::handle1(Poco::Notification* pNf)
 	HDC PaintDC = ::GetDC(GetHWND());
 	HDC hChildMemDC = ::CreateCompatibleDC(PaintDC);
 	HBITMAP hBitmap = CRenderEngine::CreateARGB32Bitmap(hChildMemDC, pic->width(), pic->height(), &data);
-	/*CRenderEngine::DrawRect(PaintDC, Image->GetClientPos(), 5, 0x00FF0000);
-	CRenderEngine::DrawImage(PaintDC, hBitmap, Image->GetClientPos(), Image->GetClientPos(), \
-		Image->GetClientPos(), Image->GetClientPos(), false);*/
-
-	//
-
+	
 	HDC hdcStill = ::GetDC(GetHWND());
 	PAINTSTRUCT ps;
 	::BeginPaint(GetHWND(), &ps);
