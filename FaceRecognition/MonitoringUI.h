@@ -33,7 +33,8 @@ public:
 
 	
 public:
-	std::queue<readCompareInfo>& getCompareQueue();
+	std::queue<writeCompareInfo>& getCompareQueue();
+	std::queue<CapBitmapData>& getCapDataQueue();
 private:
 	void fireEvent(bool n)
 	{
@@ -43,9 +44,10 @@ private:
 private:
 	int				m_nBmp;
 	int				m_testID;
-	std::queue<readCompareInfo> m_compare;
+	std::queue<writeCompareInfo> m_compare;
 	Poco::BasicEvent<bool> m_theEvent;
-	std::auto_ptr<BitMapCompare> m_pCompare;
+	BitMapCompare *m_pCompare;
+	std::queue<CapBitmapData> m_capdata;
 	
 protected:
 	virtual LPCTSTR GetWindowClassName() const;

@@ -109,6 +109,9 @@ Mat BitMapCompare::LoadBmpFile1(std::string strFilePath)
 
 void BitMapCompare::run()
 {
+	int i;
+	float fRet;
+
 	for (;;)
 	{
 		if (_break)
@@ -116,21 +119,51 @@ void BitMapCompare::run()
 			std::cout << "listen is break" << std::endl;
 			break;
 		}
-		//读取数据库内注册数据		
+		//读取数据库内注册数据			
 		getUserInfo();
 
 		//获取摄像头数据
-
-		//开始比对
-
-
-		//将大于0.6的数据写入数据库
 		CMonitoringUI *pWnd = (CMonitoringUI *)_pWnd;
-		std::queue<readCompareInfo> pcompare = pWnd->getCompareQueue();
-		readCompareInfo rCompareInfo;
-		pcompare.push(rCompareInfo);
+		std::queue<CapBitmapData> *pCapData = &pWnd->getCapDataQueue();
+		while (!pCapData->empty())
+		{
+			CapBitmapData Bitmapdata = pCapData->front();
+			//开始比对
+			for (i = 0; i < _vUserInfo.size(); i++)
+			{
+				fRet = 0.0;				
+				Poco::Data::CLOB pUserPic = _vUserInfo[i].get<9>();
+				CompareBitmap(Bitmapdata.data, (BYTE *)pUserPic.rawContent(), Bitmapdata.getWidth(), 640, Bitmapdata.getHeigth(), 480, fRet);
+
+				if (fRet > 0.6)
+				{
+					//将大于0.6的数据写入队列		
+					std::queue<writeCompareInfo> *pcompare = &pWnd->getCompareQueue();
+					writeCompareInfo rCompareInfo;
+					rCompareInfo.set<0>(_vUserInfo[i].get<0>());
+
+					time_t rawtime;
+					struct tm * timeinfo;
+					char buffer[80];
+					time(&rawtime);
+					timeinfo = localtime(&rawtime);
+					strftime(buffer, 80, "%d-%m-%Y %I:%M:%S", timeinfo);
+					std::string str(buffer);
+					rCompareInfo.set<1>(str);
+
+					rCompareInfo.set<2>(fRet);
+
+					Poco::Data::CLOB image((const char *)Bitmapdata.data, Bitmapdata.size);
+					rCompareInfo.set<3>(image);
+					pcompare->push(rCompareInfo);
+				}
+			}
+
+			pCapData->pop();
+			Poco::Thread::sleep(20);
+		}
 		
-		Poco::Thread::sleep(200);
+		Poco::Thread::sleep(100);
 	}
 }
 
