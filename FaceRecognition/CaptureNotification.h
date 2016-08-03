@@ -12,6 +12,8 @@ public:
 
 	CaptureNotification(const Picture::Ptr data);
 	~CaptureNotification();
+
+	Picture* data();
 private:
 	Picture::Ptr _data;
 };
