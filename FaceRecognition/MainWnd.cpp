@@ -4,7 +4,7 @@
 #include "MatchUI.h"
 #include "MonitoringUI.h"
 #include "SettingUI.h"
-//#include "SignOutUI.h"
+#include "SignOutUI.h"
 
 #include "RegisterInfo.h"
 
@@ -131,11 +131,11 @@ void CMainWnd::Show_HideTask(bool IsHide)
 
 void CMainWnd::OnSignOutWnd(TNotifyUI& msg)
 {
-	/*std::auto_ptr<CSignOutUI> pDlg(new CSignOutUI);
+	std::auto_ptr<CSignOutUI> pDlg(new CSignOutUI);
 	assert(pDlg.get());
 	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_FRAME, 0L, 1024, 768, 0, 0);
 	pDlg->CenterWindow();
-	pDlg->ShowModal();*/
+	pDlg->ShowModal();
 }
 
 
