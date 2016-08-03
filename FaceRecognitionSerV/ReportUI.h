@@ -1,33 +1,30 @@
 #pragma once
 #include <DuiLib/UIlib.h>
 
+#define BT_CLOSE_REPORT			(_T("close_btn"))
+#define BT_SELECT_ALL			(_T("All_Select"))
 
-class CRegisterInfo;
-
-#define BT_CLOSE_MatchWnd		(_T("close_btn1"))
-#define BT_OK_FILISH			(_T("btn_ok1"))
-
-class MatchUI :
+class CReportUI :
 	public WindowImplBase
 {
 public:
-	MatchUI();
-	~MatchUI();
-	void InitWindow();
+	CReportUI();
+	~CReportUI();
+
 	virtual void OnFinalMessage(HWND hWnd);
 	virtual void Notify(TNotifyUI& msg);
 
 	DUI_DECLARE_MESSAGE_MAP();
 
 	void OnCloseWnd(TNotifyUI& msg);
-	void OnFilishMatch(TNotifyUI& msg);
+	void OnSelectAll(TNotifyUI& msg);
 
-	void ShowMatchInfo();
-
+	void AddSubList();
+	void SaveSelectOptionTag(std::string& strName);
 
 private:
-	int				m_nBmp;
-	CRegisterInfo*	m_RegInfo;
+	int						m_optionSerial;
+	std::vector<int>		m_SelectOptions;
 protected:
 	virtual LPCTSTR GetWindowClassName() const;
 	virtual CDuiString GetSkinFolder();

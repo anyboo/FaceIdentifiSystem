@@ -5,7 +5,7 @@
 	<VerticalLayout bkimage="file='skin/RegBJ.png'" height="765" inset="3,0,3,3" bordersize="3" bordercolor="0x12345678">
 		<HorizontalLayout width="1024" height="70" >
 			<Button name="close_btn1" width="44" height="44" padding="10,10,0,0" tooltip="返回" normalimage="file='skin/back_normal.png'" hotimage="file='skin/back_hot.png'" pushedimage="file='skin/back_push.png'"/>
-			<Label text="职员签到" font="2" padding="400,0,0,0" textcolor="#FFFFFFFF" align="center" />
+			<Label text="职员签退" font="2" padding="400,0,0,0" textcolor="#FFFFFFFF" align="center" />
 		</HorizontalLayout>
 		<HorizontalLayout  height="500" padding="20,0,20,40" >
 			<HorizontalLayout name="photo_video" width="400" height="420" padding="80,60,0,0" inset="2,2,2,2" bordersize="2" bordercolor="0x88888888" bkimage="file='skin/photo.png'">
@@ -35,6 +35,6 @@
 			</VerticalLayout>
 		</HorizontalLayout>
 		<Control height="3" bkimage="file='skin/hor.png'" />
-		<Button name="photo" width="140" height="60" padding="400,30,0,0" text="签到" font="1" textcolor="#FFFFFFFF" pushedimage="file='skin/regok_push.png'" normalimage="skin/regok_normal.png" hotimage="skin/regok_hot.png"/>
+		<Button name="photo" width="140" height="60" padding="400,30,0,0" text="签退" font="1" textcolor="#FFFFFFFF" pushedimage="file='skin/regok_push.png'" normalimage="skin/regok_normal.png" hotimage="skin/regok_hot.png"/>
 	</VerticalLayout>
 </Window>

@@ -29,15 +29,15 @@ void BitMapCompare::CompareBitmap(BYTE *pFirst, BYTE *pSecond, long nFirstWidth,
 	{
 		ptfp1[k].dwReserved = (DWORD)new BYTE[512];
 	}
-	//è·å–é¢éƒ¨
+	//
 	int nNum1 = THFI_DetectFace(0, pFirst, 24, nFirstWidth, nFirstHeight, ptfp1, 1);//only process one face
 
 	if (nNum1 > 0)
 	{
-		//ç¬¬ä¸€å‰¯ç…§ç‰‡éœ€è¦æ¯”è¾ƒçš„å†…å®¹
+		//
 		pFeature1 = new BYTE[EF_Size()];
 
-		//only extract the first face(max size face)è·å–é¢éƒ¨ä¿¡æ¯
+		//only extract the first face(max size face)
 		int ret = EF_Extract(0, pFirst, nFirstWidth, nFirstHeight, 3, (DWORD)&ptfp1[0], pFeature1);
 		if (ret)
 		{
@@ -54,7 +54,7 @@ void BitMapCompare::CompareBitmap(BYTE *pFirst, BYTE *pSecond, long nFirstWidth,
 		}	
 	}
 
-	//face detectè·å–é¢éƒ¨ä¿¡æ¯
+	//face detect
 	THFI_FacePos ptfp2[1];
 	for (k = 0; k<1; k++)
 	{
@@ -65,7 +65,7 @@ void BitMapCompare::CompareBitmap(BYTE *pFirst, BYTE *pSecond, long nFirstWidth,
 	{
 		pFeature2 = new BYTE[EF_Size()];
 
-		//only extract the first face(max size face)è·å–æ¯”è¾ƒå†…å®¹
+		//only extract the first face(max size face)
 		int ret = EF_Extract(0, pSecond, nSecondWidth, nSecondHeight, 3, (DWORD)&ptfp2[0], pFeature2);
 		if (ret)
 		{
@@ -109,6 +109,9 @@ Mat BitMapCompare::LoadBmpFile1(std::string strFilePath)
 
 void BitMapCompare::run()
 {
+	int i;
+	float fRet;
+
 	for (;;)
 	{
 		if (_break)
@@ -116,21 +119,52 @@ void BitMapCompare::run()
 			std::cout << "listen is break" << std::endl;
 			break;
 		}
-		//è¯»å–æ•°æ®åº“å†…æ³¨å†Œæ•°æ®		
+
+		//¶ÁÈ¡Êı¾İ¿âÄÚ×¢²áÊı¾İ			
 		getUserInfo();
 
-		//è·å–æ‘„åƒå¤´æ•°æ®
-
-		//å¼€å§‹æ¯”å¯¹
-
-
-		//å°†å¤§äº0.6çš„æ•°æ®å†™å…¥æ•°æ®åº“
+		//»ñÈ¡ÉãÏñÍ·Êı¾İ
 		CMonitoringUI *pWnd = (CMonitoringUI *)_pWnd;
-		std::queue<readCompareInfo> pcompare = pWnd->getCompareQueue();
-		readCompareInfo rCompareInfo;
-		pcompare.push(rCompareInfo);
+		std::queue<CapBitmapData> *pCapData = &pWnd->getCapDataQueue();
+		while (!pCapData->empty())
+		{
+			CapBitmapData Bitmapdata = pCapData->front();
+			//¿ªÊ¼±È¶Ô
+			for (i = 0; i < _vUserInfo.size(); i++)
+			{
+				fRet = 0.0;				
+				Poco::Data::CLOB pUserPic = _vUserInfo[i].get<9>();
+				CompareBitmap(Bitmapdata.data, (BYTE *)pUserPic.rawContent(), Bitmapdata.getWidth(), 640, Bitmapdata.getHeigth(), 480, fRet);
+
+				if (fRet > 0.6)
+				{
+					//½«´óÓÚ0.6µÄÊı¾İĞ´Èë¶ÓÁĞ		
+					std::queue<writeCompareInfo> *pcompare = &pWnd->getCompareQueue();
+					writeCompareInfo rCompareInfo;
+					rCompareInfo.set<0>(_vUserInfo[i].get<0>());
+
+					time_t rawtime;
+					struct tm * timeinfo;
+					char buffer[80];
+					time(&rawtime);
+					timeinfo = localtime(&rawtime);
+					strftime(buffer, 80, "%d-%m-%Y %I:%M:%S", timeinfo);
+					std::string str(buffer);
+					rCompareInfo.set<1>(str);
+
+					rCompareInfo.set<2>(fRet);
+
+					Poco::Data::CLOB image((const char *)Bitmapdata.data, Bitmapdata.size);
+					rCompareInfo.set<3>(image);
+					pcompare->push(rCompareInfo);
+				}
+			}
+
+			pCapData->pop();
+			Poco::Thread::sleep(20);
+		}
 		
-		Poco::Thread::sleep(200);
+		Poco::Thread::sleep(100);
 	}
 }
 

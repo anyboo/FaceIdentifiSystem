@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window >
+	<Font shared="true" id="2" name="微软雅黑" size="26" bold="false" />
+	<Label name="lab_Prompt" text="注册信息输入不完整！" font="2" textcolor="#FFFF0000" width="400" height="30" padding="310,0,0,20" align="center"/>
+</Window>

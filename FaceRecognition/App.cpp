@@ -13,6 +13,7 @@
 #include <windows.h>
 #include <objbase.h>
 #include <shellapi.h>
+#include "QMFileSqlite.h"
 
 void Show_HideTask(bool IsHide)
 {
@@ -51,6 +52,9 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 	HRESULT Hr = ::CoInitialize(NULL);
 	if (FAILED(Hr)) return 0;
 
+	//init database
+	QFileSqlite *pDb = QFileSqlite::getInstance();
+	pDb->createTable(CREATE_USER_INFO_TABLE);
 	//CInitDevice	Init_Device;
 	//Init_Device.InitStart();
 
@@ -66,7 +70,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 	//r.start();
 	//p.start();
 
-	Show_HideTask(true);
+//	Show_HideTask(true);
 
 	CPaintManagerUI::MessageLoop();
 	//r.stop();

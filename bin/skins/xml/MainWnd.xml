@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window size="1024,768" caption="0,0,0,0" roundcorner="4,4" showdirty="false">
+	<Font shared="true" id="0" name="微软雅黑" size="30" bold="false" />
+	<Font shared="true" id="9" name="微软雅黑" size="80" bold="false" />
+	<HorizontalLayout bkimage="file='skin/bsbj.png'" height="765" inset="4,4,4,4" bordersize="4" bordercolor="0x12345678">
+		<VerticalLayout width="200" bordersize="1" bordercolor="0x88888888" bkimage="file='skin/beijing.png'">
+			<Button name="bt_report" width="160" height="80" text="审核" font="0" bordersize="2" bordercolor="0x12345678" padding="20,120,20,20" bkimage="file='skin/cxbt.png'" pushedimage="file='skin/add_push.png'" hotimage="file='skin/add_normal.png'"/>
+			<Button name="bt_close" width="160" height="80" text="退出" font="0" bordersize="2" bordercolor="0x12345678" padding="20,20,20,20" bkimage="file='skin/cxbt.png'" pushedimage="file='skin/add_push.png'" hotimage="file='skin/add_normal.png'"/>
+		</VerticalLayout>
+		<VerticalLayout width="500" height="400" bordersize="4" bkimage="file='skin/hsbj.png'" bordercolor="0x88888888" padding="150,150,0,0" >
+			<Label text="人脸识别系统" font="9" width="500" height="200" align="center" />
+			<Label text="服务端" font="9" width="500" height="200" align="center"/>
+		</VerticalLayout>
+	</HorizontalLayout>
+</Window>

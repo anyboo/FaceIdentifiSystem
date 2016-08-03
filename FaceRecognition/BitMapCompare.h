@@ -4,34 +4,42 @@
 #include "Poco/Thread.h"
 #include "QMFileSqlite.h"
 
-struct CompareResult
+struct CapBitmapData
 {
-	CompareResult()
+	CapBitmapData()
 	{
 		data = nullptr;
 		size = 0;
+		width = 0;
+		height = 0;
 	}
 
-	~CompareResult()
+	~CapBitmapData()
 	{
 		if (nullptr != data)
 		{
 			delete[] data;
 			data = nullptr;
 			size = 0;
+			width = 0;
+			height = 0;
 		}
 	}
 
-	CompareResult(const CompareResult& other)
+	CapBitmapData(const CapBitmapData& other)
 	{
 		size = other.size;
+		width = other.width;
+		height = other.height;
 		data = nullptr;
 		setPacketData(other.data, other.size);
 	}
 
-	CompareResult(const BYTE* data, const short len)
+	CapBitmapData(const BYTE* data, const long len, const long BitmapWidth, const long BitmapHeight)
 	{
 		size = len;
+		width = BitmapWidth;
+		height = BitmapHeight;
 		data = nullptr;
 		setPacketData((BYTE*)data, len);
 	}
@@ -54,13 +62,15 @@ struct CompareResult
 		}
 	}
 
-	CompareResult& operator= (const CompareResult& other)
+	CapBitmapData& operator= (const CapBitmapData& other)
 	{
 		if (&other == this)
 		{
 			return *this;
 		}
 		size = other.size;
+		width = other.width;
+		height = other.height;
 		setPacketData(other.data, other.size);
 		return *this;
 	}
@@ -75,11 +85,20 @@ struct CompareResult
 		return size;
 	}
 
-	long 		num;            //注册表原编号
-	float		fsimilarity;    //相似度
-	__int64		time;			//照片的时间
-	BYTE *		data;			//照片的数据
-	long		size;			//照片的时间
+	long getWidth() const
+	{
+		return width;
+	}
+
+	long getHeigth() const
+	{
+		return height;
+	}
+	
+	BYTE *		data;			//位图的数据
+	long		size;			//位图的大小
+	long        width;          //位图的宽
+	long        height;         //位图的高
 };
 
 #include "cv.h"
