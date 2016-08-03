@@ -4,3 +4,6 @@
 [submodule "poco"]
 	path = poco
 	url = https://github.com/pocoproject/poco.git
+[submodule "JSON"]
+	path = JSON
+	url = https://github.com/miloyip/rapidjson.git
