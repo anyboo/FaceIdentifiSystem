@@ -9,9 +9,6 @@ RegisterUI::RegisterUI()
 {
 	m_RegID = 100001;
 	m_RegisterInfo = new CRegisterInfo;
-
-	addObserver(*this);
-	r.start();
 }
 
 
@@ -19,8 +16,6 @@ RegisterUI::~RegisterUI()
 {
 	/*delete m_RegisterInfo;
 	m_RegisterInfo = nullptr;*/
-	removeObserver(*this);
-	r.stop();
 }
 
 DUI_BEGIN_MESSAGE_MAP(RegisterUI, WindowImplBase)
@@ -46,6 +41,8 @@ CDuiString RegisterUI::GetSkinFile()
 
 void RegisterUI::OnFinalMessage(HWND hWnd)
 {
+	removeObserver(*this);
+	r.stop();
 	WindowImplBase::OnFinalMessage(hWnd);
 }
 
@@ -62,6 +59,8 @@ void RegisterUI::OnCloseRWnd(TNotifyUI& msg)
 void RegisterUI::InitWindow()
 {
 	//::SetTimer(GetHWND(), 1, 50, NULL);
+	addObserver(*this);
+	r.start();
 }
 
 void RegisterUI::OnFilishi(TNotifyUI& msg)
@@ -167,5 +166,61 @@ using Poco::AutoPtr;
 void RegisterUI::handle1(Poco::Notification* pNf)
 {
 	poco_check_ptr(pNf);
-	CaptureNotify::handle1(pNf);
+	//CaptureNotify::handle1(pNf);
+	Notification::Ptr pf(pNf);
+	poco_check_ptr(pf.get());
+	CaptureNotification::Ptr nf = pf.cast<CaptureNotification>();
+	poco_check_ptr(nf.get());
+	Picture::Ptr pic(nf->data());
+	poco_check_ptr(pic.get());
+
+	//CVerticalLayoutUI* photo_Lyt = dynamic_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("photo_wnd")));
+	CVerticalLayoutUI* Image = dynamic_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("photo_wnd")));
+	poco_check_ptr(Image);
+	COLORREF* data = (COLORREF*)pic->data();
+	
+	CDuiString name = "carmera";
+	HDC PaintDC = ::GetDC(GetHWND());
+	HDC hChildMemDC = ::CreateCompatibleDC(PaintDC);
+	HBITMAP hBitmap = CRenderEngine::CreateARGB32Bitmap(hChildMemDC, pic->width(), pic->height(), &data);
+	/*CRenderEngine::DrawRect(PaintDC, Image->GetClientPos(), 5, 0x00FF0000);
+	CRenderEngine::DrawImage(PaintDC, hBitmap, Image->GetClientPos(), Image->GetClientPos(), \
+		Image->GetClientPos(), Image->GetClientPos(), false);*/
+
+	//
+
+	HDC hdcStill = ::GetDC(GetHWND());
+	PAINTSTRUCT ps;
+	::BeginPaint(GetHWND(), &ps);
+
+
+	::SetStretchBltMode(hdcStill, COLORONCOLOR);
+
+	BITMAPINFOHEADER bih;
+
+	bih.biSize = 40; 						// header size
+	bih.biWidth = pic->width();
+	bih.biHeight = pic->height();
+	bih.biPlanes = 1;
+	bih.biBitCount = 24;					// RGB encoded, 24 bit
+	bih.biCompression = BI_RGB;			// no compression
+	bih.biSizeImage = bih.biWidth * bih.biHeight * 3;
+	bih.biXPelsPerMeter = 0;
+	bih.biYPelsPerMeter = 0;
+	bih.biClrUsed = 0;
+	bih.biClrImportant = 0;
+
+	BITMAPINFO bi;
+	memset(&bi, 0, sizeof(bi));
+	memcpy(&(bi.bmiHeader), &bih, sizeof(BITMAPINFOHEADER));
+	int iWidth = bih.biWidth;
+	int iHeight = bih.biHeight;
+
+	::StretchDIBits(hdcStill, Image->GetX(), Image->GetY(), Image->GetWidth(), Image->GetHeight(),
+		0, 0, pic->width(), pic->height(), pic->data(), &bi,
+		DIB_RGB_COLORS, SRCCOPY);
+
+
+	::EndPaint(GetHWND(), &ps);
+	::ReleaseDC(GetHWND(), hdcStill);
 }
