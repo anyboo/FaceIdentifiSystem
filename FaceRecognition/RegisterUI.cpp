@@ -165,15 +165,11 @@ void RegisterUI::handle1(Poco::Notification* pNf)
         const RECT& rcBmpPart, const RECT& rcScale9, bool alphaChannel, BYTE uFade = 255, 
         bool hole = false, bool xtiled = false, bool ytiled = false);
 	*/
-	RECT rc, rcPaint, rcBmpPart, rcScale9;
-	//CRenderEngine::DrawImage(PaintDC, hBitmap, );
-
-	HDC hdcStill = ::GetDC(GetHWND());
 	PAINTSTRUCT ps;
 	::BeginPaint(GetHWND(), &ps);
 
 
-	::SetStretchBltMode(hdcStill, COLORONCOLOR);
+	::SetStretchBltMode(PaintDC, COLORONCOLOR);
 
 	BITMAPINFOHEADER bih;
 
@@ -195,11 +191,11 @@ void RegisterUI::handle1(Poco::Notification* pNf)
 	int iWidth = bih.biWidth;
 	int iHeight = bih.biHeight;
 
-	::StretchDIBits(hdcStill, Image->GetX(), Image->GetY(), Image->GetWidth(), Image->GetHeight(),
+	::StretchDIBits(PaintDC, Image->GetX(), Image->GetY(), Image->GetWidth(), Image->GetHeight(),
 		0, 0, pic->width(), pic->height(), pic->data(), &bi,
 		DIB_RGB_COLORS, SRCCOPY);
 
 
 	::EndPaint(GetHWND(), &ps);
-	::ReleaseDC(GetHWND(), hdcStill);
+	::ReleaseDC(GetHWND(), PaintDC);
 }
