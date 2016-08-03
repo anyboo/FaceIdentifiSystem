@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window size="1024,768" caption="0,0,0,0" roundcorner="4,4" showdirty="false">
+	<Font shared="true" id="1" name="微软雅黑" size="18" bold="false" />
+	<Font shared="true" id="3" name="微软雅黑" size="26" bold="false" />
+	<Font shared="true" id="2" name="宋体" size="14" bold="false" />
+	<Include source="skin/scrollbar.xml" />
+	<VerticalLayout name="main_lyt" width="1024" height="768" bkimage="skin/bsbj.png" inset="3,3,3,3" bordersize="3" bordercolor="0x12345678">
+		<HorizontalLayout width="1024" height="50" bkimage="file='skin/beijing.png'">
+			<Button name="close_btn" width="44" height="44" padding="10,3,0,0" tooltip="返回" normalimage="file='skin/back_normal.png'" hotimage="file='skin/back_hot.png'" pushedimage="file='skin/back_push.png'"/>
+			<Label text="审核" font="3" padding="400,0,0,0" textcolor="#FFFFFFFF" align="center" />
+			<Button name="test" width="60" height="30" text="添加" padding="200,10,0,0" font="1" bkimage="file='skin/bsbj.png'"/>
+		</HorizontalLayout>
+		<VerticalLayout width="1024" height="611">
+			<List name="RepotList" width="1000" padding="10,10,5,0" bkcolor="#FFFFFFFF" inset="1,1,1,1" bordersize="1" bordercolor="0x12345678" itemshowhtml="true" vscrollbar="true" headerbkimage="file='skin/lbl.png'" itemalign="center" itembkcolor="" itemaltbk="true">
+				<ListHeader height="31" menu="true">
+					<option name="All_Select" width="22" height="22" padding="8,5,0,4" normalimage="file='skin/quanxuan.png'" selectedimage="file='skin/quanxuanzhuangtai.png'"/>
+					<Label text="全选" width="40" font="1" align="center" />
+					<ListHeaderItem text="照片" font="1" width="80" hotimage="file='skin/lbl.png'" pushedimage="file='skin/lbl.png'" sepimage="file='skin/lbl.png'" sepwidth="1" dragable="false"/>
+					<Control bkimage="file='skin/st.png'" width="1" />
+					<ListHeaderItem text="姓名" font="1" width="100" hotimage="file='skin/lbl.png'" pushedimage="file='skin/lbl.png'" sepimage="file='skin/lbl.png'" sepwidth="1" dragable="false"/>
+					<Control bkimage="file='skin/st.png'" width="1" />
+					<ListHeaderItem text="年龄" font="1" width="100" hotimage="file='skin/lbl.png'" pushedimage="file='skin/lbl.png'" sepimage="file='skin/lbl.png'" sepwidth="1" dragable="false"/>
+					<Control bkimage="file='skin/st.png'" width="1" />
+					<ListHeaderItem text="性别" font="1" width="100" hotimage="file='skin/lbl.png'" pushedimage="file='skin/lbl.png'" sepimage="file='skin/lbl.png'" sepwidth="1" dragable="false"/>
+					<Control bkimage="file='skin/st.png'" width="1" />
+					<ListHeaderItem text="出生年月" font="1" width="100" hotimage="file='skin/lbl.png'" pushedimage="file='skin/lbl.png'" sepimage="file='skin/lbl.png'" sepwidth="1" dragable="false"/>
+					<Control bkimage="file='skin/st.png'" width="1" />
+					<ListHeaderItem text="家庭住址" font="1" width="130" hotimage="file='skin/lbl.png'" pushedimage="file='skin/lbl.png'" sepimage="file='skin/lbl.png'" sepwidth="1" dragable="false"/>
+					<Control bkimage="file='skin/st.png'" width="1" />
+					<ListHeaderItem text="证件号码" font="1" width="100" hotimage="file='skin/lbl.png'" pushedimage="file='skin/lbl.png'" sepimage="file='skin/lbl.png'" sepwidth="1" dragable="false"/>
+					<Control bkimage="file='skin/st.png'" width="1" />
+					<ListHeaderItem text="手机号码" font="1" width="100" hotimage="file='skin/lbl.png'" pushedimage="file='skin/lbl.png'" sepimage="file='skin/lbl.png'" sepwidth="1" dragable="false"/>
+					<Control bkimage="file='skin/st.png'" width="1" />
+					<ListHeaderItem text="审核状态" font="1" width="120" hotimage="file='skin/lbl.png'" pushedimage="file='skin/lbl.png'" sepimage="file='skin/lbl.png'" sepwidth="1" dragable="false"/>
+				</ListHeader>
+			</List>
+		</VerticalLayout>
+		<Button name="bt_verify" width="160" height="60" text="审核" padding="400,10,0,0" font="3" textcolor="#FFFFFFFF" normalimage="skin/regok_normal.png" hotimage="file='skin/regok_hot.png'" pushedimage="file='skin/regok_push.png'"/>
+	</VerticalLayout>
+</Window>

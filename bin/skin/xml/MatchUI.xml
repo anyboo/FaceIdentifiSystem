@@ -2,16 +2,15 @@
 <Window size="1024,768" caption="0,0,0,0" roundcorner="4,4" showdirty="false">
 	<Font shared="true" id="1" name="微软雅黑" size="18" bold="false" />
 	<Font shared="false" id="2" name="微软雅黑" size="26" bold="false" />
-	<VerticalLayout bkimage="file='skin/bsbj.png'" height="765" bordersize="3" bordercolor="0x12345678">
-		<HorizontalLayout width="1024" height="50" bkimage="file='skin/bj.png'">
-			<Button name="close_btn1" width="30" height="30" padding="10,10,0,0" tooltip="返回" foreimage="file='skin/xz.png' dest='6,2,20,29'" hotimage="file='skin/hsbj.png'"/>
-			<Label text="职员签到" font="1" padding="400,0,0,0" textcolor="#FFFFFFFF" align="center" />
+	<VerticalLayout bkimage="file='skin/RegBJ.png'" height="765" inset="3,0,3,3" bordersize="3" bordercolor="0x12345678">
+		<HorizontalLayout width="1024" height="70" >
+			<Button name="close_btn1" width="44" height="44" padding="10,10,0,0" tooltip="返回" normalimage="file='skin/back_normal.png'" hotimage="file='skin/back_hot.png'" pushedimage="file='skin/back_push.png'"/>
+			<Label text="职员签到" font="2" padding="400,0,0,0" textcolor="#FFFFFFFF" align="center" />
 		</HorizontalLayout>
-		<HorizontalLayout bordersize="3" bordercolor="0x88888888" padding="20,0,20,40">
-			<HorizontalLayout name="photo_video" width="410" height="500" padding="80,60,0,0" inset="3,3,3,3" bordersize="3" bordercolor="0x88888888">
-				
+		<HorizontalLayout  height="500" padding="20,0,20,40" >
+			<HorizontalLayout name="photo_video" width="400" height="420" padding="80,60,0,0" inset="2,2,2,2" bordersize="2" bordercolor="0x88888888" bkimage="file='skin/photo.png'">
 			</HorizontalLayout>
-			<VerticalLayout width="500" >
+			<VerticalLayout width="520" >
 			<HorizontalLayout width="400" height="450" padding="80,40,0,0" >
 				<VerticalLayout width="100" padding="0,50,0,0">
 					<Label text="姓名：" font="1" width="90" height="40" align="left" padding="10,20,0,0"/>
@@ -24,17 +23,18 @@
 				</VerticalLayout>
 				<VerticalLayout width="310" padding="0,0,0,0">
 					<Label text="签到成功！" font="2" width="250" height="40" textcolor="#FFFF0000" align="left" padding="10,10,0,0"/>
-					<Edit name="Edit_Name" width="290" height="40" font="1" readonly="true" bordersize="1" bordercolor="0x12345678" padding="0,20,0,0" />
-					<Edit name="Edit_Age" width="290" height="40" font="1" readonly="true" bordersize="1" bordercolor="0x12345678" padding="0,10,0,0" />
-					<Edit name="Edit_Sex" width="290" height="40" font="1" readonly="true" bordersize="1" bordercolor="0x12345678" padding="0,10,0,0" />
-					<Edit name="Edit_Birth" width="290" height="40" font="1" readonly="true" bordersize="1" bordercolor="0x12345678" padding="0,10,0,0" />
-					<Edit name="Edit_Address" width="290" height="40" font="1" readonly="true" bordersize="1" bordercolor="0x12345678" padding="0,10,0,0" />
-					<Edit name="Edit_Phone" width="290" height="40" font="1" readonly="true" bordersize="1" bordercolor="0x12345678" padding="0,10,0,0" />
-					<Edit name="Edit_IDnumber" width="290" height="40" font="1" readonly="true" bordersize="1" bordercolor="0x12345678" padding="0,10,0,0" />
+					<Edit name="Edit_Name" width="290" height="40" font="1" readonly="true" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'" padding="0,20,0,0" />
+					<Edit name="Edit_Age" width="290" height="40" font="1" readonly="true" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'" padding="0,10,0,0" />
+					<Edit name="Edit_Sex" width="290" height="40" font="1" readonly="true" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'" padding="0,10,0,0" />
+					<Edit name="Edit_Birth" width="290" height="40" font="1" readonly="true" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'" padding="0,10,0,0" />
+					<Edit name="Edit_Address" width="290" height="40" font="1" readonly="true" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'" padding="0,10,0,0" />
+					<Edit name="Edit_Phone" width="290" height="40" font="1" readonly="true" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'" padding="0,10,0,0" />
+					<Edit name="Edit_IDnumber" width="290" height="40" font="1" readonly="true" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'" padding="0,10,0,0" />
 				</VerticalLayout>
 			</HorizontalLayout>
-				<Button name="photo" width="140" height="60" padding="200,0,0,0" text="确认" font="1" bordersize="2" bordercolor="0x88888888" pushedimage="file='skin/add_push.png'" normalimage="skin/cxbt.png" hotimage="skin/add_normal.png"/>
 			</VerticalLayout>
 		</HorizontalLayout>
+		<Control height="3" bkimage="file='skin/hor.png'" />
+		<Button name="photo" width="140" height="60" padding="400,30,0,0" text="确认" font="1" pushedimage="file='skin/regok_push.png'" normalimage="skin/regok_normal.png" hotimage="skin/regok_hot.png"/>
 	</VerticalLayout>
 </Window>

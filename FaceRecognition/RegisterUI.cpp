@@ -5,11 +5,8 @@
 #include "Camera.h"
 
 RegisterUI::RegisterUI()
-:m_nbmp(0), m_photo_agin(false), r(new Camera)
+:m_photo_agin(false), r(new Camera)
 {
-	m_RegID = 100001;
-	m_RegisterInfo = new CRegisterInfo;
-
 	addObserver(*this);
 	r.start();
 }
@@ -61,7 +58,7 @@ void RegisterUI::OnCloseRWnd(TNotifyUI& msg)
 
 void RegisterUI::InitWindow()
 {
-	//::SetTimer(GetHWND(), 1, 50, NULL);
+
 }
 
 void RegisterUI::OnFilishi(TNotifyUI& msg)
@@ -99,30 +96,6 @@ void RegisterUI::OnGetPhoto(TNotifyUI& msg)
 	}
 }
 
-LRESULT RegisterUI::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
-{
-	m_nbmp = m_nbmp + 1;
-	CVerticalLayoutUI* photo_Lyt = dynamic_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("photo_wnd")));
-
-	std::string strName = std::string(_T("file = 'bmp/test")) + std::to_string(m_nbmp) + std::string(".bmp'");
-	photo_Lyt->SetBkImage(strName.c_str());
-	if (m_nbmp == 150)
-	{
-		m_nbmp = 1;
-	}
-	return 0;
-}
-
-LRESULT RegisterUI::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
-{
-	LRESULT lRes = 0;
-	switch (uMsg)
-	{
-	case WM_TIMER: lRes = OnTimer(uMsg, wParam, lParam, bHandled); break;
-	}
-	bHandled = FALSE;
-	return 0;
-}
 
 bool RegisterUI::SaveRegisterInfo()
 {
@@ -151,14 +124,10 @@ bool RegisterUI::SaveRegisterInfo()
 		return false;
 	}
 
-	m_RegisterInfo->Add(m_RegID, Item);
 	return true;
 }
 
-CRegisterInfo* RegisterUI::GetRegisterInfo()
-{
-	return m_RegisterInfo;
-}
+
 
 #include <Poco/AutoPtr.h>
 

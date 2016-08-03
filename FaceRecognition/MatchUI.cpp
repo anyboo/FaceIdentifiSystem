@@ -36,7 +36,7 @@ CDuiString MatchUI::GetSkinFile()
 
 void MatchUI::InitWindow()
 {
-	::SetTimer(GetHWND(), 1, 50, nullptr);
+	
 }
 
 void MatchUI::OnFinalMessage(HWND hWnd)
@@ -58,32 +58,6 @@ void MatchUI::OnCloseWnd(TNotifyUI& msg)
 void MatchUI::OnFilishMatch(TNotifyUI& msg)
 {
 	Close();
-}
-
-LRESULT MatchUI::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
-{
-	m_nBmp = m_nBmp + 1;
-	CHorizontalLayoutUI* photo_Lyt = dynamic_cast<CHorizontalLayoutUI*>(m_PaintManager.FindControl(_T("photo_video")));
-
-	std::string strName = std::string(_T("file = 'bmp/test")) + std::to_string(m_nBmp) + std::string(".bmp'");
-	photo_Lyt->SetBkImage(strName.c_str());
-	if (m_nBmp == 10)
-	{
-		::KillTimer(GetHWND(), 1);
-		ShowMatchInfo();
-	}
-	return 0;
-}
-
-LRESULT MatchUI::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
-{
-	LRESULT lRes = 0;
-	switch (uMsg)
-	{
-	case WM_TIMER: lRes = OnTimer(uMsg, wParam, lParam, bHandled); break;
-	}
-	bHandled = FALSE;
-	return 0;
 }
 
 void MatchUI::ShowMatchInfo()

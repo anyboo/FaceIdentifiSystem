@@ -69,7 +69,6 @@ void CMainWnd::OnRegisterWnd(TNotifyUI& msg)
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
 
-	m_RegInfo = pDlg->GetRegisterInfo();
 }
 
 void CMainWnd::OnMatchWnd(TNotifyUI& msg)

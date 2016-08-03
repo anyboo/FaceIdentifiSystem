@@ -25,12 +25,6 @@ public:
 
 	void ShowMonitInfoList();
 
-	virtual LRESULT OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-
-	virtual LRESULT HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-
-	
-
 	
 public:
 	std::queue<writeCompareInfo>& getCompareQueue();
