@@ -16,6 +16,8 @@ public:
 	size_t width() const;
 	size_t height() const;
 
+	const char* data() const;
+
 	void SetWidth(size_t width);
 	void SetHeight(size_t height);
 

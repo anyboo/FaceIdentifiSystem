@@ -38,6 +38,11 @@ void Picture::out2bmp()
 	SaveBmp(buffer.begin(),_width, _height);
 }
 
+const char* Picture::data() const
+{
+	return buffer.begin();
+}
+
 #include <Poco/TemporaryFile.h>
 #include <Poco/FileStream.h>
 
