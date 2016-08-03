@@ -714,16 +714,16 @@ void CTestDlg::OnTimer(UINT nIDEvent)
 	{
 		delete [](BYTE*)ptfp[k].dwReserved;
 	}
-	Mat BmpMat = LoadBmpFile1("D:\\bmp\\test2019744.bmp");
-	//if ()
-	{
-		float fRet = 0.0;
-		CompareBitmap(pCamBuf, BmpMat.data, nWidth, BmpMat.cols, nHeight, BmpMat.rows, fRet);
-		char szRet[30] = { 0 };
-		sprintf_s(szRet, "ret:%f", fRet);
-		std::cout << szRet << std::endl;
-		//delete pMat;
-	}	
+	//Mat BmpMat = LoadBmpFile1("D:\\bmp\\test2019744.bmp");
+	////if ()
+	//{
+	//	float fRet = 0.0;
+	//	CompareBitmap(pCamBuf, BmpMat.data, nWidth, BmpMat.cols, nHeight, BmpMat.rows, fRet);
+	//	char szRet[30] = { 0 };
+	//	sprintf_s(szRet, "ret:%f", fRet);
+	//	std::cout << szRet << std::endl;
+	//	//delete pMat;
+	//}	
 
 	MirrorDIB((LPSTR)pCamBuf, nWidth, nHeight, FALSE,24);
 	//释放资源,显示视频�?
@@ -770,9 +770,8 @@ void CTestDlg::OnStart()
 	}
 	
 	m_pCap->Play();
-	// TODO: Add extra initialization here
-	
-	SetTimer(100,1000,NULL);	
+
+	SetTimer(100,100,NULL);	
 
 
 	GetDlgItem(IDC_START)->EnableWindow(FALSE);
