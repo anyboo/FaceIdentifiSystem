@@ -8,6 +8,7 @@ using namespace cv;
 BitMapCompare::BitMapCompare(void *pthis)
 {
 	_pWnd = pthis;
+	_break = false;
 }
 
 BitMapCompare::~BitMapCompare()
@@ -141,21 +142,10 @@ void BitMapCompare::run()
 					//将大于0.6的数据写入队列		
 					std::queue<writeCompareInfo> *pcompare = &pWnd->getCompareQueue();
 					writeCompareInfo rCompareInfo;
-					rCompareInfo.set<0>(_vUserInfo[i].get<0>());
+					rCompareInfo.set<0>(true);				
 
-					time_t rawtime;
-					struct tm * timeinfo;
-					char buffer[80];
-					time(&rawtime);
-					timeinfo = localtime(&rawtime);
-					strftime(buffer, 80, "%d-%m-%Y %I:%M:%S", timeinfo);
-					std::string str(buffer);
-					rCompareInfo.set<1>(str);
-
-					rCompareInfo.set<2>(fRet);
-
-					Poco::Data::CLOB image((const char *)Bitmapdata.data, Bitmapdata.size);
-					rCompareInfo.set<3>(image);
+					rCompareInfo.set<1>(_vUserInfo[i].get<0>());
+					
 					pcompare->push(rCompareInfo);
 				}
 			}

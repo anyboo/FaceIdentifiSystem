@@ -35,13 +35,13 @@ struct CapBitmapData
 		setPacketData(other.data, other.size);
 	}
 
-	CapBitmapData(const BYTE* data, const long len, const long BitmapWidth, const long BitmapHeight)
+	CapBitmapData(const BYTE* pdata, const long len, const long BitmapWidth, const long BitmapHeight)
 	{
 		size = len;
 		width = BitmapWidth;
 		height = BitmapHeight;
 		data = nullptr;
-		setPacketData((BYTE*)data, len);
+		setPacketData((BYTE*)pdata, len);
 	}
 
 

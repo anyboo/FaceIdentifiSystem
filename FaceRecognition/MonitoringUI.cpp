@@ -2,14 +2,18 @@
 #include "MonitoringUI.h"
 
 #include "Poco/Delegate.h"
+#include "Picture.h"
 
 
 CMonitoringUI::CMonitoringUI()
-:m_nBmp(0)
+	:m_nBmp(0), r(new Camera)
 {
 	m_testID = 100001;
 	m_pCompare = new BitMapCompare(this);
 	Poco::ThreadPool::defaultPool().start(*m_pCompare);
+
+	addObserver(*this);
+	r.start();
 }
 
 
@@ -20,6 +24,9 @@ CMonitoringUI::~CMonitoringUI()
 	m_theEvent -= Poco::delegate(m_pCompare, &BitMapCompare::onEvent);
 	//Poco::ThreadPool::defaultPool().joinAll();
 	delete m_pCompare;
+
+	removeObserver(*this);
+	r.stop();
 }
 
 DUI_BEGIN_MESSAGE_MAP(CMonitoringUI, WindowImplBase)
@@ -75,6 +82,15 @@ LRESULT CMonitoringUI::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
 	{
 		m_nBmp = m_nBmp + 1;
 		CVerticalLayoutUI* photo_Lyt = dynamic_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("photo_video")));
+
+		if (!m_compare.empty())
+		{
+			writeCompareInfo wCompareInfo = m_compare.front();
+			//½çÃæÏÔÊ¾
+
+
+			m_compare.pop();
+		}
 
 		std::string strName = std::string(_T("file = 'bmp/test")) + std::to_string(m_nBmp) + std::string(".bmp'");
 		photo_Lyt->SetBkImage(strName.c_str());
@@ -133,4 +149,14 @@ std::queue<writeCompareInfo>& CMonitoringUI::getCompareQueue()
 std::queue<CapBitmapData>& CMonitoringUI::getCapDataQueue()
 {
 	return m_capdata;
+}
+
+void CMonitoringUI::handle1(Poco::Notification* pNf)
+{
+	poco_check_ptr(pNf);
+	Picture *pImg = NULL;
+	//CaptureNotify::handle1(pNf);
+	CaptureNotify::handle1(pNf, &pImg);
+	CapBitmapData capdata((const BYTE *)pImg->data(), pImg->width() * pImg->height() * 3, pImg->width(), pImg->height());
+	m_capdata.push(capdata);
 }
