@@ -145,6 +145,7 @@ void BitMapCompare::run()
 
 					if (fRet > 0.6)
 					{
+						cout << " fRet > 0.6 " << endl;
 						//将大于0.6的数据写入队列		
 						//std::queue<writeCompareInfo> *pcompare = &pWnd->getCompareQueue();
 						//writeCompareInfo rCompareInfo;
@@ -153,6 +154,7 @@ void BitMapCompare::run()
 						//pcompare->push(rCompareInfo);
 						Poco::NotificationQueue queue;
 						queue.enqueueNotification(new WorkNotification(1));
+						goto exit1;
 						
 					}
 				}
@@ -164,6 +166,8 @@ void BitMapCompare::run()
 		
 		Poco::Thread::sleep(100);
 	}
+exit1:
+	cout << " compare end " << endl;
 }
 
 void BitMapCompare::onEvent(const void* pSender, bool& arg)
