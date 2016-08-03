@@ -12,9 +12,6 @@ CMonitoringUI::CMonitoringUI()
 	m_testID = 100001;
 	m_pCompare = new BitMapCompare(this);
 	Poco::ThreadPool::defaultPool().start(*m_pCompare);
-
-	addObserver(*this);
-	r.start();
 }
 
 
@@ -25,9 +22,6 @@ CMonitoringUI::~CMonitoringUI()
 	m_theEvent -= Poco::delegate(m_pCompare, &BitMapCompare::onEvent);
 	//Poco::ThreadPool::defaultPool().joinAll();
 	delete m_pCompare;
-
-	removeObserver(*this);
-	r.stop();
 }
 
 DUI_BEGIN_MESSAGE_MAP(CMonitoringUI, WindowImplBase)
@@ -51,6 +45,8 @@ CDuiString CMonitoringUI::GetSkinFile()
 
 void CMonitoringUI::OnFinalMessage(HWND hWnd)
 {
+	removeObserver(*this);
+	r.stop();
 	WindowImplBase::OnFinalMessage(hWnd);
 }
 
@@ -70,7 +66,8 @@ void CMonitoringUI::OnCloseWnd(TNotifyUI& msg)
 
 void CMonitoringUI::InitWindow()
 {
-	
+	addObserver(*this);
+	r.start();
 }
 
 void CMonitoringUI::ShowMonitInfoList()

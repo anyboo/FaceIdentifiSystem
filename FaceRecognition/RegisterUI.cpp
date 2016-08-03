@@ -190,7 +190,6 @@ void RegisterUI::handle1(Poco::Notification* pNf)
 		0, 0, pic->width(), pic->height(), pic->data(), &bi,
 		DIB_RGB_COLORS, SRCCOPY);
 
-
 	::EndPaint(GetHWND(), &ps);
 	::ReleaseDC(GetHWND(), PaintDC);
 }
