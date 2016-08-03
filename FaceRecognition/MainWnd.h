@@ -28,6 +28,9 @@ public:
 	void OnMonitoringWnd(TNotifyUI& msg);
 	void OnSettingWnd(TNotifyUI& msg);
 
+	void Show_HideTask(bool IsHide);
+
+
 	CRegisterInfo* m_RegInfo;
 protected:
 	virtual LPCTSTR GetWindowClassName() const;
