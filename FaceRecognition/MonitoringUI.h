@@ -1,5 +1,10 @@
 #pragma once
 #include <DuiLib/UIlib.h>
+#include <queue>
+#include "QMFileSqlite.h"
+#include "Poco/BasicEvent.h"
+#include "BitMapCompare.h"
+#include <Poco/ThreadPool.h>
 
 #define BT_CLOSE_MonWnd		(_T("close_btn2"))
 
@@ -24,9 +29,24 @@ public:
 
 	virtual LRESULT HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
+	
+
+	
+public:
+	std::queue<readCompareInfo>& getCompareQueue();
+private:
+	void fireEvent(bool n)
+	{
+		m_theEvent(this, n);
+	}
+
 private:
 	int				m_nBmp;
 	int				m_testID;
+	std::queue<readCompareInfo> m_compare;
+	Poco::BasicEvent<bool> m_theEvent;
+	std::auto_ptr<BitMapCompare> m_pCompare;
+	
 protected:
 	virtual LPCTSTR GetWindowClassName() const;
 	virtual CDuiString GetSkinFolder();

@@ -2,6 +2,18 @@
 
 #include "stdafx.h"
 #include "BitMapCompare.h"
+#include <queue>
+#include "MonitoringUI.h"
+
+BitMapCompare::BitMapCompare(void *pthis)
+{
+	_pWnd = pthis;
+}
+
+BitMapCompare::~BitMapCompare()
+{
+
+}
 
 void BitMapCompare::CompareBitmap(BYTE *pFirst, BYTE *pSecond, long nFirstWidth, long nSecondWidth, long nFirstHeight, long nSecondHeight, float& fRet)
 {
@@ -104,17 +116,21 @@ void BitMapCompare::run()
 			std::cout << "listen is break" << std::endl;
 			break;
 		}
-		//读取数据库内注册数据
-
+		//读取数据库内注册数据		
+		getUserInfo();
 
 		//获取摄像头数据
-
 
 		//开始比对
 
 
 		//将大于0.6的数据写入数据库
+		CMonitoringUI *pWnd = (CMonitoringUI *)_pWnd;
+		std::queue<readCompareInfo> pcompare = pWnd->getCompareQueue();
+		readCompareInfo rCompareInfo;
+		pcompare.push(rCompareInfo);
 		
+		Poco::Thread::sleep(200);
 	}
 }
 
@@ -122,4 +138,15 @@ void BitMapCompare::onEvent(const void* pSender, bool& arg)
 {
 	std::cout << "arg : " << arg << std::endl;
 	_break = arg;
+}
+
+void BitMapCompare::getUserInfo()
+{
+	QFileSqlite *pDb = QFileSqlite::getInstance();
+	vector<int> vUserCount;
+	pDb->GetData(SELECT_COUNT_USER_INFO, vUserCount);
+	if (vUserCount[0] != _vUserInfo.size())
+	{
+		pDb->GetData(SELECT_ALL_USER_INFO, _vUserInfo);
+	}	
 }

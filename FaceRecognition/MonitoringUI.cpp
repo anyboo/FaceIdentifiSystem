@@ -1,16 +1,24 @@
 #include "stdafx.h"
 #include "MonitoringUI.h"
 
+#include "Poco/Delegate.h"
+
 
 CMonitoringUI::CMonitoringUI()
 :m_nBmp(0)
 {
 	m_testID = 100001;
+	m_pCompare.reset( new BitMapCompare(this));
+	Poco::ThreadPool::defaultPool().start(*m_pCompare.get());
 }
 
 
 CMonitoringUI::~CMonitoringUI()
 {
+	m_theEvent += Poco::delegate(m_pCompare.get(), &BitMapCompare::onEvent);
+	fireEvent(true);
+	m_theEvent -= Poco::delegate(m_pCompare.get(), &BitMapCompare::onEvent);
+	Poco::ThreadPool::defaultPool().joinAll();
 }
 
 DUI_BEGIN_MESSAGE_MAP(CMonitoringUI, WindowImplBase)
@@ -57,6 +65,7 @@ void CMonitoringUI::InitWindow()
 {
 	::SetTimer(GetHWND(), 1, 50, nullptr);
 //	::SetTimer(GetHWND(), 2, 2000, nullptr);
+	
 }
 
 LRESULT CMonitoringUI::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
@@ -113,4 +122,9 @@ void CMonitoringUI::ShowMonitInfoList()
 		SubList->SetBkColor(0xFFFFDDDD);
 	}
 	m_testID++;
+}
+
+std::queue<readCompareInfo>& CMonitoringUI::getCompareQueue()
+{
+	return m_compare;
 }
