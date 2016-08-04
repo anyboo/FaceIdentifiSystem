@@ -11,6 +11,7 @@ BitMapCompare::BitMapCompare(void *pthis)
 	_pWnd = pthis;
 	_break = false;
 	_count = 0;
+	_check = true;
 	
 }
 
@@ -51,11 +52,11 @@ void BitMapCompare::CompareBitmap(BYTE *pFirst, BYTE *pSecond, long nFirstWidth,
 		{
 			delete[]pFeature1;
 			pFeature1 = NULL;
-		}
-		for (k = 0; k<1; k++)
-		{
-			delete[](BYTE*)ptfp1[k].dwReserved;
-		}	
+		}		
+	}
+	for (k = 0; k<1; k++)
+	{
+		delete[](BYTE*)ptfp1[k].dwReserved;
 	}
 
 	//face detect
@@ -79,12 +80,11 @@ void BitMapCompare::CompareBitmap(BYTE *pFirst, BYTE *pSecond, long nFirstWidth,
 		{
 			delete[]pFeature2;
 			pFeature2 = NULL;
-		}
-
-		for (k = 0; k<1; k++)
-		{
-			delete[](BYTE*)ptfp2[k].dwReserved;
-		}
+		}		
+	}
+	for (k = 0; k<1; k++)
+	{
+		delete[](BYTE*)ptfp2[k].dwReserved;
 	}
 	
 	if ((nNum1 > 0) && (nNum2 > 0))
@@ -132,6 +132,11 @@ void BitMapCompare::run()
 		std::queue<CapBitmapData> *pCapData = &pWnd->getCapDataQueue();
 		while (!pCapData->empty())
 		{
+			if (!_check)
+			{
+				pCapData->pop();
+				continue;
+			}
 			CapBitmapData Bitmapdata = pCapData->front();
 			_count++;
 			if (_count % 10 == 0)
@@ -154,14 +159,15 @@ void BitMapCompare::run()
 						//pcompare->push(rCompareInfo);
 						Poco::NotificationQueue queue;
 						queue.enqueueNotification(new WorkNotification(1));
-						goto exit1;
+						_check = false;
+						//goto exit1;
 						
 					}
 				}
 			}	
 			
 			pCapData->pop();
-			Poco::Thread::sleep(20);
+			//Poco::Thread::sleep(20);
 		}
 		
 		Poco::Thread::sleep(100);

@@ -4,6 +4,7 @@
 #include "Poco/Delegate.h"
 #include "Picture.h"
 #include "BitMapCompare.h"
+#include "CaptureNotification.h"
 
 
 CMonitoringUI::CMonitoringUI()
@@ -107,8 +108,16 @@ void CMonitoringUI::handle1(Poco::Notification* pNf)
 	poco_check_ptr(pNf);
 	Picture *pImg = NULL;
 	//CaptureNotify::handle1(pNf);
-	CaptureNotify::handle1(pNf, &pImg);
+	//CaptureNotify::handle1(pNf, &pImg);
+	Notification::Ptr pf(pNf);
+	poco_check_ptr(pf.get());
+	CaptureNotification::Ptr nf = pf.cast<CaptureNotification>();
+	poco_check_ptr(nf.get());
+	Picture::Ptr pic(nf->data());
+	poco_check_ptr(pic.get());
+	pImg = pic.get();
 	CapBitmapData capdata((const BYTE *)pImg->data(), pImg->width() * pImg->height() * 3, pImg->width(), pImg->height());
+	Camera::MirrorDIB((const char *)capdata.getData(), capdata.getWidth(), capdata.getHeigth(), false, 24);
 	m_capdata.push(capdata);		
-	delete pImg;
+	//delete pImg;
 }
