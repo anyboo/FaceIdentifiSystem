@@ -6,10 +6,13 @@
 
 #include "LangueConfig.h"
 
+
 RegisterUI::RegisterUI()
 :m_photo_agin(false), r(new Camera)
 {
-	
+	m_pDb = QFileSqlite::getInstance();
+	std::string str = CREATE_USER_INFO_TABLE;
+	bool v = m_pDb->createTable(str);
 }
 
 
@@ -65,7 +68,7 @@ void RegisterUI::InitWindow()
 void RegisterUI::OnFilishi(TNotifyUI& msg)
 {
 	CLabelUI* lab_Prompt = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("lab_Prompt")));
-	bool bRet = SaveRegisterInfo();
+	bool bRet =	SaveRegisterInfo();
 	if (!bRet)
 	{
 		std::string str = LangueConfig::GetShowText(1);
@@ -78,6 +81,10 @@ void RegisterUI::OnFilishi(TNotifyUI& msg)
 		lab_Prompt->SetText(str.c_str());
 		return;
 	}
+
+	std::string sql = INSERT_USET_INFO;
+	bool bbbRet = m_pDb->writeData(sql, m_userInfo);
+
 	Close();
 }
 
@@ -115,13 +122,22 @@ bool RegisterUI::SaveRegisterInfo()
 	Item->strAge = edit_age->GetText();
 	Item->strSex = combo_sex->GetText();
 	Item->strBirth = edit_birth->GetText();
-	Item->strAdress = edit_address->GetText();
+	Item->strIDcard = edit_address->GetText();
 	Item->strPhone = edit_phone->GetText();
 	Item->strCertID = edit_CertID->GetText();
 	Item->strPhotoInfo = photo_lyt->GetBkImage();
 
+	m_userInfo.set<0>(Item->strName);
+	m_userInfo.set<1>(stoi(Item->strAge));
+	m_userInfo.set<2>(Item->strSex);
+	m_userInfo.set<3>(Item->strBirth);
+	m_userInfo.set<4>(Item->strIDcard);
+	m_userInfo.set<5>(Item->strPhone);
+	m_userInfo.set<6>(Item->strCertID);
+	m_userInfo.set<7>(false);
+
 	if (Item->strName == _T("") || Item->strAge == _T("") || Item->strSex == _T("") || Item->strBirth == _T("")
-		|| Item->strAdress == _T("") || Item->strPhone == _T("") || Item->strCertID == _T(""))
+		|| Item->strIDcard == _T("") || Item->strPhone == _T("") || Item->strCertID == _T(""))
 	{
 		return false;
 	}
@@ -150,6 +166,10 @@ void RegisterUI::handle1(Poco::Notification* pNf)
 	CVerticalLayoutUI* Image = dynamic_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("photo_wnd")));
 	poco_check_ptr(Image);
 	COLORREF* data = (COLORREF*)pic->data();
+
+	
+	Poco::Data::CLOB imageInfo((const char*)data, 640 * 480 * 3);
+	m_userInfo.set<8>(imageInfo);
 	
 	CDuiString name = "carmera";
 	HDC PaintDC = ::GetDC(GetHWND());

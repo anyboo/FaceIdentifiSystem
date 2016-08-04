@@ -53,6 +53,10 @@
     <ClCompile Include="SignOutUI.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="WaittingUI.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="LogInUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BitMapCompare.h">
@@ -110,6 +114,10 @@
     <ClInclude Include="LangueConfig.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="WaittingUI.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="LogInUI.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ConsoleApplication1.rc" />

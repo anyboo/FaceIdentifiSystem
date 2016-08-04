@@ -7,7 +7,7 @@ typedef struct
 	std::string strAge;
 	std::string strSex;
 	std::string strBirth;
-	std::string strAdress;
+	std::string strIDcard;
 	std::string strPhone;
 	std::string strCertID;
 	std::string strPhotoInfo;

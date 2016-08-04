@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window size="400,120" caption="0,0,0,0" roundcorner="4,4" showdirty="false">
+	<Font shared="true" id="1" name="微软雅黑" size="18" bold="false" />
+	<VerticalLayout bkimage="file='skin/RegBJ.png'" bordersize="3" bordercolor="0x12345678">
+		<HorizontalLayout width="1024" height="30" bkimage="file='skin/beijing.png'">
+			<Label text="提示" font="1" padding="10,0,0,0" textcolor="#FFFFFFFF" align="left" />
+		</HorizontalLayout>
+		<Label name="text" text="正在解除中..." font="1" width="300" height="90" align="center" padding="50,0,50,0"	/>
+	</VerticalLayout>
+</Window>

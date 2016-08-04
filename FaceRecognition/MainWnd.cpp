@@ -5,6 +5,7 @@
 #include "MonitoringUI.h"
 #include "SettingUI.h"
 #include "SignOutUI.h"
+#include "LogInUI.h"
 
 #include "RegisterInfo.h"
 
@@ -14,8 +15,9 @@
 
 CMainWnd::CMainWnd()
 {
-	m_RegInfo = new CRegisterInfo;
-
+	m_Mod = 0;
+	m_IsSet = false;
+	strHotkey.clear();
 }
 
 
@@ -143,5 +145,61 @@ void CMainWnd::InitWindow()
 {
 	int nRet = RegisterHotKey(m_hWnd, 1, MOD_CONTROL, 'f');
 }
+
+
+LRESULT CMainWnd::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM /*lParam*/, bool& bHandled)
+{
+	if (uMsg == WM_KEYDOWN && wParam == VK_ESCAPE)
+	{
+		bHandled = true;
+	}
+	return FALSE;
+}
+
+
+LRESULT CMainWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+		if (uMsg == WM_KEYDOWN)
+		{
+			if (wParam != VK_CONTROL && wParam != VK_SHIFT && !strHotkey.compare(_T("CTRL+SHIFT")))
+			{
+				if (wParam == 70){
+					std::auto_ptr<CLogInUI> pDlg(new CLogInUI);
+					assert(pDlg.get());
+					pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_FRAME, 0L, 0, 0, 0, 0);
+					pDlg->CenterWindow();
+					pDlg->ShowModal();
+				}
+			}
+			else
+			{
+				if (wParam == VK_CONTROL && !strHotkey.compare(_T("SHIFT")))
+				{
+					strHotkey = std::string(_T("+CTRL")) + strHotkey;
+				}
+				else if (wParam == VK_CONTROL && strHotkey == _T(""))
+				{
+					strHotkey = std::string(_T("CTRL"));
+				}
+				if(wParam == VK_SHIFT && !strHotkey.compare(_T("CTRL")))
+				{
+					strHotkey = strHotkey + std::string(_T("+SHIFT"));
+				}
+				else if (wParam == VK_SHIFT && strHotkey == _T(""))
+				{
+					strHotkey = std::string(_T("SHIFT"));
+				}
+			}
+			return 0;
+		}
+		else if(uMsg == WM_KEYUP)
+		{
+			strHotkey.clear();
+			return 0;
+		}
+
+	return __super::HandleMessage(uMsg, wParam, lParam);
+}
+
 
 

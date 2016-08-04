@@ -10,6 +10,7 @@
 
 
 #define BT_CLOSE_MonWnd		(_T("close_btn2"))
+#define BT_REMOVE_ALARM		(_T("btm_remove"))
 
 
 class CMonitoringUI :
@@ -26,10 +27,13 @@ public:
 	DUI_DECLARE_MESSAGE_MAP();
 
 	void OnCloseWnd(TNotifyUI& msg);
+	void OnRemoveAlarm(TNotifyUI& msg);
 
 	void ShowMonitInfoList();
 
-	
+	virtual LRESULT HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+	virtual LRESULT OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+
 public:
 	std::queue<writeCompareInfo>& getCompareQueue();
 	std::queue<CapBitmapData>& getCapDataQueue();
