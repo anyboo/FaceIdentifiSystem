@@ -21,8 +21,8 @@ void Util::DrawSomething(Picture::Ptr pic, CControlUI* control, HWND hwnd)
 
 	CDuiString name = "carmera";
 	HDC PaintDC = ::GetDC(hwnd);
-	HDC hChildMemDC = ::CreateCompatibleDC(PaintDC);
-	HBITMAP hBitmap = CRenderEngine::CreateARGB32Bitmap(hChildMemDC, pic->width(), pic->height(), &data);
+	//HDC hChildMemDC = ::CreateCompatibleDC(PaintDC);
+	//HBITMAP hBitmap = CRenderEngine::CreateARGB32Bitmap(hChildMemDC, pic->width(), pic->height(), &data);
 
 	PAINTSTRUCT ps;
 	::BeginPaint(hwnd, &ps);
