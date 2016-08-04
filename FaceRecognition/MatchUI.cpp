@@ -88,7 +88,7 @@ void MatchUI::ShowMatchInfo()
 	edit_age->SetText(personInfo->strAge.c_str());
 	edit_sex->SetText(personInfo->strSex.c_str());
 	edit_birth->SetText(personInfo->strBirth.c_str());
-	edit_address->SetText(personInfo->strAdress.c_str());
+	edit_address->SetText(personInfo->strIDcard.c_str());
 	edit_phone->SetText(personInfo->strPhone.c_str());
 	edit_CertID->SetText(personInfo->strCertID.c_str());
 	photo_Lyt->SetBkImage(personInfo->strPhotoInfo.c_str());

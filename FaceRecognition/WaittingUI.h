@@ -2,23 +2,20 @@
 #include <DuiLib/UIlib.h>
 
 
-#define BT_CLOSESWnd		(_T("close_btn2"))
-#define BT_SAVELOG			(_T(""))
-
-class CSettingUI :
+class CWaittingUI :
 	public WindowImplBase
 {
 public:
-	CSettingUI();
-	~CSettingUI();
-
+	CWaittingUI();
+	~CWaittingUI();
+	virtual void InitWindow();
 	virtual void OnFinalMessage(HWND hWnd);
 	virtual void Notify(TNotifyUI& msg);
 
 	DUI_DECLARE_MESSAGE_MAP();
 
-	void OnCloseSWnd(TNotifyUI& msg);
-	void OnSaveLog(TNotifyUI& msg);
+	virtual LRESULT HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+	virtual LRESULT OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
 protected:
 	virtual LPCTSTR GetWindowClassName() const;

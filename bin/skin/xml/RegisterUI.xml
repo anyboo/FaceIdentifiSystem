@@ -9,7 +9,7 @@
 		</HorizontalLayout>
 		<VerticalLayout height="600"  padding="10,0,10,0">
 		<HorizontalLayout >
-			<VerticalLayout width="410" height="500" padding="80,40,0,0"  bkimage="file='skin/personInfo.png'">
+			<VerticalLayout width="410" height="500" padding="80,40,0,0"  bkimage="file='skin/personInfo.png'" bordersize="3" bordercolor="0x12345678">
 				<Label text="请在此处输入您的信息" font="1" width="410" textcolor="#FFFFFFFF" height="50" align="center" padding="0,0,0,0" />
 				<HorizontalLayout>
 					<VerticalLayout width="100">
@@ -38,9 +38,7 @@
 			<VerticalLayout width="400" height="500" padding="50,40,0,0" >
 				<VerticalLayout name="photo_wnd" width="391" height="421" inset="2,2,2,2" bordersize="2" bordercolor="0x88888888" bkimage="file='skin/photo.png'">
 				</VerticalLayout>
-				<VerticalLayout name="vLyt" height="78">
 				<Button name="photo" width="140" height="60" padding="120,18,0,0" text="拍照" font="1" textcolor="#FFFFFFFF" pushedimage="file='skin/push_photo.png'" normalimage="skin/normol_photo.png" hotimage="skin/hot_photo.png"/>
-				</VerticalLayout>
 			</VerticalLayout>
 		</HorizontalLayout>
 		<VerticalLayout name="lab_lyt" height="30" padding="0,0,0,20">

@@ -1,16 +1,15 @@
 #pragma once
 #include <DuiLib/UIlib.h>
 
+#define BT_CLOSE_WND		(_T("btn_cancel"))
+#define BT_LOGIN			(_T("btn_ok"))
 
-#define BT_CLOSESWnd		(_T("close_btn2"))
-#define BT_SAVELOG			(_T(""))
-
-class CSettingUI :
+class CLogInUI :
 	public WindowImplBase
 {
 public:
-	CSettingUI();
-	~CSettingUI();
+	CLogInUI();
+	~CLogInUI();
 
 	virtual void OnFinalMessage(HWND hWnd);
 	virtual void Notify(TNotifyUI& msg);
@@ -18,7 +17,8 @@ public:
 	DUI_DECLARE_MESSAGE_MAP();
 
 	void OnCloseSWnd(TNotifyUI& msg);
-	void OnSaveLog(TNotifyUI& msg);
+
+	void OnLogIn(TNotifyUI& msg);
 
 protected:
 	virtual LPCTSTR GetWindowClassName() const;

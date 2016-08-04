@@ -13,6 +13,7 @@
 						<Label text="摄像头2：" font="1" width="100" height="40" align="left" padding="10,10,0,0"/>
 						<Label text="频率：" font="1" width="100" height="40" align="left" padding="10,10,0,0"/>
 						<Label text="间隔时间：" font="1" width="100" height="40" align="left" padding="10,10,0,0"/>
+						<Button text="保存日志" textcolor="0xFFFF0000" font="1" width="100" height="40" padding="10,10,0,0" textcolor="#FFFFFFFF" normalimage="file='skin/regok_normal.png'" hotimage="file='skin/regok_hot.png'" pushedimage="file='skin/regok_push.png'"/>
 					</VerticalLayout>
 					<VerticalLayout width="300">
 						<Edit name="Edit_Name" width="290" height="40" font="1"  padding="0,20,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
@@ -27,5 +28,6 @@
 						<Label text="分钟" font="1" width="100" height="40" align="left" padding="0,10,0,0"/>
 					</VerticalLayout>
 				</HorizontalLayout>
+	
 	</VerticalLayout>
 </Window>

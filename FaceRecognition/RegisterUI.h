@@ -10,6 +10,8 @@
 #include "Recorder.h"
 #include "CaptureNotify.h"
 
+#include "QMFileSqlite.h"
+
 class RegisterUI :
 	public WindowImplBase,
 	public CaptureNotify
@@ -34,7 +36,8 @@ public:
 
 private:
 	bool			m_photo_agin;
-
+	QFileSqlite*		m_pDb;
+	writeUserInfo	m_userInfo;
 protected:
 	virtual LPCTSTR GetWindowClassName() const;
 	virtual CDuiString GetSkinFolder();
