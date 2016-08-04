@@ -9,13 +9,13 @@
 RegisterUI::RegisterUI()
 :m_photo_agin(false), r(new Camera)
 {
-	
+	example.start();
 }
 
 
 RegisterUI::~RegisterUI()
 {
-
+	example.stop();
 }
 
 DUI_BEGIN_MESSAGE_MAP(RegisterUI, WindowImplBase)
@@ -130,23 +130,28 @@ bool RegisterUI::SaveRegisterInfo()
 }
 
 #include <Poco/AutoPtr.h>
+#include "FaceImage.h"
 
 using Poco::AutoPtr;
+
 
 void RegisterUI::handle1(Poco::Notification* pNf)
 {
 	if (m_photo_agin) return;
 
 	poco_check_ptr(pNf);
-	//CaptureNotify::handle1(pNf);
 	Notification::Ptr pf(pNf);
 	poco_check_ptr(pf.get());
+	example.enqueueNotification(pf);
+	
 	CaptureNotification::Ptr nf = pf.cast<CaptureNotification>();
 	poco_check_ptr(nf.get());
 	Picture::Ptr pic(nf->data());
 	poco_check_ptr(pic.get());
 
-	//CVerticalLayoutUI* photo_Lyt = dynamic_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("photo_wnd")));
+	
+	Picture::MirrorDIB(pic->data(), pic->width(), pic->height(), true, 24);
+	
 	CVerticalLayoutUI* Image = dynamic_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("photo_wnd")));
 	poco_check_ptr(Image);
 	COLORREF* data = (COLORREF*)pic->data();
@@ -155,11 +160,7 @@ void RegisterUI::handle1(Poco::Notification* pNf)
 	HDC PaintDC = ::GetDC(GetHWND());
 	HDC hChildMemDC = ::CreateCompatibleDC(PaintDC);
 	HBITMAP hBitmap = CRenderEngine::CreateARGB32Bitmap(hChildMemDC, pic->width(), pic->height(), &data);
-	/*
-	static void DrawImage(HDC hDC, HBITMAP hBitmap, const RECT& rc, const RECT& rcPaint, \
-        const RECT& rcBmpPart, const RECT& rcScale9, bool alphaChannel, BYTE uFade = 255, 
-        bool hole = false, bool xtiled = false, bool ytiled = false);
-	*/
+
 	PAINTSTRUCT ps;
 	::BeginPaint(GetHWND(), &ps);
 
@@ -168,12 +169,12 @@ void RegisterUI::handle1(Poco::Notification* pNf)
 
 	BITMAPINFOHEADER bih;
 
-	bih.biSize = 40; 						// header size
+	bih.biSize = 40; 						
 	bih.biWidth = pic->width();
 	bih.biHeight = pic->height();
 	bih.biPlanes = 1;
-	bih.biBitCount = 24;					// RGB encoded, 24 bit
-	bih.biCompression = BI_RGB;			// no compression
+	bih.biBitCount = 24;				
+	bih.biCompression = BI_RGB;			
 	bih.biSizeImage = bih.biWidth * bih.biHeight * 3;
 	bih.biXPelsPerMeter = 0;
 	bih.biYPelsPerMeter = 0;

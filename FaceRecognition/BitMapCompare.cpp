@@ -124,10 +124,10 @@ void BitMapCompare::run()
 			break;
 		}
 
-		//¶ÁÈ¡Êý¾Ý¿âÄÚ×¢²áÊý¾Ý			
+		//ï¿½ï¿½È¡ï¿½ï¿½ï¿½Ý¿ï¿½ï¿½ï¿½×¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½			
 		getUserInfo();
 
-		//»ñÈ¡ÉãÏñÍ·Êý¾Ý
+		//ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½Í·ï¿½ï¿½ï¿½ï¿½
 		CMonitoringUI *pWnd = (CMonitoringUI *)_pWnd;
 		std::queue<CapBitmapData> *pCapData = &pWnd->getCapDataQueue();
 		while (!pCapData->empty())
@@ -136,7 +136,7 @@ void BitMapCompare::run()
 			_count++;
 			if (_count % 10 == 0)
 			{
-				//¿ªÊ¼±È¶Ô
+				//ï¿½ï¿½Ê¼ï¿½È¶ï¿½
 				for (i = 0; i < _vUserInfo.size(); i++)
 				{
 					fRet = 0.0;
@@ -146,7 +146,7 @@ void BitMapCompare::run()
 					if (fRet > 0.6)
 					{
 						cout << " fRet > 0.6 " << endl;
-						//½«´óÓÚ0.6µÄÊý¾ÝÐ´Èë¶ÓÁÐ		
+						//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½0.6ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ï¿½ï¿½ï¿½ï¿½		
 						//std::queue<writeCompareInfo> *pcompare = &pWnd->getCompareQueue();
 						//writeCompareInfo rCompareInfo;
 						//rCompareInfo.set<0>(true);
