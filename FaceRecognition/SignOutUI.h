@@ -32,6 +32,7 @@ private:
 	CRegisterInfo*	m_RegInfo;
 	Recorder r;
 	ActivityDispatcher example;
+	long m_count;
 protected:
 	virtual LPCTSTR GetWindowClassName() const;
 	virtual CDuiString GetSkinFolder();

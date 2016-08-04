@@ -25,6 +25,7 @@ void ActivityDispatcher::start()
 void ActivityDispatcher::stop()
 {
 	_activity.stop();
+	enqueueNotification(new Notification);
 	_activity.wait();
 }
 
@@ -46,7 +47,7 @@ void ActivityDispatcher::runActivity()
 					Picture::Ptr pic = pWorkNf->data();
 
 					FaceMatch example;
-					FaceMatch::AddArgs args = {pic,pic};
+					FaceMatch::AddArgs args = { pic, pic };
 					ActiveResult<bool> result = example.activeMatch(args);
 					result.wait();
 					bool ret = result.data();
@@ -54,6 +55,7 @@ void ActivityDispatcher::runActivity()
 				}
 			}
 		}
+		else break;
 	}
 	OutputDebugStringA("Activity stopped.");
 }

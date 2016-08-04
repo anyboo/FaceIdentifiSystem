@@ -6,7 +6,7 @@
 FaceImage::FaceImage()
 : _bpp(24), fpos(new FacePosition), feature(new FaceFeature)
 {
-	poco_assert(0);
+	poco_assert(0);	
 }
 
 FaceImage::FaceImage(Picture::Ptr pic)
@@ -14,18 +14,18 @@ FaceImage::FaceImage(Picture::Ptr pic)
 {
 	this->SetHeight(pic->height());
 	this->SetWidth(pic->width());
-	Picture::MirrorDIB(data(), width(), height(), false, 24);
-	DetectFace();
-	Extract();
+	Picture::MirrorDIB(data(), width(), height(), false, 24);	
+	if (DetectFace() > 0)
+		Extract();
 }
 
 FaceImage::FaceImage(const FaceImage& image)
 :Picture(image.data(),image.len()), _bpp(24)
 , fpos(new FacePosition), feature(new FaceFeature)
 {
-	Picture::MirrorDIB(data(), width(), height(), false, 24);
-	DetectFace();
-	Extract(); 
+	Picture::MirrorDIB(data(), width(), height(), false, 24);	
+	if (DetectFace() > 0)
+		Extract();
 }
 
 bool FaceImage::Compare(FaceImage& image)
@@ -37,7 +37,7 @@ bool FaceImage::Compare(FaceImage& image)
 	return (similarity >= 0.6);
 }
 
-void FaceImage::DetectFace()
+int FaceImage::DetectFace()
 {
 	poco_check_ptr(fpos);
 	detectedFaceCount = fpos->DetectFace(this);
@@ -47,6 +47,7 @@ void FaceImage::DetectFace()
 		OutputDebugStringA((std::string("Not Face Detected!") + std::to_string(detectedFaceCount)).c_str());
 		throw std::exception("Not Face Detected!");
 	}
+	return detectedFaceCount;
 }
 
 void FaceImage::Extract()
