@@ -1,9 +1,8 @@
 #include "stdafx.h"
 #include "RegisterUI.h"
 #include "CaptureNotification.h"
-
 #include "Camera.h"
-
+#include "Util.h"
 #include "LangueConfig.h"
 
 
@@ -18,7 +17,6 @@ RegisterUI::RegisterUI()
 
 RegisterUI::~RegisterUI()
 {
-
 }
 
 DUI_BEGIN_MESSAGE_MAP(RegisterUI, WindowImplBase)
@@ -46,6 +44,8 @@ void RegisterUI::OnFinalMessage(HWND hWnd)
 {
 	removeObserver(*this);
 	r.stop();
+	example.stop();
+
 	WindowImplBase::OnFinalMessage(hWnd);
 }
 
@@ -63,6 +63,7 @@ void RegisterUI::InitWindow()
 {	
 	addObserver(*this);
 	r.start();
+	example.start();
 }
 
 void RegisterUI::OnFilishi(TNotifyUI& msg)
@@ -145,6 +146,7 @@ bool RegisterUI::SaveRegisterInfo()
 }
 
 #include <Poco/AutoPtr.h>
+#include "FaceImage.h"
 
 using Poco::AutoPtr;
 
@@ -153,67 +155,15 @@ void RegisterUI::handle1(Poco::Notification* pNf)
 	if (m_photo_agin) return;
 
 	poco_check_ptr(pNf);
-	//CaptureNotify::handle1(pNf);
 	Notification::Ptr pf(pNf);
 	poco_check_ptr(pf.get());
+	example.enqueueNotification(pf);
+	
 	CaptureNotification::Ptr nf = pf.cast<CaptureNotification>();
 	poco_check_ptr(nf.get());
 	Picture::Ptr pic(nf->data());
 	poco_check_ptr(pic.get());
 
-	//CVerticalLayoutUI* photo_Lyt = dynamic_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("photo_wnd")));
-	CVerticalLayoutUI* Image = dynamic_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("photo_wnd")));
-	poco_check_ptr(Image);
-	COLORREF* data = (COLORREF*)pic->data();
-
-	
-	Poco::Data::CLOB imageInfo((const char*)data, 640 * 480 * 3);
-	m_userInfo.set<8>(imageInfo);
-	
-	CDuiString name = "carmera";
-	HDC PaintDC = ::GetDC(GetHWND());
-	HDC hChildMemDC = ::CreateCompatibleDC(PaintDC);
-	HBITMAP hBitmap = CRenderEngine::CreateARGB32Bitmap(hChildMemDC, pic->width(), pic->height(), &data);
-	/*
-	static void DrawImage(HDC hDC, HBITMAP hBitmap, const RECT& rc, const RECT& rcPaint, \
-        const RECT& rcBmpPart, const RECT& rcScale9, bool alphaChannel, BYTE uFade = 255, 
-        bool hole = false, bool xtiled = false, bool ytiled = false);
-	*/
-	RECT rc, rcPaint, rcBmpPart, rcScale9;
-	//CRenderEngine::DrawImage(PaintDC, hBitmap, );
-
-	HDC hdcStill = ::GetDC(GetHWND());
-	PAINTSTRUCT ps;
-	::BeginPaint(GetHWND(), &ps);
-
-
-	::SetStretchBltMode(hdcStill, COLORONCOLOR);
-
-	BITMAPINFOHEADER bih;
-
-	bih.biSize = 40; 						// header size
-	bih.biWidth = pic->width();
-	bih.biHeight = pic->height();
-	bih.biPlanes = 1;
-	bih.biBitCount = 24;					// RGB encoded, 24 bit
-	bih.biCompression = BI_RGB;			// no compression
-	bih.biSizeImage = bih.biWidth * bih.biHeight * 3;
-	bih.biXPelsPerMeter = 0;
-	bih.biYPelsPerMeter = 0;
-	bih.biClrUsed = 0;
-	bih.biClrImportant = 0;
-
-	BITMAPINFO bi;
-	memset(&bi, 0, sizeof(bi));
-	memcpy(&(bi.bmiHeader), &bih, sizeof(BITMAPINFOHEADER));
-	int iWidth = bih.biWidth;
-	int iHeight = bih.biHeight;
-
-	::StretchDIBits(hdcStill, Image->GetX(), Image->GetY(), Image->GetWidth(), Image->GetHeight(),
-		0, 0, pic->width(), pic->height(), pic->data(), &bi,
-		DIB_RGB_COLORS, SRCCOPY);
-
-
-	::EndPaint(GetHWND(), &ps);
-	::ReleaseDC(GetHWND(), hdcStill);
+	CControlUI* Image = m_PaintManager.FindControl(_T("photo_wnd"));
+	Util::DrawSomething(pic, Image, GetHWND());
 }

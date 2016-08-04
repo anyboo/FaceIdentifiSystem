@@ -3,17 +3,13 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "MainWnd.h"
-
 //#include "InitDevice.h"
-
-
-#include "Camera.h"
-#include "Recorder.h"
-
 #include <windows.h>
 #include <objbase.h>
 #include <shellapi.h>
 #include "QMFileSqlite.h"
+
+
 #include "THFaceImage_i.h"
 #include "THFeature_i.h"
 
@@ -59,13 +55,15 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 	param.nMinFaceSize = 150;
 	param.nRollAngle = 145;
 	param.bOnlyDetect = true;
-//	THFI_Create(1, &param);
+	THFI_Create(1, &param);
 
-	//short ret = EF_Init(1);
-	//if (ret == 1)
-	//{
-	//	cout << "Feature init ok" << endl;
-	//}
+	short ret = EF_Init(1);
+	if (ret == 1)
+	{
+		cout << "Feature init ok" << endl;
+	}
+
+
 	//init database
 	QFileSqlite *pDb = QFileSqlite::getInstance();
 	pDb->createTable(CREATE_USER_INFO_TABLE);
@@ -79,16 +77,9 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 	pFrame->CenterWindow();
 	pFrame->ShowWindow(true);
 	
-	//Camera dev;
-	//Recorder r(dev);//, p(dev);
-	//r.start();
-	//p.start();
-
 //	Show_HideTask(true);
 
 	CPaintManagerUI::MessageLoop();
-	//r.stop();
-	//p.stop();
 	::CoUninitialize();
 
 	THFI_Release();

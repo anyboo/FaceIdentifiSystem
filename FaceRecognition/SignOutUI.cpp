@@ -1,9 +1,11 @@
 #include "stdafx.h"
 #include "SignOutUI.h"
 #include "RegisterInfo.h"
+#include "Util.h"
+#include "CaptureNotification.h"
 
 CSignOutUI::CSignOutUI()
-:m_nBmp(0)
+:m_nBmp(0), r(new Camera)
 {
 }
 
@@ -35,11 +37,17 @@ CDuiString CSignOutUI::GetSkinFile()
 
 void CSignOutUI::InitWindow()
 {
-
+	addObserver(*this);
+	r.start();
+	example.start();
 }
 
 void CSignOutUI::OnFinalMessage(HWND hWnd)
 {
+	removeObserver(*this);
+	r.stop();
+	example.stop();
+
 	WindowImplBase::OnFinalMessage(hWnd);
 }
 
@@ -82,4 +90,20 @@ void CSignOutUI::ShowMatchInfo()
 	edit_phone->SetText(personInfo->strPhone.c_str());
 	edit_CertID->SetText(personInfo->strCertID.c_str());
 	photo_Lyt->SetBkImage(personInfo->strPhotoInfo.c_str());
+}
+
+void CSignOutUI::handle1(Poco::Notification* pNf)
+{
+	poco_check_ptr(pNf);
+	Notification::Ptr pf(pNf);
+	poco_check_ptr(pf.get());
+	example.enqueueNotification(pf);
+
+	CaptureNotification::Ptr nf = pf.cast<CaptureNotification>();
+	poco_check_ptr(nf.get());
+	Picture::Ptr pic(nf->data());
+	poco_check_ptr(pic.get());
+
+	CControlUI* Image = m_PaintManager.FindControl(_T("photo_video"));
+	Util::DrawSomething(pic, Image, GetHWND());
 }

@@ -1,6 +1,7 @@
 #pragma once
 #include <DuiLib/UIlib.h>
 #include "RegisterInfo.h"
+#include "ActivityDispatcher.h"
 
 #define BT_CLOSERWND		(_T("close_btn"))
 #define BT_GETPHOTO			(_T("photo"))
@@ -43,4 +44,5 @@ protected:
 	virtual CDuiString GetSkinFile();
 
 	Recorder r;
+	ActivityDispatcher example;
 };

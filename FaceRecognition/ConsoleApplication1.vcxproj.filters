@@ -57,6 +57,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="LogInUI.cpp" />
+    <ClCompile Include="FaceImage.cpp" />
+    <ClCompile Include="FacePosition.cpp" />
+    <ClCompile Include="FaceFeature.cpp" />
+    <ClCompile Include="FaceMatch.cpp" />
+    <ClCompile Include="ActivityDispatcher.cpp" />
+    <ClCompile Include="Util.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BitMapCompare.h">
@@ -118,6 +124,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="LogInUI.h" />
+    <ClInclude Include="FaceImage.h" />
+    <ClInclude Include="FacePosition.h" />
+    <ClInclude Include="FaceFeature.h" />
+    <ClInclude Include="FaceMatch.h" />
+    <ClInclude Include="ActivityDispatcher.h" />
+    <ClInclude Include="Util.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ConsoleApplication1.rc" />

@@ -7,7 +7,7 @@
 #include <Poco/ThreadPool.h>
 #include "Recorder.h"
 #include "CaptureNotify.h"
-
+#include "ActivityDispatcher.h"
 
 #define BT_CLOSE_MonWnd		(_T("close_btn2"))
 #define BT_REMOVE_ALARM		(_T("btm_remove"))
@@ -51,7 +51,8 @@ private:
 	BitMapCompare *m_pCompare;
 	std::queue<CapBitmapData> m_capdata;
 	Recorder r;
-	
+	ActivityDispatcher example;
+
 protected:
 	virtual LPCTSTR GetWindowClassName() const;
 	virtual CDuiString GetSkinFolder();
