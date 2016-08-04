@@ -44,6 +44,7 @@ void CLogInUI::Notify(TNotifyUI& msg)
 
 void CLogInUI::OnCloseSWnd(TNotifyUI& msg)
 {
+	m_LogResult = LogInFailure;
 	Close();
 }
 
@@ -54,6 +55,7 @@ void CLogInUI::OnLogIn(TNotifyUI& msg)
 	std::string str = edit_pswd->GetText();
 	if (str.compare(_T("123456")) == 0)
 	{
+		m_LogResult = LogInSucceed;
 		Close();
 	}
 	else

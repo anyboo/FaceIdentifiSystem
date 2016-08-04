@@ -129,6 +129,11 @@ bool RegisterUI::SaveRegisterInfo()
 	Item->strCertID = edit_CertID->GetText();
 	Item->strPhotoInfo = photo_lyt->GetBkImage();
 
+	if (Item->strName == _T("") || Item->strAge == _T("") || Item->strSex == _T("") || Item->strBirth == _T("")
+		|| Item->strIDcard == _T("") || Item->strPhone == _T("") || Item->strCertID == _T(""))
+	{
+		return false;
+	}
 	m_userInfo.set<0>(Item->strName);
 	m_userInfo.set<1>(stoi(Item->strAge));
 	m_userInfo.set<2>(Item->strSex);
@@ -137,12 +142,6 @@ bool RegisterUI::SaveRegisterInfo()
 	m_userInfo.set<5>(Item->strPhone);
 	m_userInfo.set<6>(Item->strCertID);
 	m_userInfo.set<7>(false);
-
-	if (Item->strName == _T("") || Item->strAge == _T("") || Item->strSex == _T("") || Item->strBirth == _T("")
-		|| Item->strIDcard == _T("") || Item->strPhone == _T("") || Item->strCertID == _T(""))
-	{
-		return false;
-	}
 
 	return true;
 }
