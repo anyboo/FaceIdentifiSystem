@@ -33,7 +33,8 @@ typedef Poco::Tuple<std::string, int, std::string, std::string, std::string, std
 #define SELECT_ALL_COMPARE_INFO				"SELECT * FROM CompareInfo"
 #define INSERT_COMPARE_INFO					"INSERT INTO CompareInfo (num, time, similarity, picture) VALUES(:num, :time, :similarity, :picture)"
 typedef Poco::Tuple<int, int, std::string, float, Poco::Data::CLOB> readCompareInfo;
-typedef Poco::Tuple<int, std::string, float, Poco::Data::CLOB> writeCompareInfo;
+//typedef Poco::Tuple<int, std::string, float, Poco::Data::CLOB> writeCompareInfo;
+typedef Poco::Tuple<bool, int> writeCompareInfo;
 
 class QFileSqlite
 {

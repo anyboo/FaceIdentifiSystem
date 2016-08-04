@@ -2,14 +2,20 @@
 #include "MonitoringUI.h"
 
 #include "Poco/Delegate.h"
+#include "Picture.h"
+#include "BitMapCompare.h"
 
+#include "WaittingUI.h"
 
 CMonitoringUI::CMonitoringUI()
-:m_nBmp(0)
+	:m_nBmp(0), r(new Camera)
 {
 	m_testID = 100001;
 	m_pCompare = new BitMapCompare(this);
 	Poco::ThreadPool::defaultPool().start(*m_pCompare);
+
+	addObserver(*this);
+	r.start();
 }
 
 
@@ -20,10 +26,14 @@ CMonitoringUI::~CMonitoringUI()
 	m_theEvent -= Poco::delegate(m_pCompare, &BitMapCompare::onEvent);
 	//Poco::ThreadPool::defaultPool().joinAll();
 	delete m_pCompare;
+
+	removeObserver(*this);
+	r.stop();
 }
 
 DUI_BEGIN_MESSAGE_MAP(CMonitoringUI, WindowImplBase)
 DUI_ON_CLICK_CTRNAME(BT_CLOSE_MonWnd, OnCloseWnd)
+DUI_ON_CLICK_CTRNAME(BT_REMOVE_ALARM, OnRemoveAlarm)
 DUI_END_MESSAGE_MAP()
 
 LPCTSTR CMonitoringUI::GetWindowClassName() const
@@ -43,6 +53,7 @@ CDuiString CMonitoringUI::GetSkinFile()
 
 void CMonitoringUI::OnFinalMessage(HWND hWnd)
 {
+	KillTimer(GetHWND(), 1);
 	WindowImplBase::OnFinalMessage(hWnd);
 }
 
@@ -60,9 +71,18 @@ void CMonitoringUI::OnCloseWnd(TNotifyUI& msg)
 	Close();
 }
 
+void CMonitoringUI::OnRemoveAlarm(TNotifyUI& msg)
+{
+	std::auto_ptr<CWaittingUI> pDlg(new CWaittingUI);
+	assert(pDlg.get());
+	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_FRAME, 0L, 1024, 768, 0, 0);
+	pDlg->CenterWindow();
+	pDlg->ShowModal();
+}
+
 void CMonitoringUI::InitWindow()
 {
-	
+	::SetTimer(GetHWND(), 1, 500, nullptr);
 }
 
 void CMonitoringUI::ShowMonitInfoList()
@@ -89,12 +109,44 @@ void CMonitoringUI::ShowMonitInfoList()
 	m_testID++;
 }
 
-std::queue<writeCompareInfo>& CMonitoringUI::getCompareQueue()
-{
-	return m_compare;
-}
-
 std::queue<CapBitmapData>& CMonitoringUI::getCapDataQueue()
 {
 	return m_capdata;
+}
+
+void CMonitoringUI::handle1(Poco::Notification* pNf)
+{
+	poco_check_ptr(pNf);
+	Picture *pImg = NULL;
+	//CaptureNotify::handle1(pNf);
+	CaptureNotify::handle1(pNf, &pImg);
+	CapBitmapData capdata((const BYTE *)pImg->data(), pImg->width() * pImg->height() * 3, pImg->width(), pImg->height());
+	m_capdata.push(capdata);		
+	delete pImg;
+}
+
+LRESULT CMonitoringUI::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+{
+	LRESULT lRes = 0;
+	switch (uMsg)
+	{
+	case WM_TIMER: lRes = OnTimer(uMsg, wParam, lParam, bHandled); break;
+	}
+	bHandled = FALSE;
+	return 0;
+}
+
+LRESULT CMonitoringUI::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+{
+	CVerticalLayoutUI* vLyt = dynamic_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("vLyt_")));
+	DWORD bkcolor = vLyt->GetBkColor();
+	if (bkcolor == 0xFFFF9999)
+	{
+		vLyt->SetBkColor(0x00000000);
+	}
+	else
+	{
+		vLyt->SetBkColor(0xFFFF9999);
+	}
+	return 0;
 }

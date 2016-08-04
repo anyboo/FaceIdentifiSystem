@@ -5,12 +5,17 @@
 #include "Poco/BasicEvent.h"
 #include "BitMapCompare.h"
 #include <Poco/ThreadPool.h>
+#include "Recorder.h"
+#include "CaptureNotify.h"
+
 
 #define BT_CLOSE_MonWnd		(_T("close_btn2"))
+#define BT_REMOVE_ALARM		(_T("btm_remove"))
 
 
 class CMonitoringUI :
-	public WindowImplBase
+	public WindowImplBase,
+	public CaptureNotify
 {
 public:
 	CMonitoringUI();
@@ -18,14 +23,17 @@ public:
 	virtual void InitWindow();
 	virtual void OnFinalMessage(HWND hWnd);
 	virtual void Notify(TNotifyUI& msg);
-
+	virtual void handle1(Poco::Notification* pNf);
 	DUI_DECLARE_MESSAGE_MAP();
 
 	void OnCloseWnd(TNotifyUI& msg);
+	void OnRemoveAlarm(TNotifyUI& msg);
 
 	void ShowMonitInfoList();
 
-	
+	virtual LRESULT HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+	virtual LRESULT OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+
 public:
 	std::queue<writeCompareInfo>& getCompareQueue();
 	std::queue<CapBitmapData>& getCapDataQueue();
@@ -42,6 +50,7 @@ private:
 	Poco::BasicEvent<bool> m_theEvent;
 	BitMapCompare *m_pCompare;
 	std::queue<CapBitmapData> m_capdata;
+	Recorder r;
 	
 protected:
 	virtual LPCTSTR GetWindowClassName() const;

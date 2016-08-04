@@ -14,6 +14,8 @@
 #include <objbase.h>
 #include <shellapi.h>
 #include "QMFileSqlite.h"
+#include "THFaceImage_i.h"
+#include "THFeature_i.h"
 
 void Show_HideTask(bool IsHide)
 {
@@ -52,6 +54,18 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 	HRESULT Hr = ::CoInitialize(NULL);
 	if (FAILED(Hr)) return 0;
 
+	//init face
+	THFI_Param param;
+	param.nMinFaceSize = 150;
+	param.nRollAngle = 145;
+	param.bOnlyDetect = true;
+//	THFI_Create(1, &param);
+
+	//short ret = EF_Init(1);
+	//if (ret == 1)
+	//{
+	//	cout << "Feature init ok" << endl;
+	//}
 	//init database
 	QFileSqlite *pDb = QFileSqlite::getInstance();
 	pDb->createTable(CREATE_USER_INFO_TABLE);
@@ -76,6 +90,9 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 	//r.stop();
 	//p.stop();
 	::CoUninitialize();
+
+	THFI_Release();
+	EF_Release();
 
 	return 0;
 }

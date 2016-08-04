@@ -55,7 +55,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\duilib;$(ProjectDir)..\include-mt;$(ProjectDir)..\poco\Foundation\include;$(SolutionDir)\poco\Data\SQLite\include;$(SolutionDir)\poco\Data\include;$(SolutionDir)\opencv231\build\include;$(SolutionDir)\opencv231\build\include\opencv</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\duilib;$(ProjectDir)..\include-mt;$(ProjectDir)..\poco\Foundation\include;$(SolutionDir)\poco\Data\SQLite\include;$(SolutionDir)\poco\Data\include;$(SolutionDir)\opencv231\build\include;$(SolutionDir)\opencv231\build\include\opencv;$(SolutionDir)\JSON\include\rapidjson</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -93,6 +93,8 @@
     <ClInclude Include="CaptureNotify.h" />
     <ClInclude Include="InitDevice.h" />
     <ClInclude Include="DatabaseException.h" />
+    <ClInclude Include="LangueConfig.h" />
+    <ClInclude Include="LogInUI.h" />
     <ClInclude Include="MainWnd.h" />
     <ClInclude Include="MatchUI.h" />
     <ClInclude Include="MonitoringUI.h" />
@@ -105,6 +107,7 @@
     <ClInclude Include="SettingUI.h" />
     <ClInclude Include="SignOutUI.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="WaittingUI.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
@@ -114,6 +117,7 @@
     <ClCompile Include="CaptureNotify.cpp" />
     <ClCompile Include="InitDevice.cpp" />
     <ClCompile Include="DatabaseException.cpp" />
+    <ClCompile Include="LogInUI.cpp" />
     <ClCompile Include="MainWnd.cpp" />
     <ClCompile Include="MatchUI.cpp" />
     <ClCompile Include="MonitoringUI.cpp" />
@@ -128,6 +132,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="WaittingUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="ConsoleApplication1.ico" />

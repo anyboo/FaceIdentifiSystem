@@ -3,11 +3,15 @@
 #include <queue>
 #include "MonitoringUI.h"
 
+
 using namespace cv;
 
 BitMapCompare::BitMapCompare(void *pthis)
 {
 	_pWnd = pthis;
+	_break = false;
+	_count = 0;
+	
 }
 
 BitMapCompare::~BitMapCompare()
@@ -110,8 +114,8 @@ Mat BitMapCompare::LoadBmpFile1(std::string strFilePath)
 void BitMapCompare::run()
 {
 	int i;
-	float fRet;
-
+	float fRet = 0.0;
+	
 	for (;;)
 	{
 		if (_break)
@@ -129,43 +133,41 @@ void BitMapCompare::run()
 		while (!pCapData->empty())
 		{
 			CapBitmapData Bitmapdata = pCapData->front();
-			//开始比对
-			for (i = 0; i < _vUserInfo.size(); i++)
+			_count++;
+			if (_count % 10 == 0)
 			{
-				fRet = 0.0;				
-				Poco::Data::CLOB pUserPic = _vUserInfo[i].get<9>();
-				CompareBitmap(Bitmapdata.data, (BYTE *)pUserPic.rawContent(), Bitmapdata.getWidth(), 640, Bitmapdata.getHeigth(), 480, fRet);
-
-				if (fRet > 0.6)
+				//开始比对
+				for (i = 0; i < _vUserInfo.size(); i++)
 				{
-					//将大于0.6的数据写入队列		
-					std::queue<writeCompareInfo> *pcompare = &pWnd->getCompareQueue();
-					writeCompareInfo rCompareInfo;
-					rCompareInfo.set<0>(_vUserInfo[i].get<0>());
+					fRet = 0.0;
+					Poco::Data::CLOB pUserPic = _vUserInfo[i].get<9>();
+					CompareBitmap(Bitmapdata.data, (BYTE *)pUserPic.rawContent(), Bitmapdata.getWidth(), 640, Bitmapdata.getHeigth(), 480, fRet);
 
-					time_t rawtime;
-					struct tm * timeinfo;
-					char buffer[80];
-					time(&rawtime);
-					timeinfo = localtime(&rawtime);
-					strftime(buffer, 80, "%d-%m-%Y %I:%M:%S", timeinfo);
-					std::string str(buffer);
-					rCompareInfo.set<1>(str);
-
-					rCompareInfo.set<2>(fRet);
-
-					Poco::Data::CLOB image((const char *)Bitmapdata.data, Bitmapdata.size);
-					rCompareInfo.set<3>(image);
-					pcompare->push(rCompareInfo);
+					if (fRet > 0.6)
+					{
+						cout << " fRet > 0.6 " << endl;
+						//将大于0.6的数据写入队列		
+						//std::queue<writeCompareInfo> *pcompare = &pWnd->getCompareQueue();
+						//writeCompareInfo rCompareInfo;
+						//rCompareInfo.set<0>(true);
+						//rCompareInfo.set<1>(_vUserInfo[i].get<0>());
+						//pcompare->push(rCompareInfo);
+						Poco::NotificationQueue queue;
+						queue.enqueueNotification(new WorkNotification(1));
+						goto exit1;
+						
+					}
 				}
-			}
-
+			}	
+			
 			pCapData->pop();
 			Poco::Thread::sleep(20);
 		}
 		
 		Poco::Thread::sleep(100);
 	}
+exit1:
+	cout << " compare end " << endl;
 }
 
 void BitMapCompare::onEvent(const void* pSender, bool& arg)

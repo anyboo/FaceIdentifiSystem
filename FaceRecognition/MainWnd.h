@@ -34,9 +34,15 @@ public:
 
 	void Show_HideTask(bool IsHide);
 
-	virtual LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
+	LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM /*lParam*/, bool& bHandled);
 
-	CRegisterInfo* m_RegInfo;
+	LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
+
+
+private:
+	UINT			m_Mod;
+	bool			m_IsSet;
+	std::string		strHotkey;
 protected:
 	virtual LPCTSTR GetWindowClassName() const;
 	virtual CDuiString GetSkinFolder();

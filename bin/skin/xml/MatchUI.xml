@@ -19,7 +19,7 @@
 					<Label text="出生年月：" font="1" width="90" height="40" align="left" padding="10,10,0,0"/>
 					<Label text="身份证号：" font="1" width="90" height="40" align="left" padding="10,10,0,0"/>
 					<Label text="电话号码：" font="1" width="90" height="40" align="left" padding="10,10,0,0"/>
-					<Label text="证件编号：" font="1" width="90" height="40" align="left" padding="10,10,0,0"/>
+					<Label text="证书编号：" font="1" width="90" height="40" align="left" padding="10,10,0,0"/>
 				</VerticalLayout>
 				<VerticalLayout name="info_lyt" width="310" padding="0,0,0,0">
 					<Label text="信息匹配成功！" font="2" width="250" height="40" textcolor="#FFFF0000" align="left" padding="10,10,0,0"/>

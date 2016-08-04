@@ -4,14 +4,21 @@
 
 #include "Camera.h"
 
+#include "LangueConfig.h"
+
+
 RegisterUI::RegisterUI()
 :m_photo_agin(false), r(new Camera)
 {
+	m_pDb = QFileSqlite::getInstance();
+	std::string str = CREATE_USER_INFO_TABLE;
+	bool v = m_pDb->createTable(str);
 }
 
 
 RegisterUI::~RegisterUI()
 {
+
 }
 
 DUI_BEGIN_MESSAGE_MAP(RegisterUI, WindowImplBase)
@@ -60,46 +67,41 @@ void RegisterUI::InitWindow()
 
 void RegisterUI::OnFilishi(TNotifyUI& msg)
 {
-	CVerticalLayoutUI* vLyt = dynamic_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("lab_lyt")));
 	CLabelUI* lab_Prompt = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("lab_Prompt")));
-	bool bRet = SaveRegisterInfo();
+	bool bRet =	SaveRegisterInfo();
 	if (!bRet)
 	{
-		CDialogBuilder builder;
-		CLabelUI* lab = (CLabelUI*)(builder.Create(_T("xml//labUI1.xml"), (UINT)0, NULL, &m_PaintManager));
-		vLyt->Remove(lab_Prompt);
-		vLyt->Add(lab);
+		std::string str = LangueConfig::GetShowText(1);
+		lab_Prompt->SetText(str.c_str());
 		return;
 	}
 	if (!m_photo_agin)
 	{
-		CDialogBuilder builder;
-		CLabelUI* lab = (CLabelUI*)(builder.Create(_T("xml//labUI2.xml"), (UINT)0, NULL, &m_PaintManager));
-		vLyt->Remove(lab_Prompt);
-		vLyt->Add(lab);
+		std::string str = LangueConfig::GetShowText(2);
+		lab_Prompt->SetText(str.c_str());
 		return;
 	}
+
+	std::string sql = INSERT_USET_INFO;
+	bool bbbRet = m_pDb->writeData(sql, m_userInfo);
+
 	Close();
 }
 
 void RegisterUI::OnGetPhoto(TNotifyUI& msg)
 {
-	CVerticalLayoutUI* vLyt = dynamic_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("vLyt")));
-	CButtonUI* bt_photo = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("photo")));
+	CLabelUI* lab_Prompt = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("lab_Prompt")));
+	CButtonUI* btn_photo = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("photo")));
 	if (m_photo_agin)
 	{
-		/*CDialogBuilder builder;
-		CLabelUI* btn = (CLabelUI*)(builder.Create(_T("xml//labUI3.xml"), (UINT)0, NULL, &m_PaintManager));
-		vLyt->Remove(bt_photo);
-		vLyt->Add(btn);*/
+		std::string str = LangueConfig::GetShowText(3);
+		btn_photo->SetText(str.c_str());
 		m_photo_agin = false;
 	}
 	else
 	{
-		/*CDialogBuilder builder;
-		CLabelUI* btn = (CLabelUI*)(builder.Create(_T("xml//labUI4.xml"), (UINT)0, NULL, &m_PaintManager));
-		vLyt->Remove(bt_photo);
-		vLyt->Add(btn);*/
+		std::string str = LangueConfig::GetShowText(4);
+		btn_photo->SetText(str.c_str());
 		m_photo_agin = true;
 	}
 }
@@ -120,13 +122,22 @@ bool RegisterUI::SaveRegisterInfo()
 	Item->strAge = edit_age->GetText();
 	Item->strSex = combo_sex->GetText();
 	Item->strBirth = edit_birth->GetText();
-	Item->strAdress = edit_address->GetText();
+	Item->strIDcard = edit_address->GetText();
 	Item->strPhone = edit_phone->GetText();
 	Item->strCertID = edit_CertID->GetText();
 	Item->strPhotoInfo = photo_lyt->GetBkImage();
 
+	m_userInfo.set<0>(Item->strName);
+	m_userInfo.set<1>(stoi(Item->strAge));
+	m_userInfo.set<2>(Item->strSex);
+	m_userInfo.set<3>(Item->strBirth);
+	m_userInfo.set<4>(Item->strIDcard);
+	m_userInfo.set<5>(Item->strPhone);
+	m_userInfo.set<6>(Item->strCertID);
+	m_userInfo.set<7>(false);
+
 	if (Item->strName == _T("") || Item->strAge == _T("") || Item->strSex == _T("") || Item->strBirth == _T("")
-		|| Item->strAdress == _T("") || Item->strPhone == _T("") || Item->strCertID == _T(""))
+		|| Item->strIDcard == _T("") || Item->strPhone == _T("") || Item->strCertID == _T(""))
 	{
 		return false;
 	}
@@ -155,6 +166,10 @@ void RegisterUI::handle1(Poco::Notification* pNf)
 	CVerticalLayoutUI* Image = dynamic_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("photo_wnd")));
 	poco_check_ptr(Image);
 	COLORREF* data = (COLORREF*)pic->data();
+
+	
+	Poco::Data::CLOB imageInfo((const char*)data, 640 * 480 * 3);
+	m_userInfo.set<8>(imageInfo);
 	
 	CDuiString name = "carmera";
 	HDC PaintDC = ::GetDC(GetHWND());
