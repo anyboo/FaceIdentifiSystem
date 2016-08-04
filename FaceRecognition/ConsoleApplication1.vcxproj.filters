@@ -53,6 +53,9 @@
     <ClCompile Include="SignOutUI.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="FaceImage.cpp" />
+    <ClCompile Include="FacePosition.cpp" />
+    <ClCompile Include="FaceFeature.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BitMapCompare.h">
@@ -110,6 +113,9 @@
     <ClInclude Include="LangueConfig.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="FaceImage.h" />
+    <ClInclude Include="FacePosition.h" />
+    <ClInclude Include="FaceFeature.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ConsoleApplication1.rc" />
