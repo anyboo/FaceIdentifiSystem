@@ -33,7 +33,7 @@ void ActivityDispatcher::runActivity()
 	while (!_activity.isStopped())
 	{
 		OutputDebugStringA("Activity running.");
-		Thread::sleep(250);
+		Thread::sleep(50);
 		//
 		Notification::Ptr pNf(_queue.waitDequeueNotification());
 		if (pNf)

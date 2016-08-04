@@ -45,4 +45,5 @@ protected:
 
 	Recorder r;
 	ActivityDispatcher example;
+	long         m_count;
 };
