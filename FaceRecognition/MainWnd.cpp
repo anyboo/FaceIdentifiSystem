@@ -169,6 +169,15 @@ LRESULT CMainWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 					pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_FRAME, 0L, 0, 0, 0, 0);
 					pDlg->CenterWindow();
 					pDlg->ShowModal();
+					if (pDlg->m_LogResult == LogInSucceed)
+					{
+						CButtonUI* btn1 = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("bt_register")));
+						CButtonUI* btn2 = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("bt_setting")));
+						CButtonUI* btn3 = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("bt_close")));
+						btn1->SetVisible(true);
+						btn2->SetVisible(true);
+						btn3->SetVisible(true);
+					}
 				}
 			}
 			else
