@@ -94,5 +94,5 @@ void Camera::GetFrame()
 	pic->SetWidth(_width);
 	NotificationCenter::defaultCenter().postNotification(new CaptureNotification(pic));
 
-	delete data;
+	delete[] data;
 }
