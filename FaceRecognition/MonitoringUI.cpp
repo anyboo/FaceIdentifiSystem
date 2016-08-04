@@ -4,7 +4,7 @@
 #include "Poco/Delegate.h"
 #include "Picture.h"
 #include "BitMapCompare.h"
-
+#include "Util.h"
 
 CMonitoringUI::CMonitoringUI()
 	:m_nBmp(0), r(new Camera)
@@ -47,6 +47,8 @@ void CMonitoringUI::OnFinalMessage(HWND hWnd)
 {
 	removeObserver(*this);
 	r.stop();
+	example.stop();
+
 	WindowImplBase::OnFinalMessage(hWnd);
 }
 
@@ -68,6 +70,7 @@ void CMonitoringUI::InitWindow()
 {
 	addObserver(*this);
 	r.start();
+	example.start();
 }
 
 void CMonitoringUI::ShowMonitInfoList()
@@ -99,13 +102,19 @@ std::queue<CapBitmapData>& CMonitoringUI::getCapDataQueue()
 	return m_capdata;
 }
 
+#include "CaptureNotification.h"
 void CMonitoringUI::handle1(Poco::Notification* pNf)
 {
 	poco_check_ptr(pNf);
-	//Picture *pImg = NULL;
-	////CaptureNotify::handle1(pNf);
-	//CaptureNotify::handle1(pNf, &pImg);
-	//CapBitmapData capdata((const BYTE *)pImg->data(), pImg->width() * pImg->height() * 3, pImg->width(), pImg->height());
-	//m_capdata.push(capdata);		
-	//delete pImg;
+	Notification::Ptr pf(pNf);
+	poco_check_ptr(pf.get());
+	example.enqueueNotification(pf);
+
+	CaptureNotification::Ptr nf = pf.cast<CaptureNotification>();
+	poco_check_ptr(nf.get());
+	Picture::Ptr pic(nf->data());
+	poco_check_ptr(pic.get());
+
+	CControlUI* Image = m_PaintManager.FindControl(_T("photo_video"));
+	Util::DrawSomething(pic, Image, GetHWND());
 }

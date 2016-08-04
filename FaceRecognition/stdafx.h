@@ -34,3 +34,5 @@ using namespace DuiLib;
 #endif
 
 // TODO:  在此处引用程序需要的其他头文件
+#include "Picture.h"
+static void DrawSomething(Picture::Ptr pic, CPaintManagerUI& m_PaintManager, HWND hwnd);

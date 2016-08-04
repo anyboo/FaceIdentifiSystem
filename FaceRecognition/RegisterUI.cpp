@@ -1,21 +1,19 @@
 #include "stdafx.h"
 #include "RegisterUI.h"
 #include "CaptureNotification.h"
-
 #include "Camera.h"
-
+#include "Util.h"
 #include "LangueConfig.h"
+
 
 RegisterUI::RegisterUI()
 :m_photo_agin(false), r(new Camera)
 {
-	example.start();
 }
 
 
 RegisterUI::~RegisterUI()
 {
-	example.stop();
 }
 
 DUI_BEGIN_MESSAGE_MAP(RegisterUI, WindowImplBase)
@@ -43,6 +41,8 @@ void RegisterUI::OnFinalMessage(HWND hWnd)
 {
 	removeObserver(*this);
 	r.stop();
+	example.stop();
+
 	WindowImplBase::OnFinalMessage(hWnd);
 }
 
@@ -60,6 +60,7 @@ void RegisterUI::InitWindow()
 {	
 	addObserver(*this);
 	r.start();
+	example.start();
 }
 
 void RegisterUI::OnFilishi(TNotifyUI& msg)
@@ -134,7 +135,6 @@ bool RegisterUI::SaveRegisterInfo()
 
 using Poco::AutoPtr;
 
-
 void RegisterUI::handle1(Poco::Notification* pNf)
 {
 	if (m_photo_agin) return;
@@ -149,48 +149,6 @@ void RegisterUI::handle1(Poco::Notification* pNf)
 	Picture::Ptr pic(nf->data());
 	poco_check_ptr(pic.get());
 
-	
-	Picture::MirrorDIB(pic->data(), pic->width(), pic->height(), true, 24);
-	
-	CVerticalLayoutUI* Image = dynamic_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("photo_wnd")));
-	poco_check_ptr(Image);
-	COLORREF* data = (COLORREF*)pic->data();
-	
-	CDuiString name = "carmera";
-	HDC PaintDC = ::GetDC(GetHWND());
-	HDC hChildMemDC = ::CreateCompatibleDC(PaintDC);
-	HBITMAP hBitmap = CRenderEngine::CreateARGB32Bitmap(hChildMemDC, pic->width(), pic->height(), &data);
-
-	PAINTSTRUCT ps;
-	::BeginPaint(GetHWND(), &ps);
-
-
-	::SetStretchBltMode(PaintDC, COLORONCOLOR);
-
-	BITMAPINFOHEADER bih;
-
-	bih.biSize = 40; 						
-	bih.biWidth = pic->width();
-	bih.biHeight = pic->height();
-	bih.biPlanes = 1;
-	bih.biBitCount = 24;				
-	bih.biCompression = BI_RGB;			
-	bih.biSizeImage = bih.biWidth * bih.biHeight * 3;
-	bih.biXPelsPerMeter = 0;
-	bih.biYPelsPerMeter = 0;
-	bih.biClrUsed = 0;
-	bih.biClrImportant = 0;
-
-	BITMAPINFO bi;
-	memset(&bi, 0, sizeof(bi));
-	memcpy(&(bi.bmiHeader), &bih, sizeof(BITMAPINFOHEADER));
-	int iWidth = bih.biWidth;
-	int iHeight = bih.biHeight;
-
-	::StretchDIBits(PaintDC, Image->GetX(), Image->GetY(), Image->GetWidth(), Image->GetHeight(),
-		0, 0, pic->width(), pic->height(), pic->data(), &bi,
-		DIB_RGB_COLORS, SRCCOPY);
-
-	::EndPaint(GetHWND(), &ps);
-	::ReleaseDC(GetHWND(), PaintDC);
+	CControlUI* Image = m_PaintManager.FindControl(_T("photo_wnd"));
+	Util::DrawSomething(pic, Image, GetHWND());
 }

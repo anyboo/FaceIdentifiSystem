@@ -58,6 +58,7 @@
     <ClCompile Include="FaceFeature.cpp" />
     <ClCompile Include="FaceMatch.cpp" />
     <ClCompile Include="ActivityDispatcher.cpp" />
+    <ClCompile Include="Util.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BitMapCompare.h">
@@ -120,6 +121,7 @@
     <ClInclude Include="FaceFeature.h" />
     <ClInclude Include="FaceMatch.h" />
     <ClInclude Include="ActivityDispatcher.h" />
+    <ClInclude Include="Util.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ConsoleApplication1.rc" />

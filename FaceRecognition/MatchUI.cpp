@@ -1,9 +1,12 @@
 #include "stdafx.h"
 #include "MatchUI.h"
 #include "RegisterInfo.h"
+#include "CaptureNotification.h"
+#include "Camera.h"
+#include "Util.h"
 
 MatchUI::MatchUI()
-:m_nBmp(0)
+:m_nBmp(0), r(new Camera)
 {
 
 }
@@ -36,11 +39,17 @@ CDuiString MatchUI::GetSkinFile()
 
 void MatchUI::InitWindow()
 {
-	
+	addObserver(*this);
+	r.start();
+	example.start();
 }
 
 void MatchUI::OnFinalMessage(HWND hWnd)
 {
+	removeObserver(*this);
+	r.stop();
+	example.stop();
+
 	WindowImplBase::OnFinalMessage(hWnd);
 }
 
@@ -83,4 +92,20 @@ void MatchUI::ShowMatchInfo()
 	edit_phone->SetText(personInfo->strPhone.c_str());
 	edit_CertID->SetText(personInfo->strCertID.c_str());
 	photo_Lyt->SetBkImage(personInfo->strPhotoInfo.c_str());
+}
+
+void MatchUI::handle1(Poco::Notification* pNf)
+{
+	poco_check_ptr(pNf);
+	Notification::Ptr pf(pNf);
+	poco_check_ptr(pf.get());
+	example.enqueueNotification(pf);
+
+	CaptureNotification::Ptr nf = pf.cast<CaptureNotification>();
+	poco_check_ptr(nf.get());
+	Picture::Ptr pic(nf->data());
+	poco_check_ptr(pic.get());
+
+	CControlUI* Image = m_PaintManager.FindControl(_T("photo_video"));
+	Util::DrawSomething(pic, Image, GetHWND());
 }
