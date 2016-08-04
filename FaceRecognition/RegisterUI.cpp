@@ -5,7 +5,6 @@
 #include "Util.h"
 #include "LangueConfig.h"
 
-
 RegisterUI::RegisterUI()
 :m_photo_agin(false), r(new Camera)
 {
@@ -13,7 +12,6 @@ RegisterUI::RegisterUI()
 	std::string str = CREATE_USER_INFO_TABLE;
 	bool v = m_pDb->createTable(str);
 }
-
 
 RegisterUI::~RegisterUI()
 {
@@ -44,7 +42,6 @@ void RegisterUI::OnFinalMessage(HWND hWnd)
 {
 	removeObserver(*this);
 	r.stop();
-	example.stop();
 
 	WindowImplBase::OnFinalMessage(hWnd);
 }
@@ -63,8 +60,6 @@ void RegisterUI::InitWindow()
 {	
 	addObserver(*this);
 	r.start();
-	example.start();
-	m_count = 0;
 }
 
 void RegisterUI::OnFilishi(TNotifyUI& msg)
@@ -146,11 +141,6 @@ bool RegisterUI::SaveRegisterInfo()
 	return true;
 }
 
-#include <Poco/AutoPtr.h>
-#include "FaceImage.h"
-
-using Poco::AutoPtr;
-
 void RegisterUI::handle1(Poco::Notification* pNf)
 {
 	if (m_photo_agin) return;
@@ -158,12 +148,6 @@ void RegisterUI::handle1(Poco::Notification* pNf)
 	poco_check_ptr(pNf);
 	Notification::Ptr pf(pNf);
 	poco_check_ptr(pf.get());
-	if ((m_count % 5) == 0)
-	{
-		example.enqueueNotification(pf);
-	}
-	m_count++;
-	
 	CaptureNotification::Ptr nf = pf.cast<CaptureNotification>();
 	poco_check_ptr(nf.get());
 	Picture::Ptr pic(nf->data());

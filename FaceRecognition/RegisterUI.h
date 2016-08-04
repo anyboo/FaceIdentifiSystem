@@ -1,16 +1,13 @@
 #pragma once
 #include <DuiLib/UIlib.h>
 #include "RegisterInfo.h"
-#include "ActivityDispatcher.h"
+#include "Recorder.h"
+#include "CaptureNotify.h"
+#include "QMFileSqlite.h"
 
 #define BT_CLOSERWND		(_T("close_btn"))
 #define BT_GETPHOTO			(_T("photo"))
 #define BT_OK_REGISTER		(_T("btn_ok"))
-
-#include "Recorder.h"
-#include "CaptureNotify.h"
-
-#include "QMFileSqlite.h"
 
 class RegisterUI :
 	public WindowImplBase,
@@ -44,6 +41,4 @@ protected:
 	virtual CDuiString GetSkinFile();
 
 	Recorder r;
-	ActivityDispatcher example;
-	long         m_count;
 };
