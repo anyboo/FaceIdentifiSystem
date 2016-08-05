@@ -7,34 +7,38 @@
 			<Button name="close_btn1" width="44" height="44" padding="10,10,0,0" tooltip="返回" normalimage="file='skin/back_normal.png'" hotimage="file='skin/back_hot.png'" pushedimage="file='skin/back_push.png'"/>
 			<Label text="职员签到" font="2" padding="400,0,0,0" textcolor="#FFFFFFFF" align="center" />
 		</HorizontalLayout>
-		<HorizontalLayout  height="500" padding="20,0,20,40" >
+				<HorizontalLayout  height="510" padding="20,0,20,40" >
 			<HorizontalLayout name="photo_video" width="400" height="420" padding="80,60,0,0" inset="2,2,2,2" bordersize="2" bordercolor="0x88888888" bkimage="file='skin/photo.png'">
 			</HorizontalLayout>
 			<VerticalLayout width="520" >
-			<HorizontalLayout width="400" height="450" padding="80,40,0,0" >
-				<VerticalLayout width="100" padding="0,50,0,0">
-					<Label text="姓名：" font="1" width="90" height="40" align="left" padding="10,20,0,0"/>
+			<Label name="match_result" text="" font="2" width="250" height="30" textcolor="#FFFF0000" align="left" padding="160,20,0,0"/>
+			<HorizontalLayout width="450" height="480" padding="40,10,0,0" >
+				<VerticalLayout width="120" padding="0,0,0,0">
+					<Label text="姓名：" font="1" width="90" height="40" align="left" padding="10,0,0,0"/>
 					<Label text="年龄" font="1" width="90" height="40" align="left" padding="10,10,0,0"/>
 					<Label text="性别：" font="1" width="90" height="40" align="left" padding="10,10,0,0"/>
 					<Label text="出生年月：" font="1" width="90" height="40" align="left" padding="10,10,0,0"/>
 					<Label text="身份证号：" font="1" width="90" height="40" align="left" padding="10,10,0,0"/>
 					<Label text="电话号码：" font="1" width="90" height="40" align="left" padding="10,10,0,0"/>
-					<Label text="证书编号：" font="1" width="90" height="40" align="left" padding="10,10,0,0"/>
+					<Label text="证件编号：" font="1" width="90" height="40" align="left" padding="10,10,0,0"/>
+					<Label text="职业及等级：" font="1" width="120" height="40" align="left" padding="10,10,0,0"/>
+					<Label text="发证时间：" font="1" width="100" height="40" align="left" padding="10,10,0,0"/>
 				</VerticalLayout>
 				<VerticalLayout name="info_lyt" width="310" padding="0,0,0,0">
-					<Label name="match_result" text="" font="2" width="250" height="40" textcolor="#FFFF0000" align="left" padding="10,10,0,0"/>
-					<Edit name="Edit_Name" width="290" height="40" font="1" readonly="true" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'" padding="0,20,0,0" />
+					<Edit name="Edit_Name" width="290" height="40" font="1" readonly="true" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'" padding="0,0,0,0" />
 					<Edit name="Edit_Age" width="290" height="40" font="1" readonly="true" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'" padding="0,10,0,0" />
 					<Edit name="Edit_Sex" width="290" height="40" font="1" readonly="true" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'" padding="0,10,0,0" />
 					<Edit name="Edit_Birth" width="290" height="40" font="1" readonly="true" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'" padding="0,10,0,0" />
 					<Edit name="Edit_Address" width="290" height="40" font="1" readonly="true" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'" padding="0,10,0,0" />
 					<Edit name="Edit_Phone" width="290" height="40" font="1" readonly="true" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'" padding="0,10,0,0" />
 					<Edit name="Edit_IDnumber" width="290" height="40" font="1" readonly="true" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'" padding="0,10,0,0" />
+					<Edit name="Edit_grade" width="290" height="40" font="1" readonly="true" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'" padding="0,10,0,0" />
+					<Edit name="Edit_time" width="290" height="40" font="1" readonly="true" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'" padding="0,10,0,0" />		
 				</VerticalLayout>
 			</HorizontalLayout>
 			</VerticalLayout>
 		</HorizontalLayout>
 		<Control height="3" bkimage="file='skin/hor.png'" />
-		<Button name="photo" width="140" height="60" padding="400,30,0,0" text="签到" font="1" textcolor="#FFFFFFFF" pushedimage="file='skin/regok_push.png'" normalimage="skin/regok_normal.png" hotimage="skin/regok_hot.png"/>
+		<Button name="Sign_In" width="140" height="60" padding="400,30,0,0" enabled="false" text="签到" font="1" textcolor="#FFFFFFFF" pushedimage="file='skin/regok_push.png'" normalimage="skin/regok_normal.png" hotimage="skin/regok_hot.png"/>
 	</VerticalLayout>
 </Window>

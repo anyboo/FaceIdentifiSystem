@@ -1,6 +1,7 @@
 #pragma once
 #include <DuiLib/UIlib.h>
 #include "winuser.h"
+#include "LogInUI.h"
 
 class CRegisterInfo;
 

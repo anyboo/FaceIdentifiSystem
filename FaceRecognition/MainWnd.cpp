@@ -5,7 +5,7 @@
 #include "MonitoringUI.h"
 #include "SettingUI.h"
 #include "SignOutUI.h"
-#include "LogInUI.h"
+
 
 #include "RegisterInfo.h"
 
@@ -15,8 +15,6 @@
 
 CMainWnd::CMainWnd()
 {
-	m_Mod = 0;
-	m_IsSet = false;
 	strHotkey.clear();
 }
 
@@ -83,6 +81,12 @@ void CMainWnd::OnMatchWnd(TNotifyUI& msg)
 	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_FRAME, 0L, 1024, 768, 0, 0);
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
+
+	std::auto_ptr<CMonitoringUI> MtpDlg(new CMonitoringUI);
+	assert(MtpDlg.get());
+	MtpDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_FRAME, 0L, 1024, 768, 0, 0);
+	MtpDlg->CenterWindow();
+	MtpDlg->ShowModal();
 }
 
 void CMainWnd::OnMonitoringWnd(TNotifyUI& msg)
@@ -163,20 +167,31 @@ LRESULT CMainWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 		{
 			if (wParam != VK_CONTROL && wParam != VK_SHIFT && !strHotkey.compare(_T("CTRL+SHIFT")))
 			{
-				if (wParam == 70){
-					std::auto_ptr<CLogInUI> pDlg(new CLogInUI);
-					assert(pDlg.get());
-					pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_FRAME, 0L, 0, 0, 0, 0);
-					pDlg->CenterWindow();
-					pDlg->ShowModal();
-					if (pDlg->m_LogResult == LogInSucceed)
+				if (wParam == 70)
+				{
+					CButtonUI* btn1 = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("bt_register")));
+					CButtonUI* btn2 = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("bt_setting")));
+					CButtonUI* btn3 = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("bt_close")));
+					if (btn1->IsVisible())
 					{
-						CButtonUI* btn1 = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("bt_register")));
-						CButtonUI* btn2 = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("bt_setting")));
-						CButtonUI* btn3 = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("bt_close")));
-						btn1->SetVisible(true);
-						btn2->SetVisible(true);
-						btn3->SetVisible(true);
+						btn1->SetVisible(false);
+						btn2->SetVisible(false);
+						btn3->SetVisible(false);
+					}
+					else
+					{
+						std::auto_ptr<CLogInUI> pDlg(new CLogInUI);
+						assert(pDlg.get());
+						pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_FRAME, 0L, 0, 0, 0, 0);
+						pDlg->CenterWindow();
+						pDlg->ShowModal();
+						if (pDlg->m_LogResult == LogInSucceed)
+						{
+
+							btn1->SetVisible(true);
+							btn2->SetVisible(true);
+							btn3->SetVisible(true);
+						}
 					}
 				}
 			}

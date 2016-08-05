@@ -21,7 +21,7 @@ CSignOutUI::~CSignOutUI()
 
 DUI_BEGIN_MESSAGE_MAP(CSignOutUI, WindowImplBase)
 DUI_ON_CLICK_CTRNAME(BT_CLOSE_MatchWnd, OnCloseWnd)
-DUI_ON_CLICK_CTRNAME(BT_OK_FILISH, OnFilishMatch)
+DUI_ON_CLICK_CTRNAME(BT_SIGN_OUT, OnFilishMatch)
 DUI_END_MESSAGE_MAP()
 
 LPCTSTR CSignOutUI::GetWindowClassName() const
@@ -145,12 +145,13 @@ LRESULT CSignOutUI::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam,
 
 LRESULT CSignOutUI::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-	ActivityDispatcher ad;
-	if (!ad.queryResult())
+	if (example.queryResult())
 	{
+		CButtonUI* btn = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("Sign_out")));
 		CLabelUI* lab = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("match_result")));
 		std::string str = LangueConfig::GetShowText(6);
 		lab->SetText(str.c_str());
+		btn->SetEnabled(true);
 		ShowMatchInfo();
 		KillTimer(GetHWND(), 1);
 	}
