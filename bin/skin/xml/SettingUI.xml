@@ -7,7 +7,7 @@
 			<Button name="close_btn2" width="44" height="44" padding="10,10,0,0" tooltip="返回" normalimage="file='skin/back_normal.png'" hotimage="file='skin/back_hot.png'" pushedimage="file='skin/back_push.png'"/>
 			<Label text="系统设置" font="8" padding="400,0,0,0" textcolor="#FFFFFFFF" align="center" />
 		</HorizontalLayout>
-			<HorizontalLayout padding="80,0,0,0" width="900">
+		<HorizontalLayout padding="80,0,0,0" width="900" height="300">
 					<VerticalLayout width="110">
 						<Label text="摄像头1：" font="1" width="100" height="40" align="left" padding="10,20,0,0"/>
 						<Label text="摄像头2：" font="1" width="100" height="40" align="left" padding="10,10,0,0"/>
@@ -27,7 +27,10 @@
 						<Label text="秒" font="1" width="100" height="40" align="left" padding="0,10,0,0"/>
 						<Label text="分钟" font="1" width="100" height="40" align="left" padding="0,10,0,0"/>
 					</VerticalLayout>
-				</HorizontalLayout>
-	
+		</HorizontalLayout  >
+		<HorizontalLayout padding="80,0,0,0" width="900">
+			<Button name="saveConfig" text="保存配置" textcolor="0xFFFF0000" font="1" width="100" height="40" padding="10,10,0,0" textcolor="#FFFFFFFF" normalimage="file='skin/regok_normal.png'" hotimage="file='skin/regok_hot.png'" pushedimage="file='skin/regok_push.png'"/>
+			<Button name="resetConfig" text="重置配置" textcolor="0xFFFF0000" font="1" width="100" height="40" padding="80,10,0,0" textcolor="#FFFFFFFF" normalimage="file='skin/regok_normal.png'" hotimage="file='skin/regok_hot.png'" pushedimage="file='skin/regok_push.png'"/>
+		</HorizontalLayout>
 	</VerticalLayout>
 </Window>
