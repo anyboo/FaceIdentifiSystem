@@ -9,6 +9,9 @@
 #define BT_GETPHOTO			(_T("photo"))
 #define BT_OK_REGISTER		(_T("btn_ok"))
 
+
+
+
 class RegisterUI :
 	public WindowImplBase,
 	public CaptureNotify
@@ -33,7 +36,7 @@ public:
 
 private:
 	bool			m_photo_agin;
-
+	
 	writeUserInfo	m_userInfo;
 protected:
 	virtual LPCTSTR GetWindowClassName() const;

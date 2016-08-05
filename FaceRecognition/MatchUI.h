@@ -9,6 +9,13 @@ class CRegisterInfo;
 #define BT_CLOSE_MatchWnd		(_T("close_btn1"))
 #define BT_OK_FILISH			(_T("Sign_In"))
 
+enum IsSignIn
+{
+	SignIn_OK = 0,
+	SignIn_CANCEL
+};
+
+
 class MatchUI :
 	public WindowImplBase,
 	public CaptureNotify
@@ -17,6 +24,7 @@ public:
 	MatchUI();
 	~MatchUI();
 	void InitWindow();
+	IsSignIn GetResult();
 	virtual void OnFinalMessage(HWND hWnd);
 	virtual void Notify(TNotifyUI& msg);
 	virtual void handle1(Poco::Notification* pNf);
@@ -37,7 +45,7 @@ private:
 	Recorder r;
 	ActivityDispatcher example;
 	long  m_count;
-
+	IsSignIn		m_IsSignIn;
 protected:
 	virtual LPCTSTR GetWindowClassName() const;
 	virtual CDuiString GetSkinFolder();

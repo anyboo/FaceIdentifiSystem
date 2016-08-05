@@ -82,11 +82,14 @@ void CMainWnd::OnMatchWnd(TNotifyUI& msg)
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
 
-	std::auto_ptr<CMonitoringUI> MtpDlg(new CMonitoringUI);
-	assert(MtpDlg.get());
-	MtpDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_FRAME, 0L, 1024, 768, 0, 0);
-	MtpDlg->CenterWindow();
-	MtpDlg->ShowModal();
+	if (pDlg->GetResult() == SignIn_OK)
+	{
+		std::auto_ptr<CMonitoringUI> MtpDlg(new CMonitoringUI);
+		assert(MtpDlg.get());
+		MtpDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_FRAME, 0L, 1024, 768, 0, 0);
+		MtpDlg->CenterWindow();
+		MtpDlg->ShowModal();
+	}
 }
 
 void CMainWnd::OnMonitoringWnd(TNotifyUI& msg)
