@@ -33,7 +33,6 @@ void ActivityDispatcher::runActivity()
 {
 	while (!_activity.isStopped())
 	{
-		OutputDebugStringA("Activity running.");
 		Thread::sleep(50);
 		//
 		Notification::Ptr pNf(_queue.waitDequeueNotification());
@@ -51,16 +50,26 @@ void ActivityDispatcher::runActivity()
 					ActiveResult<bool> result = example.activeMatch(args);
 					result.wait();
 					bool ret = result.data();
+					commitResult(ret);
 					OutputDebugStringA((std::string("ActiveResult : ") + std::to_string(ret) + std::string("\n")).c_str());
 				}
 			}
 		}
 		else break;
 	}
-	OutputDebugStringA("Activity stopped.");
 }
 
 void ActivityDispatcher::enqueueNotification(Poco::Notification::Ptr pNotification)
 {
 	_queue.enqueueNotification(pNotification);
+}
+
+void ActivityDispatcher::commitResult(bool result)
+{
+	_results = result;
+}
+
+bool ActivityDispatcher::queryResult()
+{
+	return _results;
 }
