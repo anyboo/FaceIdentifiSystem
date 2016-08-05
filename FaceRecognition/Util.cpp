@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "Util.h"
 
-
 Util::Util()
 {
 }

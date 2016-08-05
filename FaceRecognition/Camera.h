@@ -27,6 +27,7 @@ public:
 	virtual void Open();
 	virtual void Close();
 	virtual void GetFrame();
+	virtual void Prepare();
 
 	size_t width() const;
 	size_t height() const;

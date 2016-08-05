@@ -9,6 +9,7 @@
 #include <shellapi.h>
 #include "QMFileSqlite.h"
 #include "RegUserInfo.h"
+#include "log.h"
 
 
 #include "THFaceImage_i.h"
@@ -50,6 +51,8 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 
 	HRESULT Hr = ::CoInitialize(NULL);
 	if (FAILED(Hr)) return 0;
+
+	Loggering::Logger_initiation();
 
 	//init face
 	THFI_Param param;

@@ -1,4 +1,6 @@
 #pragma once
+#include "Picture.h"
+
 class Util
 {
 public:
