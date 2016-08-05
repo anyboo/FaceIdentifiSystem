@@ -4,7 +4,11 @@
 #include "Poco/Delegate.h"
 #include "Picture.h"
 #include "BitMapCompare.h"
+<<<<<<< HEAD
 #include "Util.h"
+=======
+#include "CaptureNotification.h"
+>>>>>>> remotes/origin/master
 
 #include "WaittingUI.h"
 
@@ -127,6 +131,7 @@ std::queue<CapBitmapData>& CMonitoringUI::getCapDataQueue()
 void CMonitoringUI::handle1(Poco::Notification* pNf)
 {
 	poco_check_ptr(pNf);
+<<<<<<< HEAD
 	Notification::Ptr pf(pNf);
 	poco_check_ptr(pf.get());
 	if ((m_count % 5) == 0)
@@ -135,10 +140,18 @@ void CMonitoringUI::handle1(Poco::Notification* pNf)
 	}
 	m_count++;
 
+=======
+	Picture *pImg = NULL;
+	//CaptureNotify::handle1(pNf);
+	//CaptureNotify::handle1(pNf, &pImg);
+	Notification::Ptr pf(pNf);
+	poco_check_ptr(pf.get());
+>>>>>>> remotes/origin/master
 	CaptureNotification::Ptr nf = pf.cast<CaptureNotification>();
 	poco_check_ptr(nf.get());
 	Picture::Ptr pic(nf->data());
 	poco_check_ptr(pic.get());
+<<<<<<< HEAD
 
 	CControlUI* Image = m_PaintManager.FindControl(_T("photo_video"));
 	Util::DrawSomething(pic, Image, GetHWND());
@@ -181,4 +194,11 @@ LRESULT CMonitoringUI::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
 		}
 	}
 	return 0;
+=======
+	pImg = pic.get();
+	CapBitmapData capdata((const BYTE *)pImg->data(), pImg->width() * pImg->height() * 3, pImg->width(), pImg->height());
+	Camera::MirrorDIB((const char *)capdata.getData(), capdata.getWidth(), capdata.getHeigth(), false, 24);
+	m_capdata.push(capdata);		
+	//delete pImg;
+>>>>>>> remotes/origin/master
 }

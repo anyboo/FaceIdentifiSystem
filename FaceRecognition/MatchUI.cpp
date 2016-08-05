@@ -133,7 +133,7 @@ LRESULT MatchUI::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 LRESULT MatchUI::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
 	ActivityDispatcher ad;
-	if (ad.queryResult())
+	if (!ad.queryResult())
 	{
 		CLabelUI* lab = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("match_result")));
 		std::string str = LangueConfig::GetShowText(6);
