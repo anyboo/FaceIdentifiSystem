@@ -7,7 +7,7 @@
 class CRegisterInfo;
 
 #define BT_CLOSE_MatchWnd		(_T("close_btn1"))
-#define BT_OK_FILISH			(_T("btn_ok1"))
+#define BT_OK_FILISH			(_T("Sign_In"))
 
 class MatchUI :
 	public WindowImplBase,
