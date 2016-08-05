@@ -64,7 +64,9 @@
     <ClCompile Include="ActivityDispatcher.cpp" />
     <ClCompile Include="Util.cpp" />
     <ClCompile Include="RegUserInfo.cpp" />
-    <ClCompile Include="ClipUI.cpp" />
+    <ClCompile Include="log.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BitMapCompare.h">
@@ -133,7 +135,9 @@
     <ClInclude Include="ActivityDispatcher.h" />
     <ClInclude Include="Util.h" />
     <ClInclude Include="RegUserInfo.h" />
-    <ClInclude Include="ClipUI.h" />
+    <ClInclude Include="log.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ConsoleApplication1.rc" />
