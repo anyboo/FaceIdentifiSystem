@@ -18,9 +18,11 @@ FacePosition::~FacePosition()
 
 size_t FacePosition::DetectFace(FaceImage* image)
 {
-	return THFI_DetectFace(ChannelID, (BYTE*)image->data(),
+	int face_number = THFI_DetectFace(ChannelID, (BYTE*)image->data(),
 					image->bpp(), image->width(), image->height(),
 					_position, maxFaceCount);
+	
+	return ((face_number > 0) ? face_number : 0);
 }
 
 unsigned long FacePosition::facial() const

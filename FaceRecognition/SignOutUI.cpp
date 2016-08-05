@@ -40,6 +40,7 @@ void CSignOutUI::InitWindow()
 	addObserver(*this);
 	r.start();
 	example.start();
+	m_count = 0;
 }
 
 void CSignOutUI::OnFinalMessage(HWND hWnd)
@@ -97,7 +98,11 @@ void CSignOutUI::handle1(Poco::Notification* pNf)
 	poco_check_ptr(pNf);
 	Notification::Ptr pf(pNf);
 	poco_check_ptr(pf.get());
-	example.enqueueNotification(pf);
+	if ((m_count % 5) == 0)
+	{
+		example.enqueueNotification(pf);
+	}
+	m_count++;
 
 	CaptureNotification::Ptr nf = pf.cast<CaptureNotification>();
 	poco_check_ptr(nf.get());

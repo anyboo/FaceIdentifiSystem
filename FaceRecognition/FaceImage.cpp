@@ -6,7 +6,7 @@
 FaceImage::FaceImage()
 : _bpp(24), fpos(new FacePosition), feature(new FaceFeature)
 {
-	poco_assert(0);
+	poco_assert(0);	
 }
 
 FaceImage::FaceImage(Picture::Ptr pic)
@@ -14,7 +14,7 @@ FaceImage::FaceImage(Picture::Ptr pic)
 {
 	this->SetHeight(pic->height());
 	this->SetWidth(pic->width());
-	Picture::MirrorDIB(data(), width(), height(), false, 24);
+	Picture::MirrorDIB(data(), width(), height(), false, 24);	
 	DetectFace();
 	Extract();
 }
@@ -23,9 +23,9 @@ FaceImage::FaceImage(const FaceImage& image)
 :Picture(image.data(),image.len()), _bpp(24)
 , fpos(new FacePosition), feature(new FaceFeature)
 {
-	Picture::MirrorDIB(data(), width(), height(), false, 24);
+	Picture::MirrorDIB(data(), width(), height(), false, 24);	
 	DetectFace();
-	Extract(); 
+	Extract();
 }
 
 bool FaceImage::Compare(FaceImage& image)
@@ -51,6 +51,7 @@ void FaceImage::DetectFace()
 
 void FaceImage::Extract()
 {
+	poco_check_ptr(feature);
 	feature->Extract(this, fpos);
 }
 

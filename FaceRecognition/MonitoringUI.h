@@ -52,6 +52,7 @@ private:
 	std::queue<CapBitmapData> m_capdata;
 	Recorder r;
 	ActivityDispatcher example;
+	long  m_count;
 
 protected:
 	virtual LPCTSTR GetWindowClassName() const;

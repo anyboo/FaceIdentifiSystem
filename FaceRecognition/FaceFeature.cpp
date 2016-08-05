@@ -23,11 +23,11 @@ void FaceFeature::Extract(FaceImage* image, FacePosition* fpos)
 	if (ret = EF_Extract(ChannelID, (BYTE*)image->data(), image->width(), image->height(),
 		magic, FacialData, feature) != success)
 	{
-		delete feature;
+		delete[] feature;
 		throw std::exception("Extract failed!");
 		OutputDebugStringA((std::string("Extract failed! ret:") + std::to_string(ret)).c_str());
 	}
-	delete feature;
+	delete[] feature;
 	_data.assign((const char*)feature, feature_size);
 }
 
