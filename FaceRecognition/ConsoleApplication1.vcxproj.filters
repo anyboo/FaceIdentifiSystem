@@ -63,6 +63,7 @@
     <ClCompile Include="FaceMatch.cpp" />
     <ClCompile Include="ActivityDispatcher.cpp" />
     <ClCompile Include="Util.cpp" />
+    <ClCompile Include="RegUserInfo.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BitMapCompare.h">
@@ -130,6 +131,7 @@
     <ClInclude Include="FaceMatch.h" />
     <ClInclude Include="ActivityDispatcher.h" />
     <ClInclude Include="Util.h" />
+    <ClInclude Include="RegUserInfo.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ConsoleApplication1.rc" />

@@ -108,6 +108,7 @@
     <ClInclude Include="Recorder.h" />
     <ClInclude Include="RegisterInfo.h" />
     <ClInclude Include="RegisterUI.h" />
+    <ClInclude Include="RegUserInfo.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SettingUI.h" />
     <ClInclude Include="SignOutUI.h" />
@@ -137,6 +138,7 @@
     <ClCompile Include="Recorder.cpp" />
     <ClCompile Include="RegisterInfo.cpp" />
     <ClCompile Include="RegisterUI.cpp" />
+    <ClCompile Include="RegUserInfo.cpp" />
     <ClCompile Include="SettingUI.cpp" />
     <ClCompile Include="SignOutUI.cpp" />
     <ClCompile Include="stdafx.cpp">

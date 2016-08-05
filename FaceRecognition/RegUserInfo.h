@@ -4,16 +4,16 @@ class RegUserInfo
 {
 public:
 	RegUserInfo();
-	~RegUserInfo();
-
-	static vector<readUserInfo> _userinfo;
+	~RegUserInfo();	
 
 	static vector<readUserInfo> getUserInfo();
 
 	static void addUserInfo(writeUserInfo userinfo);
 
-private:
 	static void init();
 
+private:
+	
+	static vector<readUserInfo> _userinfo;
 };
 

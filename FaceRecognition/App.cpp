@@ -8,6 +8,7 @@
 #include <objbase.h>
 #include <shellapi.h>
 #include "QMFileSqlite.h"
+#include "RegUserInfo.h"
 
 
 #include "THFaceImage_i.h"
@@ -69,6 +70,9 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 	pDb->createTable(CREATE_USER_INFO_TABLE);
 	//CInitDevice	Init_Device;
 	//Init_Device.InitStart();
+
+	//init userinfo
+	RegUserInfo::init();
 
 	std::auto_ptr<CMainWnd> pFrame(new CMainWnd);
 	assert(pFrame.get());

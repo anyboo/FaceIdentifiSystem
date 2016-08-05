@@ -13,8 +13,8 @@ RegUserInfo::~RegUserInfo()
 
 vector<readUserInfo> RegUserInfo::getUserInfo()
 {
-	if (_userinfo.size() == 0)
-		init();
+	/*if (_userinfo.size() == 0)
+		init();*/
 	return _userinfo;
 }
 
