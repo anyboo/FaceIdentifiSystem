@@ -19,6 +19,17 @@ FaceImage::FaceImage(Picture::Ptr pic)
 	Extract();
 }
 
+FaceImage::FaceImage(Picture::Ptr pic, int picwidth, int picheight)
+	: Picture(*pic), _bpp(24), fpos(new FacePosition), feature(new FaceFeature)
+{
+	this->SetHeight(picheight);
+	this->SetWidth(picwidth);
+	Picture::MirrorDIB(data(), width(), height(), true, 24);
+	Picture::MirrorDIB(data(), width(), height(), false, 24);
+	DetectFace();
+	Extract();
+}
+
 FaceImage::FaceImage(const FaceImage& image)
 :Picture(image.data(),image.len()), _bpp(24)
 , fpos(new FacePosition), feature(new FaceFeature)

@@ -26,9 +26,9 @@ void FaceFeature::Extract(FaceImage* image, FacePosition* fpos)
 		delete[] feature;
 		throw std::exception("Extract failed!");
 		OutputDebugStringA((std::string("Extract failed! ret:") + std::to_string(ret)).c_str());
-	}
-	delete[] feature;
+	}	
 	_data.assign((const char*)feature, feature_size);
+	delete[] feature;
 }
 
 const char* FaceFeature::data()
