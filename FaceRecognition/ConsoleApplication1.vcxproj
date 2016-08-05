@@ -72,7 +72,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\duilib;$(ProjectDir)..\include-mt;$(ProjectDir)..\poco\Foundation\include;$(SolutionDir)\poco\Data\SQLite\include;$(SolutionDir)\poco\Data\include;$(SolutionDir)\opencv231\build\include;$(SolutionDir)\opencv231\build\include\opencv</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\duilib;$(ProjectDir)..\include-mt;$(ProjectDir)..\poco\Foundation\include;$(SolutionDir)\poco\Data\SQLite\include;$(SolutionDir)\poco\Data\include;$(SolutionDir)\opencv231\build\include;$(SolutionDir)\opencv231\build\include\opencv;$(SolutionDir)\JSON\include\rapidjson</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -92,6 +92,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CaptureNotification.h" />
     <ClInclude Include="CaptureNotify.h" />
+    <ClInclude Include="ClipUI.h" />
     <ClInclude Include="FaceImage.h" />
     <ClInclude Include="FaceMatch.h" />
     <ClInclude Include="FacePosition.h" />
@@ -124,6 +125,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CaptureNotification.cpp" />
     <ClCompile Include="CaptureNotify.cpp" />
+    <ClCompile Include="ClipUI.cpp" />
     <ClCompile Include="FaceImage.cpp" />
     <ClCompile Include="FaceMatch.cpp" />
     <ClCompile Include="FacePosition.cpp" />

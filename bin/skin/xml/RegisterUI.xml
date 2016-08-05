@@ -36,8 +36,8 @@
 				</HorizontalLayout>
 			</VerticalLayout>
 			<VerticalLayout width="400" height="500" padding="50,40,0,0" >
-				<VerticalLayout name="photo_wnd" width="391" height="421" inset="2,2,2,2" bordersize="2" bordercolor="0x88888888" bkimage="file='skin/photo.png'">
-				</VerticalLayout>
+				<Clip name="Clip" width="391" height="421" inset="2,2,2,2" bordersize="2" bordercolor="0x88888888">
+				</Clip>
 				<Button name="photo" width="140" height="60" padding="120,18,0,0" text="拍照" font="1" textcolor="#FFFFFFFF" pushedimage="file='skin/push_photo.png'" normalimage="skin/normol_photo.png" hotimage="skin/hot_photo.png"/>
 			</VerticalLayout>
 		</HorizontalLayout>

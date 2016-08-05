@@ -21,7 +21,7 @@ public:
 	virtual void OnFinalMessage(HWND hWnd);
 	virtual void Notify(TNotifyUI& msg);
 
-
+	virtual CControlUI* CreateControl(LPCTSTR pstrClass);
 	virtual void handle1(Poco::Notification* pNf);
 	DUI_DECLARE_MESSAGE_MAP();
 
@@ -32,7 +32,8 @@ public:
 	bool SaveRegisterInfo();
 
 private:
-	bool			m_photo_agin;	
+	bool			m_photo_agin;
+
 	writeUserInfo	m_userInfo;
 protected:
 	virtual LPCTSTR GetWindowClassName() const;

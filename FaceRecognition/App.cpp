@@ -59,13 +59,13 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 	param.nMinFaceSize = 150;
 	param.nRollAngle = 145;
 	param.bOnlyDetect = true;
-	THFI_Create(1, &param);
+	//THFI_Create(1, &param);
 
-	short ret = EF_Init(1);
-	if (ret == 1)
-	{
-		cout << "Feature init ok" << endl;
-	}
+	//short ret = EF_Init(1);
+	//if (ret == 1)
+	//{
+	//	cout << "Feature init ok" << endl;
+	//}
 
 
 	//init database

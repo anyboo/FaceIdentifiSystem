@@ -15,6 +15,27 @@ static void MirrorDIB(const char* lpDIBBits, long lWidth, long lHeight, bool bDi
 Camera::Camera()
 :_width(640), _height(480), isRunning(false)
 {
+	try
+	{
+		Prepare();
+	}
+	catch (Poco::Exception& e)
+	{
+	}
+	
+}
+
+Camera::~Camera()
+{
+	if (_camera)
+	{
+		delete _camera;
+		_camera = 0;
+	}
+}
+
+void Camera::Prepare()
+{
 	SCapParam cameraParam;
 	memset(&cameraParam, 0, sizeof(SCapParam));
 
@@ -25,23 +46,21 @@ Camera::Camera()
 
 	_camera = CCapture::Create(&cameraParam);
 	poco_check_ptr(_camera);
-	bool ret = _camera->InitCapture();
-	poco_assert(ret);
+	if (!_camera)
+	{
+		throw Poco::LogicException("SDK Create Device Failed!");
+	}
+		
+	if (!_camera->InitCapture())
+	{
+		throw Poco::LogicException("SDK Initialize Device Failed!");
+	}
 }
-
-
-Camera::~Camera()
-{
-	poco_check_ptr(_camera);
-	delete _camera;
-	_camera = 0;
-}
-
 
 void Camera::Open()
 {
 	poco_check_ptr(_camera);
-	if (!isRunning)
+	if (_camera && !isRunning)
 	{
 		isRunning = _camera->Play();
 		poco_assert(isRunning);
@@ -51,7 +70,7 @@ void Camera::Open()
 void Camera::Close()
 {
 	poco_check_ptr(_camera);
-	if (isRunning)
+	if (_camera && isRunning)
 	{
 		_camera->Stop();
 	}
@@ -60,6 +79,8 @@ void Camera::Close()
 void Camera::SetQuality(SCapQuality* pQuality)
 {
 	poco_check_ptr(_camera);
+	if (!_camera) return;
+
 	bool ret = _camera->SetQuality(pQuality);
 	poco_assert(ret);
 }
@@ -78,7 +99,7 @@ size_t Camera::height() const
 
 void Camera::GetFrame()
 {
-	if (!isRunning) return;
+	if (!_camera && !isRunning) return;
 
 	poco_check_ptr(_camera);
 
