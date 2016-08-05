@@ -154,4 +154,5 @@ private:
 	void *           _pWnd;
 	vector<readUserInfo> _vUserInfo;
 	int             _count;
+	bool            _check;
 };

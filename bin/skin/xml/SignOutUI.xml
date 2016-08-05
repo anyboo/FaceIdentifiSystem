@@ -22,7 +22,7 @@
 					<Label text="证件编号：" font="1" width="90" height="40" align="left" padding="10,10,0,0"/>
 				</VerticalLayout>
 				<VerticalLayout name="info_lyt" width="310" padding="0,0,0,0">
-					<Label text="信息匹配成功！" font="2" width="250" height="40" textcolor="#FFFF0000" align="left" padding="10,10,0,0"/>
+					<Label name="match_result" text="" font="2" width="250" height="40" textcolor="#FFFF0000" align="left" padding="10,10,0,0"/>
 					<Edit name="Edit_Name" width="290" height="40" font="1" readonly="true" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'" padding="0,20,0,0" />
 					<Edit name="Edit_Age" width="290" height="40" font="1" readonly="true" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'" padding="0,10,0,0" />
 					<Edit name="Edit_Sex" width="290" height="40" font="1" readonly="true" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'" padding="0,10,0,0" />

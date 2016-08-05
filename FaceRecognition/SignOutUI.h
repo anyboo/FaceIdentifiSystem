@@ -7,7 +7,7 @@
 class CRegisterInfo;
 
 #define BT_CLOSE_MatchWnd		(_T("close_btn1"))
-#define BT_OK_FILISH			(_T("btn_ok1"))
+#define BT_OK_FILISH			(_T("Sign_In"))
 
 class CSignOutUI :
 	public WindowImplBase,
@@ -27,6 +27,9 @@ public:
 	void OnFilishMatch(TNotifyUI& msg);
 
 	void ShowMatchInfo();
+
+	virtual LRESULT HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+	virtual LRESULT OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 private:
 	int				m_nBmp;
 	CRegisterInfo*	m_RegInfo;

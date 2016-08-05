@@ -9,9 +9,7 @@
 RegisterUI::RegisterUI()
 :m_photo_agin(false), r(new Camera)
 {
-	/*m_pDb = QFileSqlite::getInstance();
-	std::string str = CREATE_USER_INFO_TABLE;
-	bool v = m_pDb->createTable(str);*/
+
 }
 
 RegisterUI::~RegisterUI()
@@ -81,7 +79,9 @@ void RegisterUI::OnFilishi(TNotifyUI& msg)
 		return;
 	}
 
-	std::string sql = INSERT_USET_INFO;	
+
+	
+	RegUserInfo::addUserInfo(m_userInfo);
 
 	Close();
 }
@@ -106,7 +106,7 @@ void RegisterUI::OnGetPhoto(TNotifyUI& msg)
 
 bool RegisterUI::SaveRegisterInfo()
 {
-	//CVerticalLayoutUI* photo_lyt = dynamic_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("photo_wnd")));
+
 	CEditUI* edit_name = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_Name")));
 	CEditUI* edit_age = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_Age")));
 	CComboUI* combo_sex = dynamic_cast<CComboUI*>(m_PaintManager.FindControl(_T("combo_sex")));
@@ -123,7 +123,7 @@ bool RegisterUI::SaveRegisterInfo()
 	Item->strIDcard = edit_address->GetText();
 	Item->strPhone = edit_phone->GetText();
 	Item->strCertID = edit_CertID->GetText();
-	//Item->strPhotoInfo = photo_lyt->GetBkImage();
+
 
 	if (Item->strName == _T("") || Item->strAge == _T("") || Item->strSex == _T("") || Item->strBirth == _T("")
 		|| Item->strIDcard == _T("") || Item->strPhone == _T("") || Item->strCertID == _T(""))

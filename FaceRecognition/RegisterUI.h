@@ -32,7 +32,8 @@ public:
 	bool SaveRegisterInfo();
 
 private:
-	bool			m_photo_agin;	
+	bool			m_photo_agin;
+
 	writeUserInfo	m_userInfo;
 protected:
 	virtual LPCTSTR GetWindowClassName() const;

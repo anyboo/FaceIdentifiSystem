@@ -14,7 +14,7 @@ using Poco::Notification;
 FastMutex ActivityDispatcher::_mutex;
 
 ActivityDispatcher::ActivityDispatcher() :
-_activity(this, &ActivityDispatcher::runActivity)
+_activity(this, &ActivityDispatcher::runActivity), _results(false)
 {
 }
 
@@ -49,15 +49,17 @@ void ActivityDispatcher::runActivity()
 					vector<readUserInfo> userinfo = RegUserInfo::getUserInfo();
 					for (i = 0; i < userinfo.size(); i++)
 					{
-						Picture::Ptr userpic(new Picture(userinfo[i].get<9>().rawContent(), 640 * 480 * 3));
+
+					/*	Picture::Ptr userpic(new Picture(userinfo[i].get<9>().rawContent(), 640 * 480 * 3));
 						userpic->SetWidth(640);
 						userpic->SetHeight(480);
 						FaceMatch example;
+
 						FaceMatch::AddArgs args = { pic, userpic };
 						ActiveResult<bool> result = example.activeMatch(args);
 						result.wait();
 						bool ret = result.data();
-						commitResult(ret);
+						commitResult(ret);*/
 					}					
 				}
 			}

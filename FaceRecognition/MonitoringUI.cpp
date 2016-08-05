@@ -4,7 +4,10 @@
 #include "Poco/Delegate.h"
 #include "Picture.h"
 #include "BitMapCompare.h"
+
 #include "Util.h"
+
+
 
 #include "WaittingUI.h"
 
@@ -76,10 +79,18 @@ void CMonitoringUI::OnRemoveAlarm(TNotifyUI& msg)
 	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_FRAME, 0L, 1024, 768, 0, 0);
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
+
+	CVerticalLayoutUI* vLyt = dynamic_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("vLyt_")));
+	CButtonUI* btn = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("btm_remove")));
+	btn->SetVisible(false);
+	vLyt->SetBkColor(0x00000000);
+	KillTimer(GetHWND(), 2);
+//	SetTimer(GetHWND(), 1, 500, nullptr);
 }
 
 void CMonitoringUI::InitWindow()
 {
+	SetTimer(GetHWND(), 1, 500, nullptr);
 	addObserver(*this);
 	r.start();
 	example.start();
@@ -119,6 +130,7 @@ std::queue<CapBitmapData>& CMonitoringUI::getCapDataQueue()
 void CMonitoringUI::handle1(Poco::Notification* pNf)
 {
 	poco_check_ptr(pNf);
+
 	Notification::Ptr pf(pNf);
 	poco_check_ptr(pf.get());
 	if ((m_count % 5) == 0)
@@ -131,6 +143,8 @@ void CMonitoringUI::handle1(Poco::Notification* pNf)
 	poco_check_ptr(nf.get());
 	Picture::Ptr pic(nf->data());
 	poco_check_ptr(pic.get());
+
+
 
 	CControlUI* Image = m_PaintManager.FindControl(_T("photo_video"));
 	Util::DrawSomething(pic, Image, GetHWND());
@@ -149,15 +163,28 @@ LRESULT CMonitoringUI::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lPar
 
 LRESULT CMonitoringUI::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-	CVerticalLayoutUI* vLyt = dynamic_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("vLyt_")));
-	DWORD bkcolor = vLyt->GetBkColor();
-	if (bkcolor == 0xFFFF9999)
+	if (wParam == 1)
 	{
-		vLyt->SetBkColor(0x00000000);
+		ActivityDispatcher ad;
+		if (ad.queryResult()){
+			SetTimer(GetHWND(), 2, 500, nullptr);
+			KillTimer(GetHWND(), 1);
+			CButtonUI* btn = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("btm_remove")));
+			btn->SetVisible(true);
+		}
 	}
-	else
+	else if (wParam == 2)
 	{
-		vLyt->SetBkColor(0xFFFF9999);
+		CVerticalLayoutUI* vLyt = dynamic_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("vLyt_")));
+		DWORD bkcolor = vLyt->GetBkColor();
+		if (bkcolor == 0xFFFF9999)
+		{
+			vLyt->SetBkColor(0x00000000);
+		}
+		else
+		{
+			vLyt->SetBkColor(0xFFFF9999);
+		}
 	}
 	return 0;
 }
