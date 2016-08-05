@@ -10,7 +10,8 @@
 #include <vector>
 
 MatchUI::MatchUI()
-:m_nBmp(0), r(new Camera)
+:m_nBmp(0), r(new Camera), 
+t(100, 1000), tc(*this, &MatchUI::onTimer)
 {
 
 }
@@ -43,11 +44,12 @@ CDuiString MatchUI::GetSkinFile()
 
 void MatchUI::InitWindow()
 {
-	SetTimer(GetHWND(), 1, 1000, nullptr);
+	//SetTimer(GetHWND(), 1, 1000, NULL);
 	addObserver(*this);
 	r.start();
 	example.start();
 	m_count = 0;
+	t.start(tc);
 }
 
 void MatchUI::OnFinalMessage(HWND hWnd)
@@ -122,18 +124,8 @@ void MatchUI::handle1(Poco::Notification* pNf)
 {
 	poco_check_ptr(pNf);
 	Notification::Ptr pf(pNf);
-	poco_check_ptr(pf.get());
-	if ((m_count % 5) == 0)
-	{
-		example.enqueueNotification(pf);
-	}
-	m_count++;
-
 	CaptureNotification::Ptr nf = pf.cast<CaptureNotification>();
-	poco_check_ptr(nf.get());
 	Picture::Ptr pic(nf->data());
-	poco_check_ptr(pic.get());
-
 	CControlUI* Image = m_PaintManager.FindControl(_T("photo_video"));
 	Util::DrawSomething(pic, Image, GetHWND());
 }
@@ -143,18 +135,7 @@ IsSignIn MatchUI::GetResult()
 	return m_IsSignIn;
 }
 
-LRESULT MatchUI::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
-{
-	LRESULT lRes = 0;
-	switch (uMsg)
-	{
-	case WM_TIMER: lRes = OnTimer(uMsg, wParam, lParam, bHandled); break;
-	}
-	bHandled = FALSE;
-	return 0;
-}
-
-LRESULT MatchUI::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+void MatchUI::onTimer(Poco::Timer& timer)
 {
 	if (example.queryResult())
 	{
@@ -162,7 +143,7 @@ LRESULT MatchUI::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled
 		std::string str = LangueConfig::GetShowText(6);
 		lab->SetText(str.c_str());
 		ShowMatchInfo();
-		KillTimer(GetHWND(), 1);
+		//KillTimer(GetHWND(), 1);
+		t.stop();
 	}
-	return 0;
 }
