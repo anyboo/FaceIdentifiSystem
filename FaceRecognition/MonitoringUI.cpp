@@ -6,6 +6,7 @@
 #include "BitMapCompare.h"
 #include "Util.h"
 
+
 #include "WaittingUI.h"
 
 CMonitoringUI::CMonitoringUI()
@@ -140,6 +141,7 @@ void CMonitoringUI::handle1(Poco::Notification* pNf)
 	Picture::Ptr pic(nf->data());
 	poco_check_ptr(pic.get());
 
+
 	CControlUI* Image = m_PaintManager.FindControl(_T("photo_video"));
 	Util::DrawSomething(pic, Image, GetHWND());
 }
@@ -181,4 +183,5 @@ LRESULT CMonitoringUI::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
 		}
 	}
 	return 0;
+
 }
