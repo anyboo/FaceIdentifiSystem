@@ -3,7 +3,7 @@
 #include "RegisterInfo.h"
 #include "Recorder.h"
 #include "CaptureNotify.h"
-#include "QMFileSqlite.h"
+#include "RegUserInfo.h"
 
 #define BT_CLOSERWND		(_T("close_btn"))
 #define BT_GETPHOTO			(_T("photo"))
@@ -32,8 +32,7 @@ public:
 	bool SaveRegisterInfo();
 
 private:
-	bool			m_photo_agin;
-	QFileSqlite*		m_pDb;
+	bool			m_photo_agin;	
 	writeUserInfo	m_userInfo;
 protected:
 	virtual LPCTSTR GetWindowClassName() const;

@@ -14,6 +14,7 @@ public:
 	typedef Poco::AutoPtr<FaceImage> Ptr;
 
 	FaceImage(Picture::Ptr pic);
+	FaceImage(Picture::Ptr pic, int width, int height);
 	FaceImage(const FaceImage& image);
 	bool Compare(FaceImage& image);
 	int bpp()const;
