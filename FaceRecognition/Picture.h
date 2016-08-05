@@ -22,6 +22,7 @@ public:
 	void SetWidth(size_t width);
 	void SetHeight(size_t height);
 
+	void MirrorDIB(bool bDirection, int nImageBits = 24);
 	static void MirrorDIB(const char* lpDIBBits, long lWidth, long lHeight, bool bDirection, int nImageBits);
 	void out2bmp();
 	virtual ~Picture();

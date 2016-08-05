@@ -64,6 +64,7 @@
     <ClCompile Include="ActivityDispatcher.cpp" />
     <ClCompile Include="Util.cpp" />
     <ClCompile Include="RegUserInfo.cpp" />
+    <ClCompile Include="ClipUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BitMapCompare.h">
@@ -132,6 +133,7 @@
     <ClInclude Include="ActivityDispatcher.h" />
     <ClInclude Include="Util.h" />
     <ClInclude Include="RegUserInfo.h" />
+    <ClInclude Include="ClipUI.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ConsoleApplication1.rc" />

@@ -58,6 +58,10 @@ const size_t Picture::len() const
 	return buffer.size();
 }
 
+void Picture::MirrorDIB(bool bDirection, int nImageBits)
+{
+	Picture::MirrorDIB(data(), _width, _height, bDirection, nImageBits);
+}
 
 #define WIDTHBYTES(bits)    (((bits) + 31) / 32 * 4)
 void Picture::MirrorDIB(const char* lpDIBBits, long lWidth, long lHeight, bool bDirection, int nImageBits)

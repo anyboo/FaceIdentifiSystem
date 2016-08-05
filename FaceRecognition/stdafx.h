@@ -1,16 +1,10 @@
-// stdafx.h : 标准系统包含文件的包含文件，
-// 或是经常使用但不常更改的
-// 特定于项目的包含文件
-//
-
 #pragma once
 
 
-#define WIN32_LEAN_AND_MEAN             //  从 Windows 头文件中排除极少使用的信息
-// Windows 头文件: 
+#define WIN32_LEAN_AND_MEAN          
 #include <windows.h>
 
-// C 运行时头文件
+
 #include <string>
 #include <stdlib.h>
 #include <malloc.h>
@@ -32,7 +26,3 @@ using namespace DuiLib;
 #       pragma comment(lib, "DuiLib.lib")
 #   endif
 #endif
-
-// TODO:  在此处引用程序需要的其他头文件
-#include "Picture.h"
-static void DrawSomething(Picture::Ptr pic, CPaintManagerUI& m_PaintManager, HWND hwnd);

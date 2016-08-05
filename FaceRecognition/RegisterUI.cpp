@@ -4,6 +4,7 @@
 #include "Camera.h"
 #include "Util.h"
 #include "LangueConfig.h"
+#include "ClipUI.h"
 
 
 RegisterUI::RegisterUI()
@@ -36,6 +37,13 @@ CDuiString RegisterUI::GetSkinFolder()
 CDuiString RegisterUI::GetSkinFile()
 {
 	return _T("xml\\RegisterUI.xml");
+}
+
+CControlUI* RegisterUI::CreateControl(LPCTSTR pstrClass)
+{
+	if (_tcscmp(pstrClass, DUI_CTR_CLIP) == 0) 
+		return new CClipUI;
+	return NULL;
 }
 
 void RegisterUI::OnFinalMessage(HWND hWnd)

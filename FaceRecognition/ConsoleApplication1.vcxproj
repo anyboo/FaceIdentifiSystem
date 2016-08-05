@@ -92,6 +92,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CaptureNotification.h" />
     <ClInclude Include="CaptureNotify.h" />
+    <ClInclude Include="ClipUI.h" />
     <ClInclude Include="FaceImage.h" />
     <ClInclude Include="FaceMatch.h" />
     <ClInclude Include="FacePosition.h" />
@@ -123,6 +124,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CaptureNotification.cpp" />
     <ClCompile Include="CaptureNotify.cpp" />
+    <ClCompile Include="ClipUI.cpp" />
     <ClCompile Include="FaceImage.cpp" />
     <ClCompile Include="FaceMatch.cpp" />
     <ClCompile Include="FacePosition.cpp" />
