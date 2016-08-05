@@ -4,6 +4,7 @@
 
 CLogInUI::CLogInUI()
 {
+
 }
 
 
@@ -64,3 +65,5 @@ void CLogInUI::OnLogIn(TNotifyUI& msg)
 		lab_log->SetText(result.c_str());
 	}
 }
+
+

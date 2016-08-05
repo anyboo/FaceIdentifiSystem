@@ -27,7 +27,8 @@ public:
 
 	void OnLogIn(TNotifyUI& msg);
 
-	
+
+
 
 protected:
 	virtual LPCTSTR GetWindowClassName() const;

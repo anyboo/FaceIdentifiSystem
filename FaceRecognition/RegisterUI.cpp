@@ -15,7 +15,7 @@ RegisterUI::RegisterUI()
 
 RegisterUI::~RegisterUI()
 {
-	RegUserInfo::addUserInfo(m_userInfo);
+	
 }
 
 DUI_BEGIN_MESSAGE_MAP(RegisterUI, WindowImplBase)
@@ -87,8 +87,6 @@ void RegisterUI::OnFilishi(TNotifyUI& msg)
 		return;
 	}
 
-
-	
 	RegUserInfo::addUserInfo(m_userInfo);
 
 	Close();

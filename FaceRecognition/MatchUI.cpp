@@ -67,11 +67,13 @@ void MatchUI::Notify(TNotifyUI& msg)
 
 void MatchUI::OnCloseWnd(TNotifyUI& msg)
 {
+	m_IsSignIn = SignIn_CANCEL;
 	Close();
 }
 
 void MatchUI::OnFilishMatch(TNotifyUI& msg)
 {
+	m_IsSignIn = SignIn_OK;
 	Close();
 }
 
@@ -136,6 +138,11 @@ void MatchUI::handle1(Poco::Notification* pNf)
 	Util::DrawSomething(pic, Image, GetHWND());
 }
 
+IsSignIn MatchUI::GetResult()
+{
+	return m_IsSignIn;
+}
+
 LRESULT MatchUI::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
 	LRESULT lRes = 0;
@@ -149,8 +156,7 @@ LRESULT MatchUI::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 
 LRESULT MatchUI::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-	ActivityDispatcher ad;
-	if (!ad.queryResult())
+	if (example.queryResult())
 	{
 		CLabelUI* lab = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("match_result")));
 		std::string str = LangueConfig::GetShowText(6);

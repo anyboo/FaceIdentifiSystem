@@ -7,7 +7,7 @@
 
 #include "Util.h"
 
-
+#include "Mmsystem.h"
 
 #include "WaittingUI.h"
 
@@ -82,15 +82,17 @@ void CMonitoringUI::OnRemoveAlarm(TNotifyUI& msg)
 
 	CVerticalLayoutUI* vLyt = dynamic_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("vLyt_")));
 	CButtonUI* btn = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("btm_remove")));
+	CLabelUI* lab = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("result")));
+	lab->SetVisible(false);
 	btn->SetVisible(false);
 	vLyt->SetBkColor(0x00000000);
 	KillTimer(GetHWND(), 2);
-//	SetTimer(GetHWND(), 1, 500, nullptr);
+	SetTimer(GetHWND(), 1, 10000, nullptr);
 }
 
 void CMonitoringUI::InitWindow()
 {
-	SetTimer(GetHWND(), 1, 500, nullptr);
+	SetTimer(GetHWND(), 1, 10000, nullptr);
 	addObserver(*this);
 	r.start();
 	example.start();
@@ -165,16 +167,21 @@ LRESULT CMonitoringUI::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
 {
 	if (wParam == 1)
 	{
-		ActivityDispatcher ad;
-		if (ad.queryResult()){
+		if (!example.queryResult()){
 			SetTimer(GetHWND(), 2, 500, nullptr);
 			KillTimer(GetHWND(), 1);
-			CButtonUI* btn = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("btm_remove")));
-			btn->SetVisible(true);
 		}
 	}
 	else if (wParam == 2)
 	{
+		if (example.queryResult())
+		{
+			CLabelUI* lab = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("result")));
+			CButtonUI* btn = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("btm_remove")));
+			btn->SetVisible(true);
+			lab->SetVisible(true);
+		}
+		PlaySoundA(_T("msg.wav"), NULL, SND_FILENAME | SND_ASYNC);
 		CVerticalLayoutUI* vLyt = dynamic_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("vLyt_")));
 		DWORD bkcolor = vLyt->GetBkColor();
 		if (bkcolor == 0xFFFF9999)
@@ -187,4 +194,5 @@ LRESULT CMonitoringUI::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
 		}
 	}
 	return 0;
+
 }

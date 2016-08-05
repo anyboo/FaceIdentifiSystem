@@ -7,7 +7,7 @@
 class CRegisterInfo;
 
 #define BT_CLOSE_MatchWnd		(_T("close_btn1"))
-#define BT_OK_FILISH			(_T("Sign_In"))
+#define BT_SIGN_OUT			(_T("Sign_out"))
 
 class CSignOutUI :
 	public WindowImplBase,
