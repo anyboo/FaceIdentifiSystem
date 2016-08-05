@@ -14,6 +14,7 @@ RegisterUI::RegisterUI()
 
 RegisterUI::~RegisterUI()
 {
+	RegUserInfo::addUserInfo(m_userInfo);
 }
 
 DUI_BEGIN_MESSAGE_MAP(RegisterUI, WindowImplBase)
@@ -78,8 +79,10 @@ void RegisterUI::OnFilishi(TNotifyUI& msg)
 		return;
 	}
 
+
 	
 	RegUserInfo::addUserInfo(m_userInfo);
+
 	Close();
 }
 
@@ -103,6 +106,7 @@ void RegisterUI::OnGetPhoto(TNotifyUI& msg)
 
 bool RegisterUI::SaveRegisterInfo()
 {
+
 	CEditUI* edit_name = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_Name")));
 	CEditUI* edit_age = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_Age")));
 	CComboUI* combo_sex = dynamic_cast<CComboUI*>(m_PaintManager.FindControl(_T("combo_sex")));
@@ -119,6 +123,7 @@ bool RegisterUI::SaveRegisterInfo()
 	Item->strIDcard = edit_address->GetText();
 	Item->strPhone = edit_phone->GetText();
 	Item->strCertID = edit_CertID->GetText();
+
 
 	if (Item->strName == _T("") || Item->strAge == _T("") || Item->strSex == _T("") || Item->strBirth == _T("")
 		|| Item->strIDcard == _T("") || Item->strPhone == _T("") || Item->strCertID == _T(""))
