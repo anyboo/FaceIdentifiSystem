@@ -4,7 +4,9 @@
 #include "Poco/Delegate.h"
 #include "Picture.h"
 #include "BitMapCompare.h"
+
 #include "Util.h"
+
 
 
 #include "WaittingUI.h"
@@ -128,6 +130,7 @@ std::queue<CapBitmapData>& CMonitoringUI::getCapDataQueue()
 void CMonitoringUI::handle1(Poco::Notification* pNf)
 {
 	poco_check_ptr(pNf);
+
 	Notification::Ptr pf(pNf);
 	poco_check_ptr(pf.get());
 	if ((m_count % 5) == 0)
@@ -140,6 +143,7 @@ void CMonitoringUI::handle1(Poco::Notification* pNf)
 	poco_check_ptr(nf.get());
 	Picture::Ptr pic(nf->data());
 	poco_check_ptr(pic.get());
+
 
 
 	CControlUI* Image = m_PaintManager.FindControl(_T("photo_video"));
@@ -183,5 +187,4 @@ LRESULT CMonitoringUI::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
 		}
 	}
 	return 0;
-
 }
