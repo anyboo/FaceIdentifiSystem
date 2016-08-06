@@ -68,6 +68,7 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="ClipUI.cpp" />
+    <ClCompile Include="AppInitialize.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BitMapCompare.h">
@@ -140,6 +141,7 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="ClipUI.h" />
+    <ClInclude Include="AppInitialize.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ConsoleApplication1.rc" />
