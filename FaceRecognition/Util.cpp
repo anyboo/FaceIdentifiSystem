@@ -49,7 +49,7 @@ void Util::DrawSomething(Picture::Ptr pic, CControlUI* control, HWND hwnd)
 	int iWidth = bih.biWidth;
 	int iHeight = bih.biHeight;
 
-	::StretchDIBits(PaintDC, control->GetX(), control->GetY(), control->GetWidth() - 20, control->GetHeight() -20,
+	::StretchDIBits(PaintDC, control->GetX(), control->GetY(), control->GetWidth(), control->GetHeight(),
 		0, 0, pic->width(), pic->height(), pic->data(), &bi,
 		DIB_RGB_COLORS, SRCCOPY);
 

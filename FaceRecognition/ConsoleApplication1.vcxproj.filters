@@ -67,6 +67,7 @@
     <ClCompile Include="log.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="ClipUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BitMapCompare.h">
@@ -138,6 +139,7 @@
     <ClInclude Include="log.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="ClipUI.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ConsoleApplication1.rc" />

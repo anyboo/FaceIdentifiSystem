@@ -47,10 +47,15 @@ private:
 
 	Poco::Timer t;
 	Poco::TimerCallback<MatchUI> tc;
+	bool enableCompare;
+	bool painting;
 
 protected:
 	virtual LPCTSTR GetWindowClassName() const;
 	virtual CDuiString GetSkinFolder();
 	virtual CDuiString GetSkinFile();
 	void onTimer(Poco::Timer& timer);
+	void match_resulut();
+	void beginTime();
+	void endTime();
 };

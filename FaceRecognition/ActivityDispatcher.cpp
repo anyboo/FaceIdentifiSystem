@@ -59,6 +59,9 @@ void ActivityDispatcher::runActivity()
 						ActiveResult<bool> result = example.activeMatch(args);
 						result.wait();
 						bool ret = result.data();
+						std::stringstream ostr;
+						ostr << "result:" << ret << std::endl;
+						OutputDebugStringA(ostr.str().c_str());
 						commitResult(ret);
 					}					
 				}

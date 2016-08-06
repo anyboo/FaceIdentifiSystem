@@ -3,6 +3,7 @@
 #include "Recorder.h"
 #include "CaptureNotify.h"
 #include "ActivityDispatcher.h"
+#include <Poco/Timer.h>
 
 class CRegisterInfo;
 
@@ -28,17 +29,24 @@ public:
 
 	void ShowMatchInfo();
 
-	virtual LRESULT HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-	virtual LRESULT OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 private:
 	int				m_nBmp;
 	CRegisterInfo*	m_RegInfo;
 	Recorder r;
 	ActivityDispatcher example;
 	long m_count;
+
+	Poco::Timer t;
+	Poco::TimerCallback<CSignOutUI> tc;
+	bool enableCompare;
+	bool painting;
 protected:
 	virtual LPCTSTR GetWindowClassName() const;
 	virtual CDuiString GetSkinFolder();
 	virtual CDuiString GetSkinFile();
+	void onTimer(Poco::Timer& timer);
+	void match_resulut();
+	void beginTime();
+	void endTime();
 };
 

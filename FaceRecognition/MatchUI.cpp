@@ -12,6 +12,7 @@
 MatchUI::MatchUI()
 :m_nBmp(0), r(new Camera), 
 t(100, 1000), tc(*this, &MatchUI::onTimer)
+, enableCompare(false), painting(true)
 {
 
 }
@@ -42,9 +43,8 @@ CDuiString MatchUI::GetSkinFile()
 	return _T("xml\\MatchUI.xml");
 }
 
-void MatchUI::InitWindow()
+void MatchUI::beginTime()
 {
-	//SetTimer(GetHWND(), 1, 1000, NULL);
 	addObserver(*this);
 	r.start();
 	example.start();
@@ -52,12 +52,22 @@ void MatchUI::InitWindow()
 	t.start(tc);
 }
 
-void MatchUI::OnFinalMessage(HWND hWnd)
+void MatchUI::endTime()
 {
 	removeObserver(*this);
 	r.stop();
 	example.stop();
+	t.stop();
+}
 
+void MatchUI::InitWindow()
+{
+	beginTime();
+}
+
+void MatchUI::OnFinalMessage(HWND hWnd)
+{
+	endTime();
 	WindowImplBase::OnFinalMessage(hWnd);
 }
 
@@ -69,13 +79,13 @@ void MatchUI::Notify(TNotifyUI& msg)
 
 void MatchUI::OnCloseWnd(TNotifyUI& msg)
 {
-	m_IsSignIn = SignIn_CANCEL;
+	//m_IsSignIn = SignIn_CANCEL;
 	Close();
 }
 
 void MatchUI::OnFilishMatch(TNotifyUI& msg)
 {
-	m_IsSignIn = SignIn_OK;
+	//m_IsSignIn = SignIn_OK;
 	Close();
 }
 
@@ -83,16 +93,6 @@ void MatchUI::ShowMatchInfo()
 {
 	r.stop();
 	std::vector<readUserInfo> m_readInfo = RegUserInfo::getUserInfo();
-	
-	CButtonUI* btn_SignIn = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("Sign_In")));
-	CEditUI* edit_name = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_Name")));
-	CEditUI* edit_age = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_Age")));
-	CEditUI* edit_sex = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_Sex")));
-	CEditUI* edit_birth = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_Birth")));
-	CEditUI* edit_address = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_Address")));
-	CEditUI* edit_phone = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_Phone")));
-	CEditUI* edit_CertID = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_IDnumber")));
-
 	std::string strName = m_readInfo[0].get<1>();
 	int age = m_readInfo[0].get<2>();
 	std::string strAge = std::to_string(age);
@@ -102,15 +102,15 @@ void MatchUI::ShowMatchInfo()
 	std::string strPhone = m_readInfo[0].get<6>();
 	std::string strCertID = m_readInfo[0].get<7>();
 
-	Picture::Ptr userpic(new Picture(m_readInfo[0].get<9>().rawContent(), 640 * 480 * 3));
-	userpic->SetWidth(640);
-	userpic->SetHeight(480);
-
-	CControlUI* Image = m_PaintManager.FindControl(_T("photo_video"));
 	
-	Util::DrawSomething(userpic, Image, GetHWND());
+	CLabelUI* edit_name = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("Edit_Name")));
+	CLabelUI* edit_age = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("Edit_Age")));
+	CLabelUI* edit_sex = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("Edit_Sex")));
+	CLabelUI* edit_birth = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("Edit_Birth")));
+	CLabelUI* edit_address = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("Edit_Address")));
+	CLabelUI* edit_phone = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("Edit_Phone")));
+	CLabelUI* edit_CertID = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("Edit_IDnumber")));
 
-	btn_SignIn->SetEnabled(true);
 	edit_name->SetText(strName.c_str());
 	edit_age->SetText(strAge.c_str());
 	edit_sex->SetText(strSex.c_str());
@@ -118,12 +118,30 @@ void MatchUI::ShowMatchInfo()
 	edit_address->SetText(strIDcard.c_str());
 	edit_phone->SetText(strPhone.c_str());
 	edit_CertID->SetText(strCertID.c_str());
+
+	Picture::Ptr userpic(new Picture(m_readInfo[0].get<9>().rawContent(), 640 * 480 * 3));
+	userpic->SetWidth(640);
+	userpic->SetHeight(480);
+	CControlUI* Image = m_PaintManager.FindControl(_T("photo_video"));
+	Util::DrawSomething(userpic, Image, GetHWND());
+
+	Sleep(2000);
+	CButtonUI* btn_SignIn = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("Sign_In")));
+	btn_SignIn->SetEnabled(true);
 }
 
 void MatchUI::handle1(Poco::Notification* pNf)
 {
+	if (!painting) return;
+
 	poco_check_ptr(pNf);
 	Notification::Ptr pf(pNf);
+	if ((m_count % 5) == 0)
+	{
+		if (enableCompare)
+		example.enqueueNotification(pf);
+	}
+	m_count++;
 	CaptureNotification::Ptr nf = pf.cast<CaptureNotification>();
 	Picture::Ptr pic(nf->data());
 	CControlUI* Image = m_PaintManager.FindControl(_T("photo_video"));
@@ -137,13 +155,19 @@ IsSignIn MatchUI::GetResult()
 
 void MatchUI::onTimer(Poco::Timer& timer)
 {
-	if (example.queryResult())
+	enableCompare = !example.queryResult();
+	if (!enableCompare)
 	{
-		CLabelUI* lab = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("match_result")));
-		std::string str = LangueConfig::GetShowText(6);
-		lab->SetText(str.c_str());
-		ShowMatchInfo();
-		//KillTimer(GetHWND(), 1);
-		t.stop();
+		painting = false;
+		match_resulut();
 	}
+}
+
+
+void MatchUI::match_resulut()
+{
+	CLabelUI* lab = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("match_result")));
+	std::string str = LangueConfig::GetShowText(6);
+	lab->SetText(str.c_str());
+	ShowMatchInfo();
 }

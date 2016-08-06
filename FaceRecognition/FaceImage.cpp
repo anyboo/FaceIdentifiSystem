@@ -39,15 +39,20 @@ FaceImage::FaceImage(const FaceImage& image)
 	Extract();
 }
 
+#include <sstream>
+
 bool FaceImage::Compare(FaceImage& image)
 {
 	BYTE* data1 = (BYTE*)feature->data();
 	BYTE* data2 = (BYTE*)(image.feature)->data();
 	float similarity = EF_Compare(data1, data2);
-	OutputDebugStringA((std::string("similarity:") + std::to_string(similarity)).c_str());
+	std::stringstream ostr;
+	ostr << "similarity:" << similarity << std::endl;
+	OutputDebugStringA(ostr.str().c_str());
 	return (similarity >= 0.6);
 }
 
+#include <sstream>
 void FaceImage::DetectFace()
 {
 	poco_check_ptr(fpos);
@@ -55,7 +60,9 @@ void FaceImage::DetectFace()
 	//only process one face
 	if (detectedFaceCount <= 0)
 	{
-		OutputDebugStringA((std::string("Not Face Detected!") + std::to_string(detectedFaceCount)).c_str());
+		std::stringstream ostr;
+		ostr << "Not Face Detected! - " << detectedFaceCount << std::endl;
+		OutputDebugStringA(ostr.str().c_str());
 		throw std::exception("Not Face Detected!");
 	}
 }

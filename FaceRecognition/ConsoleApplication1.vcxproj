@@ -79,7 +79,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>duilib_d.lib;TiCapture2.lib;THFaceImage.lib;THFeature.lib;opencv_core231.lib;opencv_imgproc231.lib;opencv_highgui231.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>duilib_d.lib;TiCapture2.lib;THFaceImage.lib;THFeature.lib;opencv_core231.lib;opencv_imgproc231.lib;opencv_highgui231.lib;WINMM.LIB;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(ProjectDir)..\lib;$(ProjectDir)..\lib-mt;$(SolutionDir)\opencv231\build\lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
