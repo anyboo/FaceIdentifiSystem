@@ -5,7 +5,7 @@
 #include "Util.h"
 #include "LangueConfig.h"
 #include "ClipUI.h"
-
+#include "Employee.h"
 
 RegisterUI::RegisterUI()
 :m_photo_agin(false)
@@ -142,26 +142,20 @@ bool RegisterUI::isValidInformation()
 
 void RegisterUI::SaveRegisterInformation()
 {
-	IdentityInfo* Item = new IdentityInfo;
-	Item->strName = name->GetText();
-	Item->strAge = age->GetText();
-	Item->strSex = sex->GetText();
-	Item->strBirth = birth->GetText();
-	Item->strIDcard = address->GetText();
-	Item->strPhone = phone->GetText();
-	Item->strCertID = certificate->GetText();
-
-	/*Poco::Data::CLOB saveImage((const char*)pic->data(), pic->len());
-	m_userInfo.set<8>(saveImage);*/
-	//m_userInfo.set<0>(Item->strName);
-	//m_userInfo.set<1>(stoi(Item->strAge));
-	//m_userInfo.set<2>(Item->strSex);
-	//m_userInfo.set<3>(Item->strBirth);
-	//m_userInfo.set<4>(Item->strIDcard);
-	//m_userInfo.set<5>(Item->strPhone);
-	//m_userInfo.set<6>(Item->strCertID);
-	//m_userInfo.set<7>(false);
-	//RegUserInfo::addUserInfo(m_userInfo);
+	Employee e =
+	{
+		name->GetText(),
+		age->GetText(),
+		sex->GetText(),
+		birth->GetText(),
+		address->GetText(),
+		phone->GetText(),
+		certificate->GetText()
+	};
+	
+	Identity id(e,CurrentImage);
+	IdentityDB::Instance().Add(id);
+	//need photograph data
 }
 
 void RegisterUI::handle1(Poco::Notification* pNf)
@@ -170,12 +164,11 @@ void RegisterUI::handle1(Poco::Notification* pNf)
 
 	poco_check_ptr(pNf);
 	Notification::Ptr pf(pNf);
-	poco_check_ptr(pf.get());
 	CaptureNotification::Ptr nf = pf.cast<CaptureNotification>();
-	poco_check_ptr(nf.get());
-	Picture::Ptr pic(nf->data());
-	poco_check_ptr(pic.get());
-
-	CControlUI* Image = m_PaintManager.FindControl(_T("photo_wnd"));
-	Util::DrawSomething(pic, Image, GetHWND());
+	if (nf)
+	{
+		CurrentImage.assign(nf->data());
+		CControlUI* Image = m_PaintManager.FindControl(_T("photo_wnd"));
+		Util::DrawSomething(CurrentImage, Image, GetHWND());
+	}
 }

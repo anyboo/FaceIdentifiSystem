@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Picture.h"
 
-static void SaveBmp(char* data, int width, int height);
+static std::string SaveBmp(char* data, int width, int height);
 
 Picture::Picture(const Picture& pic)
 :buffer(pic.data(),pic.len())
@@ -46,6 +46,11 @@ void Picture::SetHeight(size_t height)
 void Picture::out2bmp()
 {
 	SaveBmp(buffer.begin(),_width, _height);
+}
+
+std::string Picture::WriteToDisk()
+{
+	return SaveBmp(buffer.begin(), _width, _height);
 }
 
 const char* Picture::data() const
@@ -123,7 +128,7 @@ void Picture::MirrorDIB(const char* lpDIBBits, long lWidth, long lHeight, bool b
 using Poco::TemporaryFile;
 using Poco::FileOutputStream;
 
-void SaveBmp(char* data, int width, int height)
+std::string SaveBmp(char* data, int width, int height)
 {
 	BITMAPINFOHEADER bih;
 	bih.biSize = 40; 						// header size
@@ -169,4 +174,6 @@ void SaveBmp(char* data, int width, int height)
 	//data
 	fs.write((char*)data, bih.biSizeImage);
 	fs.close();
+
+	return name;
 }

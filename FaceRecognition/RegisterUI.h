@@ -63,4 +63,6 @@ private:
 	CButtonUI*  shutter;
 
 	bool bAlreadyTaked;
+
+	Picture::Ptr CurrentImage;
 };

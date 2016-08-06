@@ -89,11 +89,11 @@
   <ItemGroup>
     <ClInclude Include="ActivityDispatcher.h" />
     <ClInclude Include="AppInitialize.h" />
-    <ClInclude Include="BitMapCompare.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CaptureNotification.h" />
     <ClInclude Include="CaptureNotify.h" />
     <ClInclude Include="ClipUI.h" />
+    <ClInclude Include="Employee.h" />
     <ClInclude Include="FaceImage.h" />
     <ClInclude Include="FaceMatch.h" />
     <ClInclude Include="FacePosition.h" />
@@ -123,11 +123,11 @@
     <ClCompile Include="ActivityDispatcher.cpp" />
     <ClCompile Include="App.cpp" />
     <ClCompile Include="AppInitialize.cpp" />
-    <ClCompile Include="BitMapCompare.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CaptureNotification.cpp" />
     <ClCompile Include="CaptureNotify.cpp" />
     <ClCompile Include="ClipUI.cpp" />
+    <ClCompile Include="Employee.cpp" />
     <ClCompile Include="FaceImage.cpp" />
     <ClCompile Include="FaceMatch.cpp" />
     <ClCompile Include="FacePosition.cpp" />

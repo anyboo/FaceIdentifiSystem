@@ -15,9 +15,11 @@ public:
 
 	FaceImage(Picture::Ptr pic);
 	FaceImage(Picture::Ptr pic, int width, int height);
-	FaceImage(const FaceImage& image);
+	FaceImage(FaceImage& image);
 	bool Compare(FaceImage& image);
 	int bpp()const;
+
+	void SaveImageData();
 
 protected:
 	FaceImage();
