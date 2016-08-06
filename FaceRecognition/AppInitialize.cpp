@@ -31,13 +31,13 @@ CAppInitialize::~CAppInitialize()
 
 void CAppInitialize::AttatchSDK()
 {
-	THFaceImageSDK();
+	//THFaceImageSDK();
 	TiCapture2SDK();
 }
 
 void CAppInitialize::DetachedSDK()
 {
-	THFI_Release();
+	//THFI_Release();
 	EF_Release();
 }
 
