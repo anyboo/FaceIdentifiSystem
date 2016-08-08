@@ -92,15 +92,16 @@ void MatchUI::OnFilishMatch(TNotifyUI& msg)
 void MatchUI::ShowMatchInfo()
 {
 	r.stop();
+	int n = example.queryPerson();
 	std::vector<readUserInfo> m_readInfo = RegUserInfo::getUserInfo();
-	std::string strName = m_readInfo[0].get<1>();
-	int age = m_readInfo[0].get<2>();
+	std::string strName = m_readInfo[n].get<1>();
+	int age = m_readInfo[n].get<2>();
 	std::string strAge = std::to_string(age);
-	std::string strSex = m_readInfo[0].get<3>();
-	std::string strBirth = m_readInfo[0].get<4>();
-	std::string strIDcard = m_readInfo[0].get<5>();
-	std::string strPhone = m_readInfo[0].get<6>();
-	std::string strCertID = m_readInfo[0].get<7>();
+	std::string strSex = m_readInfo[n].get<3>();
+	std::string strBirth = m_readInfo[n].get<4>();
+	std::string strIDcard = m_readInfo[n].get<5>();
+	std::string strPhone = m_readInfo[n].get<6>();
+	std::string strCertID = m_readInfo[n].get<7>();
 
 	
 	CLabelUI* edit_name = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("Edit_Name")));
@@ -119,7 +120,7 @@ void MatchUI::ShowMatchInfo()
 	edit_phone->SetText(strPhone.c_str());
 	edit_CertID->SetText(strCertID.c_str());
 
-	Picture::Ptr userpic(new Picture(m_readInfo[0].get<9>().rawContent(), 640 * 480 * 3));
+	Picture::Ptr userpic(new Picture(m_readInfo[n].get<9>().rawContent(), 640 * 480 * 3));
 	userpic->SetWidth(640);
 	userpic->SetHeight(480);
 	CControlUI* Image = m_PaintManager.FindControl(_T("photo_video"));
