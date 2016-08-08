@@ -15,6 +15,7 @@ public:
 
 	void enqueueNotification(Poco::Notification::Ptr pNotification);
 	bool queryResult();
+	int queryPerson();
 protected:
 	void runActivity();
 	void commitResult(bool result);
@@ -23,5 +24,6 @@ private:
 	Poco::NotificationQueue _queue;
 	static Poco::FastMutex  _mutex;
 	bool _results;
+	int _serial;
 };
 

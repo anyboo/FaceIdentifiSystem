@@ -59,6 +59,10 @@ void ActivityDispatcher::runActivity()
 						ActiveResult<bool> result = example.activeMatch(args);
 						result.wait();
 						bool ret = result.data();
+						if (ret)
+						{
+							_serial = i;
+						}
 						std::stringstream ostr;
 						ostr << "result:" << ret << std::endl;
 						OutputDebugStringA(ostr.str().c_str());
@@ -84,4 +88,9 @@ void ActivityDispatcher::commitResult(bool result)
 bool ActivityDispatcher::queryResult()
 {
 	return _results;
+}
+
+int ActivityDispatcher::queryPerson()
+{
+	return _serial;
 }
