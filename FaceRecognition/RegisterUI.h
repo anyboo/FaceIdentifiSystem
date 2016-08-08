@@ -51,16 +51,16 @@ private:
 	CClipUI* customizedImage;
 	writeUserInfo	m_userInfo;
 
-	CEditUI*	name;
-	CEditUI*	age;
-	CEditUI*	birth;
-	CEditUI*	address;
-	CEditUI*	phone;
-	CEditUI*	certificate;
-
-	CComboUI*	sex;
-	CLabelUI*	prompt;
-	CButtonUI*  shutter;
+	CEditUI*	_name;
+	CEditUI*	_age;
+	CEditUI*	_birth;
+	CEditUI*	_address;
+	CEditUI*	_phone;
+	CEditUI*	_certificate;
+			   
+	CComboUI*	_sex;
+	CLabelUI*	_prompt;
+	CButtonUI* _shutter;
 
 	bool bAlreadyTaked;
 

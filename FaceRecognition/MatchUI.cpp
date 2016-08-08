@@ -14,7 +14,7 @@ MatchUI::MatchUI()
 t(100, 1000), tc(*this, &MatchUI::onTimer)
 , enableCompare(false), painting(true)
 {
-
+	_confirm->SetEnabled(false);
 }
 
 
@@ -24,8 +24,8 @@ MatchUI::~MatchUI()
 
 
 DUI_BEGIN_MESSAGE_MAP(MatchUI, WindowImplBase)
-DUI_ON_CLICK_CTRNAME(BT_CLOSE_MatchWnd, OnCloseWnd)
-DUI_ON_CLICK_CTRNAME(BT_OK_FILISH, OnFilishMatch)
+DUI_ON_CLICK_CTRNAME(BT_CLOSE_MatchWnd, Backward)
+DUI_ON_CLICK_CTRNAME(BT_OK_FILISH, SignIn)
 DUI_END_MESSAGE_MAP()
 
 LPCTSTR MatchUI::GetWindowClassName() const
@@ -63,6 +63,21 @@ void MatchUI::endTime()
 void MatchUI::InitWindow()
 {
 	beginTime();
+	BandingSubControl();
+}
+
+void MatchUI::BandingSubControl()
+{
+	_name			=	dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("Edit_Name")));
+	_age			=	dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("Edit_Age")));
+	_sex			=	dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("Edit_Sex")));
+	_birth			=	dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("Edit_Birth")));
+	_address		=	dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("Edit_Address")));
+	_phone			=	dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("Edit_Phone")));
+	_certificate	=	dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("Edit_IDnumber")));
+
+	_matchMsg		=	dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("match_result")));
+	_confirm			=	dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("Sign_In")));
 }
 
 void MatchUI::OnFinalMessage(HWND hWnd)
@@ -77,57 +92,43 @@ void MatchUI::Notify(TNotifyUI& msg)
 	WindowImplBase::Notify(msg);
 }
 
-void MatchUI::OnCloseWnd(TNotifyUI& msg)
+void MatchUI::Backward(TNotifyUI& msg)
 {
 	//m_IsSignIn = SignIn_CANCEL;
 	Close();
 }
 
-void MatchUI::OnFilishMatch(TNotifyUI& msg)
+void MatchUI::SignIn(TNotifyUI& msg)
 {
 	//m_IsSignIn = SignIn_OK;
 	Close();
 }
 
+#include "Employee.h"
+
 void MatchUI::ShowMatchInfo()
 {
-	r.stop();
-	std::vector<readUserInfo> m_readInfo = RegUserInfo::getUserInfo();
-	std::string strName = m_readInfo[0].get<1>();
-	int age = m_readInfo[0].get<2>();
-	std::string strAge = std::to_string(age);
-	std::string strSex = m_readInfo[0].get<3>();
-	std::string strBirth = m_readInfo[0].get<4>();
-	std::string strIDcard = m_readInfo[0].get<5>();
-	std::string strPhone = m_readInfo[0].get<6>();
-	std::string strCertID = m_readInfo[0].get<7>();
+	Identity id;
+	IdentityDB::Instance().Get(1, id);
 
-	
-	CLabelUI* edit_name = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("Edit_Name")));
-	CLabelUI* edit_age = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("Edit_Age")));
-	CLabelUI* edit_sex = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("Edit_Sex")));
-	CLabelUI* edit_birth = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("Edit_Birth")));
-	CLabelUI* edit_address = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("Edit_Address")));
-	CLabelUI* edit_phone = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("Edit_Phone")));
-	CLabelUI* edit_CertID = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("Edit_IDnumber")));
+	_name->SetText(id.name().c_str());
+	_age->SetText(id.age().c_str());
+	_sex->SetText(id.sex().c_str());
+	_birth->SetText(id.birth().c_str());
+	_address->SetText(id.address().c_str());
+	_phone->SetText(id.phone().c_str());
+	_certificate->SetText(id.certificate().c_str());
 
-	edit_name->SetText(strName.c_str());
-	edit_age->SetText(strAge.c_str());
-	edit_sex->SetText(strSex.c_str());
-	edit_birth->SetText(strBirth.c_str());
-	edit_address->SetText(strIDcard.c_str());
-	edit_phone->SetText(strPhone.c_str());
-	edit_CertID->SetText(strCertID.c_str());
-
-	Picture::Ptr userpic(new Picture(m_readInfo[0].get<9>().rawContent(), 640 * 480 * 3));
-	userpic->SetWidth(640);
-	userpic->SetHeight(480);
 	CControlUI* Image = m_PaintManager.FindControl(_T("photo_video"));
-	Util::DrawSomething(userpic, Image, GetHWND());
+	Image->SetBkImage(id.picutre_name().c_str());
 
-	Sleep(2000);
-	CButtonUI* btn_SignIn = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("Sign_In")));
-	btn_SignIn->SetEnabled(true);
+	//Picture::Ptr userpic(new Picture(m_readInfo[0].get<9>().rawContent(), 640 * 480 * 3));
+	//userpic->SetWidth(640);
+	//userpic->SetHeight(480);
+	//CControlUI* Image = m_PaintManager.FindControl(_T("photo_video"));
+	//Util::DrawSomething(userpic, Image, GetHWND());
+
+	_confirm->SetEnabled(true);
 }
 
 void MatchUI::handle1(Poco::Notification* pNf)
@@ -141,16 +142,14 @@ void MatchUI::handle1(Poco::Notification* pNf)
 		if (enableCompare)
 		example.enqueueNotification(pf);
 	}
-	m_count++;
-	CaptureNotification::Ptr nf = pf.cast<CaptureNotification>();
-	Picture::Ptr pic(nf->data());
-	CControlUI* Image = m_PaintManager.FindControl(_T("photo_video"));
-	Util::DrawSomething(pic, Image, GetHWND());
-}
 
-IsSignIn MatchUI::GetResult()
-{
-	return m_IsSignIn;
+	CaptureNotification::Ptr nf = pf.cast<CaptureNotification>();
+	if (nf)
+	{
+		CurrentImage.assign(nf->data());
+		CControlUI* Image = m_PaintManager.FindControl(_T("photo_wnd"));
+		Util::DrawSomething(CurrentImage, Image, GetHWND());
+	}
 }
 
 void MatchUI::onTimer(Poco::Timer& timer)
@@ -166,8 +165,7 @@ void MatchUI::onTimer(Poco::Timer& timer)
 
 void MatchUI::match_resulut()
 {
-	CLabelUI* lab = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("match_result")));
 	std::string str = LangueConfig::GetShowText(6);
-	lab->SetText(str.c_str());
+	_matchMsg->SetText(str.c_str());
 	ShowMatchInfo();
 }

@@ -70,17 +70,17 @@ void RegisterUI::InitWindow()
 
 void RegisterUI::BandingSubControl()
 {
-	name		=	dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_Name")));
-	age			=	dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_Age")));
-	sex			=	dynamic_cast<CComboUI*>(m_PaintManager.FindControl(_T("combo_sex")));
-	birth		=	dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_Birth")));
-	address		=	dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_Address")));
-	phone		=	dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_Phone")));
-	certificate =	dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_IDnumber")));
-
-	prompt		=	dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("lab_Prompt")));
-
-	shutter		=	dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("photo")));
+	_name		 =	dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_Name")));
+	_age		 =	dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_Age")));
+	_sex		 =	dynamic_cast<CComboUI*>(m_PaintManager.FindControl(_T("combo_sex")));
+	_birth		 =	dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_Birth")));
+	_address	 =	dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_Address")));
+	_phone		 =	dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_Phone")));
+	_certificate =	dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_IDnumber")));
+	
+	_prompt		 =	dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("lab_Prompt")));
+	
+	_shutter	 =	dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("photo")));
 }
 
 void RegisterUI::Backward(TNotifyUI& msg)
@@ -93,13 +93,13 @@ void RegisterUI::SignUp(TNotifyUI& msg)
 	if (!bAlreadyTaked)
 	{
 		std::string str = LangueConfig::GetShowText(2);
-		return prompt->SetText(str.c_str());
+		return _prompt->SetText(str.c_str());
 	}
 
 	if (!isValidInformation())
 	{
 		std::string str = LangueConfig::GetShowText(1);
-		return prompt->SetText(str.c_str());
+		return _prompt->SetText(str.c_str());
 	}
 
 	SaveRegisterInformation();	
@@ -112,26 +112,26 @@ void RegisterUI::TakePhoto(TNotifyUI& msg)
 	if (bAlreadyTaked)
 	{
 		std::string str = LangueConfig::GetShowText(3);
-		shutter->SetText(str.c_str());
+		_shutter->SetText(str.c_str());
 		bAlreadyTaked = false;
 	}
 	else
 	{
 		std::string str = LangueConfig::GetShowText(4);
-		shutter->SetText(str.c_str());
+		_shutter->SetText(str.c_str());
 		bAlreadyTaked = true;
 	}
 }
 
 bool RegisterUI::isValidInformation()
 {
-	if (name->GetText().IsEmpty() ||
-		age->GetText().IsEmpty() ||
-		sex->GetText().IsEmpty() ||
-		birth->GetText().IsEmpty() ||
-		address->GetText().IsEmpty() ||
-		phone->GetText().IsEmpty() ||
-		certificate->GetText().IsEmpty()){
+	if (_name->GetText().IsEmpty() ||
+		_age->GetText().IsEmpty() ||
+		_sex->GetText().IsEmpty() ||
+		_birth->GetText().IsEmpty() ||
+		_address->GetText().IsEmpty() ||
+		_phone->GetText().IsEmpty() ||
+		_certificate->GetText().IsEmpty()){
 
 			return false;
 	}
@@ -144,13 +144,13 @@ void RegisterUI::SaveRegisterInformation()
 {
 	Employee e =
 	{
-		name->GetText(),
-		age->GetText(),
-		sex->GetText(),
-		birth->GetText(),
-		address->GetText(),
-		phone->GetText(),
-		certificate->GetText()
+		_name->GetText(),
+		_age->GetText(),
+		_sex->GetText(),
+		_birth->GetText(),
+		_address->GetText(),
+		_phone->GetText(),
+		_certificate->GetText()
 	};
 	
 	Identity id(e,CurrentImage);
