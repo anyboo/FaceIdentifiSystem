@@ -29,7 +29,6 @@ public:
 	void OnCloseWnd(TNotifyUI& msg);
 	void OnRemoveAlarm(TNotifyUI& msg);
 
-	void ShowMonitInfoList();
 
 	virtual LRESULT HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	virtual LRESULT OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
@@ -44,8 +43,6 @@ private:
 	}
 
 private:
-	int				m_nBmp;
-	int				m_testID;
 	std::queue<writeCompareInfo> m_compare;
 	Poco::BasicEvent<bool> m_theEvent;
 	BitMapCompare *m_pCompare;

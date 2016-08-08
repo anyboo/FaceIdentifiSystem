@@ -59,7 +59,8 @@ void CSettingUI::OnSaveLog(TNotifyUI& msg)
 	ofn.lpstrInitialDir = _T("D:\\");   
 	ofn.lpstrFile = szBuffer;   
 	ofn.nMaxFile = sizeof(szBuffer) / sizeof(*szBuffer);
-	ofn.nFilterIndex = 0;
-	ofn.Flags = OFN_CREATEPROMPT | OFN_OVERWRITEPROMPT;  
-	BOOL bSel = GetOpenFileName(&ofn);
+	ofn.nFilterIndex = 1;
+	ofn.Flags = OFN_CREATEPROMPT | OFN_PATHMUSTEXIST | OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT;
+	ofn.lpstrTitle = TEXT("±£´æµ½");
+	BOOL bSel = GetSaveFileName(&ofn);
 }

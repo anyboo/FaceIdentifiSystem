@@ -12,9 +12,8 @@
 #include "WaittingUI.h"
 
 CMonitoringUI::CMonitoringUI()
-	:m_nBmp(0), r(new Camera)
+	:r(new Camera)
 {
-	m_testID = 100001;
 	//m_pCompare = new BitMapCompare(this);
 	//Poco::ThreadPool::defaultPool().start(*m_pCompare);
 }
@@ -60,10 +59,6 @@ void CMonitoringUI::OnFinalMessage(HWND hWnd)
 
 void CMonitoringUI::Notify(TNotifyUI& msg)
 {
-	if (msg.sType == DUI_MSGTYPE_CLICK && msg.pSender->GetName() == _T("test"))
-	{
-	//	ShowMonitInfoList();
-	}
 	WindowImplBase::Notify(msg);
 }
 
@@ -99,29 +94,6 @@ void CMonitoringUI::InitWindow()
 	m_count = 0;
 }
 
-void CMonitoringUI::ShowMonitInfoList()
-{
-	CDialogBuilder builder;
-	CListContainerElementUI* SubList = (CListContainerElementUI*)(builder.Create(_T("xml//RegInfoList.xml"), (UINT)0, NULL, &m_PaintManager));
-	CListUI* pList = dynamic_cast<CListUI*>(m_PaintManager.FindControl(_T("Refer_InfoList")));
-	pList->Add(SubList);
-	CControlUI* photoUI = dynamic_cast<CControlUI*>(m_PaintManager.FindSubControlByClass(SubList, DUI_CTR_CONTROL));
-	CLabelUI* lab_ID = dynamic_cast<CLabelUI*>(m_PaintManager.FindSubControlByClass(SubList, DUI_CTR_LABEL, 1));
-	CLabelUI* lab_similarity = dynamic_cast<CLabelUI*>(m_PaintManager.FindSubControlByClass(SubList, DUI_CTR_LABEL, 3));
-	CLabelUI* lab_time = dynamic_cast<CLabelUI*>(m_PaintManager.FindSubControlByClass(SubList, DUI_CTR_LABEL, 5));
-
-	std::string strName = std::string(_T("file = 'bmp/test")) + std::to_string(m_nBmp) + std::string(".bmp'");
-	photoUI->SetBkImage(strName.c_str());
-	lab_ID->SetText(std::to_string(m_testID).c_str());
-	lab_similarity->SetText("76%");
-	lab_time->SetText("2016-7-29 17:12:55");
-
-	if (m_testID % 3 == 0)
-	{
-		SubList->SetBkColor(0xFFFFDDDD);
-	}
-	m_testID++;
-}
 
 std::queue<CapBitmapData>& CMonitoringUI::getCapDataQueue()
 {
@@ -145,7 +117,6 @@ void CMonitoringUI::handle1(Poco::Notification* pNf)
 	poco_check_ptr(nf.get());
 	Picture::Ptr pic(nf->data());
 	poco_check_ptr(pic.get());
-
 
 
 	CControlUI* Image = m_PaintManager.FindControl(_T("photo_video"));
@@ -194,5 +165,4 @@ LRESULT CMonitoringUI::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
 		}
 	}
 	return 0;
-
 }
