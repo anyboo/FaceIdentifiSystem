@@ -34,7 +34,6 @@ public:
 
 protected:
 	void SetQuality(SCapQuality* pQuality);
-	void SaveBmp(char* pDataBuf);
 private:
 	CCapture* _camera;
 	size_t _width;

@@ -8,11 +8,15 @@
 #include "RegUserInfo.h"
 #include <vector>
 
+#include "Mmsystem.h"
+#include "Picture.h"
+
 CSignOutUI::CSignOutUI()
 :m_nBmp(0), r(new Camera)
 , t(100, 1000), tc(*this, &CSignOutUI::onTimer)
 , enableCompare(false), painting(true)
 {
+	m_closeApp = true;
 }
 
 
@@ -77,11 +81,13 @@ void CSignOutUI::Notify(TNotifyUI& msg)
 
 void CSignOutUI::OnCloseWnd(TNotifyUI& msg)
 {
+	m_closeApp = false;
 	Close();
 }
 
 void CSignOutUI::OnFilishMatch(TNotifyUI& msg)
 {
+	PlaySoundA(_T("QT.wav"), NULL, SND_FILENAME | SND_ASYNC);
 	Close();
 }
 
@@ -115,12 +121,15 @@ void CSignOutUI::ShowMatchInfo()
 	edit_phone->SetText(strPhone.c_str());
 	edit_CertID->SetText(strCertID.c_str());
 
-	Picture::Ptr userpic(new Picture(m_readInfo[n].get<9>().rawContent(), 640 * 480 * 3));
-	userpic->SetWidth(640);
-	userpic->SetHeight(480);
+	Picture::Ptr userpic(new Picture(m_readInfo[n].get<9>().rawContent(), width * height * magic));
+	userpic->SetWidth(width);
+	userpic->SetHeight(height);
 
-	CControlUI* Image = m_PaintManager.FindControl(_T("photo_video"));
-	Util::DrawSomething(userpic, Image, GetHWND());
+	std::string path = CPaintManagerUI::GetInstancePath();
+	std::string imageName = userpic->out2bmp(path);
+	
+	CHorizontalLayoutUI* hLyt = dynamic_cast<CHorizontalLayoutUI*>(m_PaintManager.FindControl(_T("photo_video")));
+	hLyt->SetBkImage(imageName.c_str());
 
 	Sleep(2000);
 	CButtonUI* btn = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("Sign_out")));
@@ -163,5 +172,16 @@ void CSignOutUI::onTimer(Poco::Timer& timer)
 		painting = false;
 		match_resulut();
 		//t.stop();
+	
 	}
+}
+
+LRESULT CSignOutUI::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+{
+	if (uMsg == WM_DESTROY && m_closeApp)
+	{
+		::PostQuitMessage(0);
+	}
+	bHandled = FALSE;
+	return 0;
 }
