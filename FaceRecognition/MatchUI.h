@@ -36,6 +36,7 @@ public:
 	void OnFilishMatch(TNotifyUI& msg);
 
 	void ShowMatchInfo();
+	virtual LRESULT HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
 private:
 	int				m_nBmp;
@@ -50,6 +51,9 @@ private:
 	bool enableCompare;
 	bool painting;
 
+	const int width = 640;
+	const int height = 480;
+	const int magic = 3;
 protected:
 	virtual LPCTSTR GetWindowClassName() const;
 	virtual CDuiString GetSkinFolder();

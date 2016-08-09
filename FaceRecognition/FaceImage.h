@@ -3,6 +3,7 @@
 #include "Picture.h"
 #include "FaceFeature.h"
 #include "FacePosition.h"
+#include <Poco/Stopwatch.h>
 
 class FaceFeature;
 class FacePosition;

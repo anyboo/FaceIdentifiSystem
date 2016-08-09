@@ -19,7 +19,9 @@ public:
 
 	void OnCloseSWnd(TNotifyUI& msg);
 	void OnSaveLog(TNotifyUI& msg);
-
+	virtual LRESULT HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+private:
+	bool		m_closeApp;
 protected:
 	virtual LPCTSTR GetWindowClassName() const;
 	virtual CDuiString GetSkinFolder();

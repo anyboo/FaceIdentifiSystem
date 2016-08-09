@@ -166,6 +166,10 @@ LRESULT CMainWnd::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM /*lParam*/, bo
 
 LRESULT CMainWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
+	if (uMsg == WM_DESTROY)
+	{
+		::PostQuitMessage(0);
+	}
 		if (uMsg == WM_KEYDOWN)
 		{
 			if (wParam != VK_CONTROL && wParam != VK_SHIFT && !strHotkey.compare(_T("CTRL+SHIFT")))

@@ -14,6 +14,9 @@
 CMonitoringUI::CMonitoringUI()
 	:r(new Camera)
 {
+	m_closeApp = true;
+	m_bSendMsg = true;
+	time(&m_lastTime);
 	//m_pCompare = new BitMapCompare(this);
 	//Poco::ThreadPool::defaultPool().start(*m_pCompare);
 }
@@ -64,6 +67,7 @@ void CMonitoringUI::Notify(TNotifyUI& msg)
 
 void CMonitoringUI::OnCloseWnd(TNotifyUI& msg)
 {
+	m_closeApp = false;
 	Close();
 }
 
@@ -75,6 +79,7 @@ void CMonitoringUI::OnRemoveAlarm(TNotifyUI& msg)
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
 
+	time(&m_lastTime);
 	CVerticalLayoutUI* vLyt = dynamic_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("vLyt_")));
 	CButtonUI* btn = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("btm_remove")));
 	CLabelUI* lab = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("result")));
@@ -82,12 +87,12 @@ void CMonitoringUI::OnRemoveAlarm(TNotifyUI& msg)
 	btn->SetVisible(false);
 	vLyt->SetBkColor(0x00000000);
 	KillTimer(GetHWND(), 2);
-	SetTimer(GetHWND(), 1, 10000, nullptr);
+	SetTimer(GetHWND(), 1, 200, nullptr);
 }
 
 void CMonitoringUI::InitWindow()
 {
-	SetTimer(GetHWND(), 1, 10000, nullptr);
+	SetTimer(GetHWND(), 1, 200, nullptr);
 	addObserver(*this);
 	r.start();
 	example.start();
@@ -107,12 +112,15 @@ void CMonitoringUI::handle1(Poco::Notification* pNf)
 
 	Notification::Ptr pf(pNf);
 	poco_check_ptr(pf.get());
-	if ((m_count % 5) == 0)
+	if (m_bSendMsg)
 	{
-		example.enqueueNotification(pf);
+		if ((m_count % 10) == 0)
+		{
+			example.enqueueNotification(pf);
+		}
+		m_count++;
 	}
-	m_count++;
-
+	
 	CaptureNotification::Ptr nf = pf.cast<CaptureNotification>();
 	poco_check_ptr(nf.get());
 	Picture::Ptr pic(nf->data());
@@ -129,30 +137,61 @@ LRESULT CMonitoringUI::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lPar
 	switch (uMsg)
 	{
 	case WM_TIMER: lRes = OnTimer(uMsg, wParam, lParam, bHandled); break;
+	case WM_DESTROY:
+		if (m_closeApp){
+			::PostQuitMessage(0);
+		}
+		break;
 	}
 	bHandled = FALSE;
 	return 0;
 }
 
 LRESULT CMonitoringUI::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
-{
+{  
 	if (wParam == 1)
 	{
-		if (!example.queryResult()){
-			SetTimer(GetHWND(), 2, 500, nullptr);
-			KillTimer(GetHWND(), 1);
+		if (m_bSendMsg)
+		{
+			m_bSendMsg = false;
+		}
+		else
+		{
+			m_bSendMsg = true;
+		}
+		if (!example.queryResult())
+		{		
+			time(&m_nowTime);
+			if (m_nowTime - m_lastTime > 20)
+			{
+				SetTimer(GetHWND(), 2, 500, nullptr);
+				KillTimer(GetHWND(), 1);
+			}
+		}	
+		else 
+		{
+			time(&m_lastTime);
 		}
 	}
 	else if (wParam == 2)
 	{
-		if (example.queryResult())
+		if (m_bSendMsg)
 		{
+			m_bSendMsg = false;
+		}
+		else
+		{
+			m_bSendMsg = true;
+		}
+		if (example.queryResult())
+		{			
+			time(&m_lastTime);
 			CLabelUI* lab = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("result")));
 			CButtonUI* btn = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("btm_remove")));
 			btn->SetVisible(true);
 			lab->SetVisible(true);
 		}
-		PlaySoundA(_T("msg.wav"), NULL, SND_FILENAME | SND_ASYNC);
+		PlaySoundA(_T("BJ.wav"), NULL, SND_FILENAME | SND_ASYNC);
 		CVerticalLayoutUI* vLyt = dynamic_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("vLyt_")));
 		DWORD bkcolor = vLyt->GetBkColor();
 		if (bkcolor == 0xFFFF9999)

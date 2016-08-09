@@ -5,6 +5,8 @@
 #include "CaptureNotify.h"
 #include "RegUserInfo.h"
 
+
+
 #define BT_CLOSERWND		(_T("close_btn"))
 #define BT_GETPHOTO			(_T("photo"))
 #define BT_OK_REGISTER		(_T("btn_ok"))
@@ -33,10 +35,11 @@ public:
 	void OnFilishi(TNotifyUI& msg);
 
 	bool SaveRegisterInfo();
+	//virtual LRESULT HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
 private:
 	bool			m_photo_agin;
-	
+	bool				m_closeApp;
 	writeUserInfo	m_userInfo;
 protected:
 	virtual LPCTSTR GetWindowClassName() const;

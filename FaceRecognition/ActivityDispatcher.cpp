@@ -5,6 +5,7 @@
 #include "FaceMatch.h"
 #include <Poco/ActiveResult.h>
 #include "RegUserInfo.h"
+#include "log.h"
 
 using Poco::ActiveResult;
 using Poco::Thread;
@@ -30,6 +31,8 @@ void ActivityDispatcher::stop()
 	_activity.wait();
 }
 
+#include <Poco/Stopwatch.h>
+
 void ActivityDispatcher::runActivity()
 {
 	while (!_activity.isStopped())
@@ -49,10 +52,11 @@ void ActivityDispatcher::runActivity()
 					vector<readUserInfo> userinfo = RegUserInfo::getUserInfo();
 					for (i = 0; i < userinfo.size(); i++)
 					{
-
-						Picture::Ptr userpic(new Picture(userinfo[i].get<9>().rawContent(), 640 * 480 * 3));
-						userpic->SetWidth(640);
-						userpic->SetHeight(480);
+						long t_start, t_end;
+						t_start = GetTickCount();
+						Picture::Ptr userpic(new Picture(userinfo[i].get<9>().rawContent(), pic->width() * pic->height() * 3));
+						userpic->SetWidth(pic->width());
+						userpic->SetHeight(pic->height());
 						FaceMatch example;
 
 						FaceMatch::AddArgs args = { pic, userpic };
@@ -63,9 +67,8 @@ void ActivityDispatcher::runActivity()
 						{
 							_serial = i;
 						}
-						std::stringstream ostr;
-						ostr << "result:" << ret << std::endl;
-						OutputDebugStringA(ostr.str().c_str());
+						t_end = GetTickCount();
+						poco_information_f2(logger_handle, "compare result:%d, time:%d", (int)ret, (int)(t_end - t_start));
 						commitResult(ret);
 					}					
 				}
@@ -87,6 +90,7 @@ void ActivityDispatcher::commitResult(bool result)
 
 bool ActivityDispatcher::queryResult()
 {
+
 	return _results;
 }
 

@@ -4,6 +4,7 @@
 
 CSettingUI::CSettingUI()
 {
+	m_closeApp = true;
 }
 
 
@@ -44,6 +45,7 @@ void CSettingUI::Notify(TNotifyUI& msg)
 
 void CSettingUI::OnCloseSWnd(TNotifyUI& msg)
 {
+	m_closeApp = false;
 	Close();
 }
 
@@ -63,4 +65,15 @@ void CSettingUI::OnSaveLog(TNotifyUI& msg)
 	ofn.Flags = OFN_CREATEPROMPT | OFN_PATHMUSTEXIST | OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT;
 	ofn.lpstrTitle = TEXT("±£´æµ½");
 	BOOL bSel = GetSaveFileName(&ofn);
+}
+
+
+LRESULT CSettingUI::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+{
+	if (uMsg == WM_DESTROY && m_closeApp)
+	{
+		::PostQuitMessage(0);
+	}
+	bHandled = FALSE;
+	return 0;
 }

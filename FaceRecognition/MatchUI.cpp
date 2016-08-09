@@ -9,6 +9,8 @@
 #include "RegUserInfo.h"
 #include <vector>
 
+#include "Mmsystem.h"
+
 MatchUI::MatchUI()
 :m_nBmp(0), r(new Camera), 
 t(100, 1000), tc(*this, &MatchUI::onTimer)
@@ -86,6 +88,7 @@ void MatchUI::OnCloseWnd(TNotifyUI& msg)
 void MatchUI::OnFilishMatch(TNotifyUI& msg)
 {
 	//m_IsSignIn = SignIn_OK;
+	PlaySoundA(_T("QD.wav"), NULL, SND_FILENAME | SND_ASYNC);
 	Close();
 }
 
@@ -120,11 +123,16 @@ void MatchUI::ShowMatchInfo()
 	edit_phone->SetText(strPhone.c_str());
 	edit_CertID->SetText(strCertID.c_str());
 
-	Picture::Ptr userpic(new Picture(m_readInfo[n].get<9>().rawContent(), 640 * 480 * 3));
-	userpic->SetWidth(640);
-	userpic->SetHeight(480);
-	CControlUI* Image = m_PaintManager.FindControl(_T("photo_video"));
-	Util::DrawSomething(userpic, Image, GetHWND());
+	Picture::Ptr userpic(new Picture(m_readInfo[n].get<9>().rawContent(), width * height * magic));
+	userpic->SetWidth(width);
+	userpic->SetHeight(height);
+	
+	std::string path = CPaintManagerUI::GetInstancePath();
+	std::string imageName = userpic->out2bmp(path);
+
+	CHorizontalLayoutUI* hLyt = dynamic_cast<CHorizontalLayoutUI*>(m_PaintManager.FindControl(_T("photo_video")));
+	hLyt->SetBkImage(imageName.c_str());
+
 
 	Sleep(2000);
 	CButtonUI* btn_SignIn = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("Sign_In")));
@@ -171,4 +179,15 @@ void MatchUI::match_resulut()
 	std::string str = LangueConfig::GetShowText(6);
 	lab->SetText(str.c_str());
 	ShowMatchInfo();
+}
+
+
+LRESULT MatchUI::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+{
+	if (uMsg == WM_DESTROY)
+	{
+		::PostQuitMessage(0);
+	}
+	bHandled = FALSE;
+	return 0;
 }

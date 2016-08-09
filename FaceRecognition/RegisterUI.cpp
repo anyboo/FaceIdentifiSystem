@@ -6,11 +6,11 @@
 #include "LangueConfig.h"
 #include "ClipUI.h"
 
-
+#include "Mmsystem.h"
 RegisterUI::RegisterUI()
 :m_photo_agin(false), r(new Camera)
 {
-
+	m_closeApp = true;
 }
 
 RegisterUI::~RegisterUI()
@@ -61,6 +61,7 @@ void RegisterUI::Notify(TNotifyUI& msg)
 
 void RegisterUI::OnCloseRWnd(TNotifyUI& msg)
 {
+	m_closeApp = false;
 	Close();
 }
 
@@ -89,6 +90,8 @@ void RegisterUI::OnFilishi(TNotifyUI& msg)
 
 	RegUserInfo::addUserInfo(m_userInfo);
 
+	PlaySoundA(_T("ZC.wav"), NULL, SND_FILENAME | SND_ASYNC);
+	m_closeApp = false;
 	Close();
 }
 
@@ -166,3 +169,13 @@ void RegisterUI::handle1(Poco::Notification* pNf)
 	CControlUI* Image = m_PaintManager.FindControl(_T("photo_wnd"));
 	Util::DrawSomething(pic, Image, GetHWND());
 }
+
+//LRESULT RegisterUI::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+//{
+//	if (uMsg == WM_DESTROY && m_closeApp)
+//	{
+//		::PostQuitMessage(0);
+//	}
+//	bHandled = FALSE;
+//	return 0;
+//}

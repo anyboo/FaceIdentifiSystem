@@ -33,6 +33,7 @@ public:
 	virtual LRESULT HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	virtual LRESULT OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
+
 public:
 	std::queue<writeCompareInfo>& getCompareQueue();
 	std::queue<CapBitmapData>& getCapDataQueue();
@@ -50,7 +51,11 @@ private:
 	Recorder r;
 	ActivityDispatcher example;
 	long  m_count;
-
+	time_t	m_lastTime;
+	time_t	m_nowTime;
+	SYSTEMTIME	m_systime;
+	bool			m_closeApp;
+	bool		m_bSendMsg;
 protected:
 	virtual LPCTSTR GetWindowClassName() const;
 	virtual CDuiString GetSkinFolder();
