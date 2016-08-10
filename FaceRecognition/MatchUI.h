@@ -41,16 +41,16 @@ public:
 private:
 	int				m_nBmp;
 	CRegisterInfo*	m_RegInfo;
-	Recorder r;
+	Recorder recoder;
 	ActivityDispatcher example;
 	long  m_count;
 	IsSignIn		m_IsSignIn;
 
-	Poco::Timer t;
+	Poco::Timer checktime;
 	Poco::TimerCallback<MatchUI> tc;
 	bool enableCompare;
 	bool painting;
-
+	bool   m_closeApp;
 	const int width = 640;
 	const int height = 480;
 	const int magic = 3;

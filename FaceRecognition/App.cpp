@@ -56,7 +56,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 
 	//init face
 	THFI_Param param;
-	param.nMinFaceSize = 150;
+	param.nMinFaceSize = 50;
 	param.nRollAngle = 145;
 	param.bOnlyDetect = true;
 	THFI_Create(1, &param);
@@ -84,7 +84,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 	pFrame->CenterWindow();
 	pFrame->ShowWindow(true);
 	
-//	Show_HideTask(true);
+	Show_HideTask(true);
 
 	CPaintManagerUI::MessageLoop();
 	::CoUninitialize();

@@ -12,6 +12,8 @@
 #include <windows.h>
 #include <fstream>
 
+#include "stdafx.h"
+#include "log.h"
 using namespace rapidjson;
 
 class LangueConfig
@@ -42,5 +44,32 @@ public:
 
 		return ShowText;
 	}
+
+
 };
+
+
+class photoPath
+{
+public:
+	photoPath(){};
+	~photoPath(){};
+
+public:
+	static std::string GetPhotoPath()
+	{
+		char pFileName[MAX_PATH];
+		::GetModuleFileNameA(nullptr, pFileName, MAX_PATH);
+		
+	
+		std::string path(pFileName);
+		std::string strPath = path.substr(0, path.find_last_of(_T("\\"))) + std::string(_T("\\"));
+
+		return strPath;
+	}
+
+private:
+
+};
+
 

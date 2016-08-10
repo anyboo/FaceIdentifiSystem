@@ -27,7 +27,7 @@ public:
 	DUI_DECLARE_MESSAGE_MAP();
 
 	void OnCloseWnd(TNotifyUI& msg);
-	void OnRemoveAlarm(TNotifyUI& msg);
+	void OnRemoveAlarm();
 
 
 	virtual LRESULT HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);

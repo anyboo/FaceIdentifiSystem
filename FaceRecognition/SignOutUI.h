@@ -29,6 +29,7 @@ public:
 
 	void ShowMatchInfo();
 
+
 private:
 	int				m_nBmp;
 	CRegisterInfo*	m_RegInfo;

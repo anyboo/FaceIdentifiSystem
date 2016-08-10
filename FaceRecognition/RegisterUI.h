@@ -35,12 +35,16 @@ public:
 	void OnFilishi(TNotifyUI& msg);
 
 	bool SaveRegisterInfo();
-	//virtual LRESULT HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+	virtual LRESULT HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
 private:
 	bool			m_photo_agin;
 	bool				m_closeApp;
 	writeUserInfo	m_userInfo;
+
+	const int width = 640;
+	const int height = 480;
+	const int magic = 3;
 protected:
 	virtual LPCTSTR GetWindowClassName() const;
 	virtual CDuiString GetSkinFolder();

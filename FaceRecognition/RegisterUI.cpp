@@ -153,14 +153,25 @@ bool RegisterUI::SaveRegisterInfo()
 
 void RegisterUI::handle1(Poco::Notification* pNf)
 {
-	if (m_photo_agin) return;
+	if (m_photo_agin)
+	{
+		Picture::Ptr userpic(new Picture(m_userInfo.get<8>().rawContent(), width * height * magic));
+		userpic->SetWidth(width);
+		userpic->SetHeight(height);
 
+		std::string path = photoPath::GetPhotoPath();
+		std::string imageName = userpic->out2bmp(path);
+
+		CControlUI* hLyt = dynamic_cast<CControlUI*>(m_PaintManager.FindControl(_T("photo_wnd")));
+		hLyt->SetBkImage(imageName.c_str());
+		return;
+	}
 	poco_check_ptr(pNf);
 	Notification::Ptr pf(pNf);
 	poco_check_ptr(pf.get());
 	CaptureNotification::Ptr nf = pf.cast<CaptureNotification>();
 	poco_check_ptr(nf.get());
-	Picture::Ptr pic(nf->data());
+	Picture::Ptr pic(nf->data()); 
 	poco_check_ptr(pic.get());
 
 	Poco::Data::CLOB saveImage((const char*)pic->data(), pic->len());
@@ -170,12 +181,12 @@ void RegisterUI::handle1(Poco::Notification* pNf)
 	Util::DrawSomething(pic, Image, GetHWND());
 }
 
-//LRESULT RegisterUI::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
-//{
-//	if (uMsg == WM_DESTROY && m_closeApp)
-//	{
-//		::PostQuitMessage(0);
-//	}
-//	bHandled = FALSE;
-//	return 0;
-//}
+LRESULT RegisterUI::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+{
+	if (uMsg == WM_DESTROY && m_closeApp)
+	{
+		::PostQuitMessage(0);
+	}
+	bHandled = FALSE;
+	return 0;
+}
