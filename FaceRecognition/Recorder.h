@@ -16,7 +16,6 @@ public:
 protected:
 	void onTimer(Poco::Timer& timer);
 private:
-	Poco::Stopwatch sw;
 	Poco::Timer t;
 	Poco::TimerCallback<Recorder> tc;
 	ICamera::Ptr _camera;

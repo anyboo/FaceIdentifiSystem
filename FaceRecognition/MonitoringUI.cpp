@@ -15,7 +15,7 @@ CMonitoringUI::CMonitoringUI()
 	:r(new Camera)
 {
 	m_closeApp = true;
-	m_bSendMsg = true;
+	m_bSendMsg = false;
 	time(&m_lastTime);
 	//m_pCompare = new BitMapCompare(this);
 	//Poco::ThreadPool::defaultPool().start(*m_pCompare);
@@ -33,7 +33,7 @@ CMonitoringUI::~CMonitoringUI()
 
 DUI_BEGIN_MESSAGE_MAP(CMonitoringUI, WindowImplBase)
 DUI_ON_CLICK_CTRNAME(BT_CLOSE_MonWnd, OnCloseWnd)
-DUI_ON_CLICK_CTRNAME(BT_REMOVE_ALARM, OnRemoveAlarm)
+//DUI_ON_CLICK_CTRNAME(BT_REMOVE_ALARM, OnRemoveAlarm)
 DUI_END_MESSAGE_MAP()
 
 LPCTSTR CMonitoringUI::GetWindowClassName() const
@@ -71,28 +71,25 @@ void CMonitoringUI::OnCloseWnd(TNotifyUI& msg)
 	Close();
 }
 
-void CMonitoringUI::OnRemoveAlarm(TNotifyUI& msg)
+void CMonitoringUI::OnRemoveAlarm()
 {
-	std::auto_ptr<CWaittingUI> pDlg(new CWaittingUI);
-	assert(pDlg.get());
-	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_FRAME, 0L, 1024, 768, 0, 0);
-	pDlg->CenterWindow();
-	pDlg->ShowModal();
+	//std::auto_ptr<CWaittingUI> pDlg(new CWaittingUI);
+	//assert(pDlg.get());
+	//pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_FRAME, 0L, 1024, 768, 0, 0);
+	//pDlg->CenterWindow();
+	//pDlg->ShowModal();
 
-	time(&m_lastTime);
 	CVerticalLayoutUI* vLyt = dynamic_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("vLyt_")));
-	CButtonUI* btn = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("btm_remove")));
-	CLabelUI* lab = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("result")));
-	lab->SetVisible(false);
-	btn->SetVisible(false);
+//	CLabelUI* lab = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("result")));
+//	lab->SetVisible(false);
+
 	vLyt->SetBkColor(0x00000000);
-	KillTimer(GetHWND(), 2);
-	SetTimer(GetHWND(), 1, 200, nullptr);
 }
 
 void CMonitoringUI::InitWindow()
 {
-	SetTimer(GetHWND(), 1, 200, nullptr);
+	SetTimer(GetHWND(), 3, 15000, nullptr);
+
 	addObserver(*this);
 	r.start();
 	example.start();
@@ -149,50 +146,47 @@ LRESULT CMonitoringUI::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lPar
 
 LRESULT CMonitoringUI::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {  
-	if (wParam == 1)
+	if (wParam == 3)
+	{ 
+		m_bSendMsg = true;
+		time(&m_lastTime);
+		SetTimer(GetHWND(), 1, 500, nullptr);	
+		KillTimer(GetHWND(), 3);
+	}
+	else if (wParam == 1)
 	{
-		if (m_bSendMsg)
+		time(&m_nowTime);
+		if (example.queryResult() && m_nowTime - m_lastTime <= 15)
 		{
 			m_bSendMsg = false;
+			KillTimer(GetHWND(), 1);
+			SetTimer(GetHWND(), 3, 15000, nullptr);
 		}
-		else
+		else if (!example.queryResult() && m_nowTime - m_lastTime > 15)
 		{
-			m_bSendMsg = true;
-		}
-		if (!example.queryResult())
-		{		
-			time(&m_nowTime);
-			if (m_nowTime - m_lastTime > 20)
-			{
-				SetTimer(GetHWND(), 2, 500, nullptr);
-				KillTimer(GetHWND(), 1);
-			}
-		}	
-		else 
-		{
-			time(&m_lastTime);
+			KillTimer(GetHWND(), 1);
+			SetTimer(GetHWND(), 4, 1000, nullptr);
+			SetTimer(GetHWND(), 2, 500, nullptr);			
 		}
 	}
 	else if (wParam == 2)
-	{
-		if (m_bSendMsg)
-		{
-			m_bSendMsg = false;
-		}
-		else
-		{
-			m_bSendMsg = true;
-		}
+	{		
 		if (example.queryResult())
-		{			
-			time(&m_lastTime);
+		{		
+			KillTimer(GetHWND(), 2);
+			KillTimer(GetHWND(), 4);
+			SetTimer(GetHWND(), 3, 15000, nullptr);
+			m_bSendMsg = false;
 			CLabelUI* lab = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("result")));
-			CButtonUI* btn = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("btm_remove")));
-			btn->SetVisible(true);
 			lab->SetVisible(true);
+
+			OnRemoveAlarm();
+			return 0;
 		}
 		PlaySoundA(_T("BJ.wav"), NULL, SND_FILENAME | SND_ASYNC);
 		CVerticalLayoutUI* vLyt = dynamic_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("vLyt_")));
+		CLabelUI* lab = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("result")));
+		lab->SetVisible(false);
 		DWORD bkcolor = vLyt->GetBkColor();
 		if (bkcolor == 0xFFFF9999)
 		{
@@ -202,6 +196,10 @@ LRESULT CMonitoringUI::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
 		{
 			vLyt->SetBkColor(0xFFFF9999);
 		}
+	}
+	else if (wParam == 4)
+	{
+		m_bSendMsg = (m_bSendMsg == false ? true : false);
 	}
 	return 0;
 }

@@ -12,11 +12,11 @@
 #include "Mmsystem.h"
 
 MatchUI::MatchUI()
-:m_nBmp(0), r(new Camera), 
-t(100, 1000), tc(*this, &MatchUI::onTimer)
+:m_nBmp(0), recoder(new Camera),
+checktime(100, 1000), tc(*this, &MatchUI::onTimer)
 , enableCompare(false), painting(true)
 {
-
+	m_closeApp = true;
 }
 
 
@@ -48,18 +48,18 @@ CDuiString MatchUI::GetSkinFile()
 void MatchUI::beginTime()
 {
 	addObserver(*this);
-	r.start();
+	recoder.start();
 	example.start();
 	m_count = 0;
-	t.start(tc);
+	checktime.start(tc);
 }
 
 void MatchUI::endTime()
 {
 	removeObserver(*this);
-	r.stop();
+	recoder.stop();
 	example.stop();
-	t.stop();
+	checktime.restart(0);
 }
 
 void MatchUI::InitWindow()
@@ -81,20 +81,20 @@ void MatchUI::Notify(TNotifyUI& msg)
 
 void MatchUI::OnCloseWnd(TNotifyUI& msg)
 {
-	//m_IsSignIn = SignIn_CANCEL;
+	m_closeApp = false;
 	Close();
 }
 
 void MatchUI::OnFilishMatch(TNotifyUI& msg)
 {
-	//m_IsSignIn = SignIn_OK;
 	PlaySoundA(_T("QD.wav"), NULL, SND_FILENAME | SND_ASYNC);
+	m_closeApp = false;
 	Close();
 }
 
 void MatchUI::ShowMatchInfo()
 {
-	r.stop();
+	//r.stop();
 	int n = example.queryPerson();
 	std::vector<readUserInfo> m_readInfo = RegUserInfo::getUserInfo();
 	std::string strName = m_readInfo[n].get<1>();
@@ -127,14 +127,12 @@ void MatchUI::ShowMatchInfo()
 	userpic->SetWidth(width);
 	userpic->SetHeight(height);
 	
-	std::string path = CPaintManagerUI::GetInstancePath();
+	std::string path = photoPath::GetPhotoPath();
 	std::string imageName = userpic->out2bmp(path);
 
 	CHorizontalLayoutUI* hLyt = dynamic_cast<CHorizontalLayoutUI*>(m_PaintManager.FindControl(_T("photo_video")));
 	hLyt->SetBkImage(imageName.c_str());
 
-
-	Sleep(2000);
 	CButtonUI* btn_SignIn = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("Sign_In")));
 	btn_SignIn->SetEnabled(true);
 }
@@ -165,10 +163,12 @@ IsSignIn MatchUI::GetResult()
 void MatchUI::onTimer(Poco::Timer& timer)
 {
 	enableCompare = !example.queryResult();
+
 	if (!enableCompare)
 	{
 		painting = false;
 		match_resulut();
+		endTime();
 	}
 }
 
@@ -184,7 +184,7 @@ void MatchUI::match_resulut()
 
 LRESULT MatchUI::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-	if (uMsg == WM_DESTROY)
+	if (uMsg == WM_DESTROY && m_closeApp)
 	{
 		::PostQuitMessage(0);
 	}

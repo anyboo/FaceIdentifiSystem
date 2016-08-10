@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Picture.h"
+#include "log.h"
 
 Picture::Picture(const Picture& pic)
 :buffer(pic.data(),pic.len())
@@ -151,12 +152,13 @@ std::string Picture::SaveBmp(char* data, int width, int height, const std::strin
 	std::string Path = path;
 	std::string name = "test";
 	std::string ext = ".bmp";
-	name += std::to_string(::GetTickCount()).c_str();
+//	name += std::to_string(::GetTickCount()).c_str();
 	Path.append(name);
 	Path.append(ext);
 
 	TemporaryFile file(Path);
 	FileOutputStream fs(Path);
+
 	//fileheader
 	BITMAPFILEHEADER bmfh;
 	int nBitsOffset = sizeof(BITMAPFILEHEADER)+bi.bmiHeader.biSize;
