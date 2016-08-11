@@ -3,6 +3,7 @@
 #include "FacePosition.h"
 #include "FaceFeature.h"
 #include "THFeature_i.h"
+
 FaceImage::FaceImage()
 : _bpp(24), fpos(new FacePosition), feature(new FaceFeature)
 {
@@ -49,6 +50,7 @@ bool FaceImage::Compare(FaceImage& image)
 	std::stringstream ostr;
 	ostr << "similarity:" << similarity << std::endl;
 	OutputDebugStringA(ostr.str().c_str());
+	
 	return (similarity >= 0.6);
 }
 

@@ -230,7 +230,8 @@ public:
         typedef typename L2<T>::ElementType ElementType;
         typedef typename L2<T>::ResultType DistanceType;
 
-	Index_(const Mat& features, const ::cvflann::IndexParams& params);
+	//Index_(const Mat& features, const ::cvflann::IndexParams& params);	
+	Index_<T>::Index_(const Mat& dataset, const ::cvflann::IndexParams& params);
 
 	~Index_();
 

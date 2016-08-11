@@ -13,6 +13,11 @@
 #include "DuiLib\UIlib.h"
 using namespace DuiLib;
 
+#include "cv.h"
+#include "cxcore.h"
+#include "highgui.h"
+using namespace cv;
+
 #ifdef _DEBUG
 #   ifdef _UNICODE
 #       pragma comment(lib, "DuiLib_ud.lib")
