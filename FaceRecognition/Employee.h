@@ -62,26 +62,36 @@ public:
 		return pic_name_id;
 	}
 
+	FaceImage::Ptr GetFaceImage()const
+	{
+		poco_check_ptr(_face);
+		return _face;
+	}
+
 protected:
 	void Parse(const Employee& e);
 private:
 
 	Employee _employee;
 	std::string pic_name_id;
-	FaceImage::Ptr face;
+	FaceImage::Ptr _face;
 };
 
 #include <list>
 
+typedef std::vector<Identity*> IdentityList;
+
 class IdentityDB
+	: private IdentityList
 {
-	typedef std::vector<Identity*> IdentityList;
+	//typedef std::vector<Identity*> IdentityList;
 public:
 	IdentityDB();
 	~IdentityDB();
 	static IdentityDB& Instance();
 	void Add(const Identity& id);
 	void Get(size_t index, Identity& id);
+	size_t Size();
 private:
-	IdentityList elist;
+	//IdentityList elist;
 };

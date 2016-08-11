@@ -4,8 +4,6 @@
 #include "stdafx.h"
 #include "Test.h"
 #include "TestDlg.h"
-#include <io.h>
-#include <fcntl.h>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -24,15 +22,6 @@ BEGIN_MESSAGE_MAP(CTestApp, CWinApp)
 	ON_COMMAND(ID_HELP, CWinApp::OnHelp)
 END_MESSAGE_MAP()
 
-static void OpenConsole()
-{
-	AllocConsole();
-	HANDLE   handle = GetStdHandle(STD_OUTPUT_HANDLE);
-	int   hCrt = _open_osfhandle((long)handle, _O_TEXT);
-	FILE   *   hf = _fdopen(hCrt, "w");
-	*stdout = *hf;
-}
-
 /////////////////////////////////////////////////////////////////////////////
 // CTestApp construction
 
@@ -40,9 +29,6 @@ CTestApp::CTestApp()
 {
 	// TODO: add construction code here,
 	// Place all significant initialization in InitInstance
-#ifdef _DEBUG  
-	OpenConsole();
-#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -65,7 +51,7 @@ BOOL CTestApp::InitInstance()
 #ifdef _AFXDLL
 	Enable3dControls();			// Call this when using MFC in a shared DLL
 #else
-	Enable3dControlsStatic();	// Call this when linking to MFC statically
+	//Enable3dControlsStatic();	// Call this when linking to MFC statically
 #endif
 
 	CoInitializeEx(NULL,COINIT_MULTITHREADED);

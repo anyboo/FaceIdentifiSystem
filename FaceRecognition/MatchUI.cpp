@@ -14,7 +14,6 @@ MatchUI::MatchUI()
 t(100, 1000), tc(*this, &MatchUI::onTimer)
 , enableCompare(false), painting(true)
 {
-	_confirm->SetEnabled(false);
 }
 
 
@@ -64,6 +63,7 @@ void MatchUI::InitWindow()
 {
 	beginTime();
 	BandingSubControl();
+	_confirm->SetEnabled(false);
 }
 
 void MatchUI::BandingSubControl()
@@ -120,7 +120,7 @@ void MatchUI::ShowMatchInfo()
 	_certificate->SetText(id.certificate().c_str());
 
 	CControlUI* Image = m_PaintManager.FindControl(_T("photo_video"));
-	Image->SetBkImage(id.picutre_name().c_str());
+	//Image->SetBkImage(id.picutre_name().c_str());
 
 	//Picture::Ptr userpic(new Picture(m_readInfo[0].get<9>().rawContent(), 640 * 480 * 3));
 	//userpic->SetWidth(640);
@@ -147,19 +147,34 @@ void MatchUI::handle1(Poco::Notification* pNf)
 	if (nf)
 	{
 		CurrentImage.assign(nf->data());
-		CControlUI* Image = m_PaintManager.FindControl(_T("photo_wnd"));
+		CControlUI* Image = m_PaintManager.FindControl(_T("photo_video"));
 		Util::DrawSomething(CurrentImage, Image, GetHWND());
 	}
 }
 
 void MatchUI::onTimer(Poco::Timer& timer)
 {
-	enableCompare = !example.queryResult();
+	enableCompare = !enableCompare;
+
+	std::stringstream ss;
+	ss << "enableCompare" << enableCompare << std::endl;
+
+	OutputDebugStringA(ss.str().c_str());
+	if (!enableCompare)
+	{
+		if (example.queryResult())
+		{
+			match_resulut();
+		}
+	}
+	/* 
+	= !example.queryResult();
 	if (!enableCompare)
 	{
 		painting = false;
 		match_resulut();
 	}
+	*/
 }
 
 

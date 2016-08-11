@@ -3,12 +3,15 @@
 #include <Poco/NotificationQueue.h>
 #include <Poco/Notification.h>
 #include <Poco/Mutex.h>
-#include <set>
+#include <list>
+
+#include <Poco/Stopwatch.h>
+#include <Poco/ActiveResult.h>
 
 class ActivityDispatcher
 {
 public:
-	ActivityDispatcher();
+	ActivityDispatcher(size_t channelNum);
 
 	void start();
 	void stop();
@@ -18,10 +21,14 @@ public:
 protected:
 	void runActivity();
 	void commitResult(bool result);
+	void PrepareChannel();
 private:
+	typedef Poco::ActiveResult<bool> Result;
 	Poco::Activity<ActivityDispatcher> _activity;
 	Poco::NotificationQueue _queue;
 	static Poco::FastMutex  _mutex;
 	bool _results;
+	std::list<Result> _resultSet;
+	size_t _channelNum;
 };
 

@@ -11,14 +11,14 @@ Identity::Identity(const Employee& e, Picture::Ptr picture)
 {
 	Parse(e);
 	pic_name_id = picture->WriteToDisk();
-	face = new FaceImage(picture);
+	_face = new FaceImage(picture);
 }
 
 Identity::Identity(const Identity& id)
 {
 	Parse(id._employee);
 	pic_name_id = id.pic_name_id;
-	face.assign(id.face);
+	_face.assign(id.GetFaceImage());
 }
 
 Identity::~Identity()
@@ -43,12 +43,12 @@ IdentityDB::IdentityDB()
 
 IdentityDB::~IdentityDB()
 {
-	for (auto e : elist)
+	for (auto e : (*this))
 	{
 		if (e) delete e;
 	}
 
-	elist.clear();
+	clear();
 }
 
 namespace 
@@ -58,13 +58,18 @@ namespace
 
 void IdentityDB::Add(const Identity& id)
 {
-	elist.push_back(new Identity(id));
+	push_back(new Identity(id));
 }
 
 void IdentityDB::Get(size_t index, Identity& id)
 {
-	poco_assert(index > elist.size());
-	id = *(elist[index]);
+	poco_assert(index < size());
+	id = *((*this)[index]);
+}
+
+size_t IdentityDB::Size()
+{
+	return (*this).size();
 }
 
 IdentityDB& IdentityDB::Instance()

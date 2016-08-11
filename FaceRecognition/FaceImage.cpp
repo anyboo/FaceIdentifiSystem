@@ -53,7 +53,7 @@ bool FaceImage::Compare(FaceImage& image)
 }
 
 #include <sstream>
-void FaceImage::DetectFace()
+void FaceImage::DetectFace()v
 {
 	poco_check_ptr(fpos);
 	detectedFaceCount = fpos->DetectFace(this);

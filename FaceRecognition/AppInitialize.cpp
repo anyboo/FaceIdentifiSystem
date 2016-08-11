@@ -48,6 +48,7 @@ void CAppInitialize::THFaceImageSDK()
 	param.nMinFaceSize = 150;
 	param.nRollAngle = 145;
 	param.bOnlyDetect = true;
+
 	THFI_Create(1, &param);
 
 	short ret = EF_Init(1);
