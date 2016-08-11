@@ -122,9 +122,6 @@
     <ClInclude Include="SignOutUI.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="LangueConfig.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="WaittingUI.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -140,6 +137,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="ClipUI.h" />
+    <ClInclude Include="SettingConfig.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ConsoleApplication1.rc" />

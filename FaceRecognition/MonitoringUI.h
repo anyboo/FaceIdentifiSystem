@@ -56,6 +56,8 @@ private:
 	SYSTEMTIME	m_systime;
 	bool			m_closeApp;
 	bool		m_bSendMsg;
+
+	int				m_timeInterval;
 protected:
 	virtual LPCTSTR GetWindowClassName() const;
 	virtual CDuiString GetSkinFolder();

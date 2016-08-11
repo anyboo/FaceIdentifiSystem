@@ -5,7 +5,7 @@
 #include "Camera.h"
 #include "Util.h"
 
-#include "LangueConfig.h"
+#include "SettingConfig.h"
 #include "RegUserInfo.h"
 #include <vector>
 
@@ -186,6 +186,7 @@ LRESULT MatchUI::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 {
 	if (uMsg == WM_DESTROY && m_closeApp)
 	{
+		::ShowWindow(::FindWindow("Shell_TrayWnd", NULL), SW_SHOW);
 		::PostQuitMessage(0);
 	}
 	bHandled = FALSE;

@@ -3,7 +3,7 @@
 #include "RegisterInfo.h"
 #include "Util.h"
 #include "CaptureNotification.h"
-#include "LangueConfig.h"
+#include "SettingConfig.h"
 
 #include "RegUserInfo.h"
 #include <vector>
@@ -180,6 +180,7 @@ LRESULT CSignOutUI::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam,
 {
 	if (uMsg == WM_DESTROY && m_closeApp)
 	{
+		::ShowWindow(::FindWindow("Shell_TrayWnd", NULL), SW_SHOW);
 		::PostQuitMessage(0);
 	}
 	bHandled = FALSE;

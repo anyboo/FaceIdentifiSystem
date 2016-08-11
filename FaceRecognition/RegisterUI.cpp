@@ -3,7 +3,7 @@
 #include "CaptureNotification.h"
 #include "Camera.h"
 #include "Util.h"
-#include "LangueConfig.h"
+#include "SettingConfig.h"
 #include "ClipUI.h"
 
 #include "Mmsystem.h"
@@ -185,6 +185,7 @@ LRESULT RegisterUI::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam,
 {
 	if (uMsg == WM_DESTROY && m_closeApp)
 	{
+		::ShowWindow(::FindWindow("Shell_TrayWnd", NULL), SW_SHOW);
 		::PostQuitMessage(0);
 	}
 	bHandled = FALSE;

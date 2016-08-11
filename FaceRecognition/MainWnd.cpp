@@ -60,7 +60,7 @@ void CMainWnd::Notify(TNotifyUI& msg)
 
 void CMainWnd::OnCloseWnd(TNotifyUI& msg)
 {
-	Show_HideTask(false);
+	::ShowWindow(::FindWindow("Shell_TrayWnd", NULL), SW_SHOW);
 	::PostQuitMessage(0L);
 }
 
@@ -110,35 +110,6 @@ void CMainWnd::OnSettingWnd(TNotifyUI& msg)
 	pDlg->ShowModal();
 }
 
-void CMainWnd::Show_HideTask(bool IsHide)
-{
-	int nCwdShow = -1;
-	LPARAM lParam;
-	HWND task = FindWindow(_T("Shell_TrayWnd"), NULL);
-	if (IsHide)
-	{
-		lParam = ABS_AUTOHIDE | ABS_ALWAYSONTOP;
-		nCwdShow = SW_HIDE;
-	}
-	else
-	{
-		lParam = ABS_ALWAYSONTOP;
-		nCwdShow = SW_SHOW;
-	}
-
-	::ShowWindow(task, nCwdShow);
-
-	APPBARDATA apBar;
-	memset(&apBar, 0, sizeof(apBar));
-	apBar.cbSize = sizeof(apBar);
-	apBar.hWnd = task;
-	if (apBar.hWnd != NULL)
-	{
-		apBar.lParam = lParam;
-		SHAppBarMessage(ABM_SETSTATE, &apBar);
-	}
-}
-
 void CMainWnd::OnSignOutWnd(TNotifyUI& msg)
 {
 	std::auto_ptr<CSignOutUI> pDlg(new CSignOutUI);
@@ -168,6 +139,7 @@ LRESULT CMainWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	if (uMsg == WM_DESTROY)
 	{
+		::ShowWindow(::FindWindow("Shell_TrayWnd", NULL), SW_SHOW);
 		::PostQuitMessage(0);
 	}
 		if (uMsg == WM_KEYDOWN)
