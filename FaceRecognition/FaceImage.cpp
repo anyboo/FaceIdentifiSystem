@@ -4,6 +4,8 @@
 #include "FaceFeature.h"
 #include "THFeature_i.h"
 #include "log.h"
+
+#include "SettingConfig.h"
 FaceImage::FaceImage()
 : _bpp(24), fpos(new FacePosition), feature(new FaceFeature)
 {
@@ -53,8 +55,9 @@ bool FaceImage::Compare(FaceImage& image)
 	sw.stop();
 	//OutputDebugStringA(ostr.str().c_str());
 	poco_information_f2(logger_handle, "Compare :%Ld similarity : %f", Poco::Clock(sw.elapsed()).microseconds(), similarity);
-
-	return (similarity >= 0.6);
+	ValueSetting vset;
+	float leastSiml = vset.SetSimilarity();
+	return (similarity >= leastSiml);
 }
 
 #include <sstream>

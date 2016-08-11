@@ -33,8 +33,6 @@ public:
 	void OnSettingWnd(TNotifyUI& msg);
 	void OnSignOutWnd(TNotifyUI& msg);
 
-	void Show_HideTask(bool IsHide);
-
 	LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM /*lParam*/, bool& bHandled);
 
 	LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);

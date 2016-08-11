@@ -10,13 +10,15 @@
 #include "Mmsystem.h"
 
 #include "WaittingUI.h"
+#include "SettingConfig.h"
 
 CMonitoringUI::CMonitoringUI()
 	:r(new Camera)
 {
 	m_closeApp = true;
 	m_bSendMsg = false;
-	time(&m_lastTime);
+	ValueSetting vSet;
+	m_timeInterval = vSet.SetTime_interval() * 1000 - 15000;
 	//m_pCompare = new BitMapCompare(this);
 	//Poco::ThreadPool::defaultPool().start(*m_pCompare);
 }
@@ -88,7 +90,7 @@ void CMonitoringUI::OnRemoveAlarm()
 
 void CMonitoringUI::InitWindow()
 {
-	SetTimer(GetHWND(), 3, 15000, nullptr);
+	SetTimer(GetHWND(), 3, m_timeInterval, nullptr);
 
 	addObserver(*this);
 	r.start();
@@ -136,6 +138,7 @@ LRESULT CMonitoringUI::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lPar
 	case WM_TIMER: lRes = OnTimer(uMsg, wParam, lParam, bHandled); break;
 	case WM_DESTROY:
 		if (m_closeApp){
+			::ShowWindow(::FindWindow("Shell_TrayWnd", NULL), SW_SHOW);
 			::PostQuitMessage(0);
 		}
 		break;
@@ -160,7 +163,7 @@ LRESULT CMonitoringUI::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
 		{
 			m_bSendMsg = false;
 			KillTimer(GetHWND(), 1);
-			SetTimer(GetHWND(), 3, 15000, nullptr);
+			SetTimer(GetHWND(), 3, m_timeInterval, nullptr);
 		}
 		else if (!example.queryResult() && m_nowTime - m_lastTime > 15)
 		{
@@ -175,7 +178,7 @@ LRESULT CMonitoringUI::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
 		{		
 			KillTimer(GetHWND(), 2);
 			KillTimer(GetHWND(), 4);
-			SetTimer(GetHWND(), 3, 15000, nullptr);
+			SetTimer(GetHWND(), 3, m_timeInterval, nullptr);
 			m_bSendMsg = false;
 			CLabelUI* lab = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("result")));
 			lab->SetVisible(true);
