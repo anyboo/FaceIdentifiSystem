@@ -76,7 +76,7 @@ void CSettingUI::OnSaveLog(TNotifyUI& msg)
 	ofn.hwndOwner = m_hWnd;
 	ofn.lpstrFilter = _T("TXT文件(*.txt)\0*.txt\0所有文件(*.*)\0*.*\0");
 	ofn.lpstrInitialDir = _T("D:\\");   
-	ofn.lpstrFile = szBuffer;   
+	ofn.lpstrFile = szBuffer;			//save data path
 	ofn.nMaxFile = sizeof(szBuffer) / sizeof(*szBuffer);
 	ofn.nFilterIndex = 1;
 	ofn.Flags = OFN_CREATEPROMPT | OFN_PATHMUSTEXIST | OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT;

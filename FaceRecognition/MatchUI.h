@@ -25,7 +25,7 @@ public:
 	MatchUI();
 	~MatchUI();
 	void InitWindow();
-	IsSignIn GetResult();
+
 	virtual void OnFinalMessage(HWND hWnd);
 	virtual void Notify(TNotifyUI& msg);
 	virtual void handle1(Poco::Notification* pNf);

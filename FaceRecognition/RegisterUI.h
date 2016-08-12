@@ -3,6 +3,7 @@
 #include "RegisterInfo.h"
 #include "Recorder.h"
 #include "CaptureNotify.h"
+#include "QMFileSqlite.h"
 #include "RegUserInfo.h"
 
 
@@ -32,7 +33,7 @@ public:
 
 	void OnCloseRWnd(TNotifyUI& msg);
 	void OnGetPhoto(TNotifyUI& msg);
-	void OnFilishi(TNotifyUI& msg);
+	void OnRegister(TNotifyUI& msg);
 
 	bool SaveRegisterInfo();
 	virtual LRESULT HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
@@ -45,6 +46,10 @@ private:
 	const int width = 640;
 	const int height = 480;
 	const int magic = 3;
+
+private:
+	CLabelUI*		m_Prompt_lab;
+
 protected:
 	virtual LPCTSTR GetWindowClassName() const;
 	virtual CDuiString GetSkinFolder();

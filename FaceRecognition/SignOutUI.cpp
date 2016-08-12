@@ -129,7 +129,7 @@ void CSignOutUI::ShowMatchInfo()
 	userpic->SetWidth(width);
 	userpic->SetHeight(height);
 
-	std::string path = photoPath::GetPhotoPath();
+	std::string path = CPaintManagerUI::GetInstancePath();
 	std::string imageName = userpic->out2bmp(path);
 
 	CHorizontalLayoutUI* hLyt = dynamic_cast<CHorizontalLayoutUI*>(m_PaintManager.FindControl(_T("photo_video")));
