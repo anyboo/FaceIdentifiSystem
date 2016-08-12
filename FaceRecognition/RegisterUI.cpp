@@ -21,7 +21,7 @@ RegisterUI::~RegisterUI()
 DUI_BEGIN_MESSAGE_MAP(RegisterUI, WindowImplBase)
 DUI_ON_CLICK_CTRNAME(BT_CLOSERWND, OnCloseRWnd)
 DUI_ON_CLICK_CTRNAME(BT_GETPHOTO, OnGetPhoto)
-DUI_ON_CLICK_CTRNAME(BT_OK_REGISTER, OnFilishi)
+DUI_ON_CLICK_CTRNAME(BT_OK_REGISTER, OnRegister)
 DUI_END_MESSAGE_MAP()
 
 LPCTSTR RegisterUI::GetWindowClassName() const
@@ -71,7 +71,7 @@ void RegisterUI::InitWindow()
 	r.start();
 }
 
-void RegisterUI::OnFilishi(TNotifyUI& msg)
+void RegisterUI::OnRegister(TNotifyUI& msg)
 {
 	CLabelUI* lab_Prompt = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("lab_Prompt")));
 	bool bRet =	SaveRegisterInfo();
@@ -89,7 +89,6 @@ void RegisterUI::OnFilishi(TNotifyUI& msg)
 	}
 
 	RegUserInfo::addUserInfo(m_userInfo);
-
 	PlaySoundA(_T("ZC.wav"), NULL, SND_FILENAME | SND_ASYNC);
 	m_closeApp = false;
 	Close();
@@ -97,7 +96,6 @@ void RegisterUI::OnFilishi(TNotifyUI& msg)
 
 void RegisterUI::OnGetPhoto(TNotifyUI& msg)
 {
-	CLabelUI* lab_Prompt = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("lab_Prompt")));
 	CButtonUI* btn_photo = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("photo")));
 	if (m_photo_agin)
 	{
@@ -124,28 +122,27 @@ bool RegisterUI::SaveRegisterInfo()
 	CEditUI* edit_phone = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_Phone")));
 	CEditUI* edit_CertID = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_IDnumber")));
 
-	IdentityInfo* Item = new IdentityInfo;
-	Item->strName = edit_name->GetText();
-	Item->strAge = edit_age->GetText();
-	Item->strSex = combo_sex->GetText();
-	Item->strBirth = edit_birth->GetText();
-	Item->strIDcard = edit_address->GetText();
-	Item->strPhone = edit_phone->GetText();
-	Item->strCertID = edit_CertID->GetText();
+	std::string strName = edit_name->GetText();
+	std::string strAge = edit_age->GetText();
+	std::string strSex = combo_sex->GetText();
+	std::string strBirth = edit_birth->GetText();
+	std::string strIDcard = edit_address->GetText();
+	std::string strPhone = edit_phone->GetText();
+	std::string strCertID = edit_CertID->GetText();
 
 
-	if (Item->strName == _T("") || Item->strAge == _T("") || Item->strSex == _T("") || Item->strBirth == _T("")
-		|| Item->strIDcard == _T("") || Item->strPhone == _T("") || Item->strCertID == _T(""))
+	if (strName == _T("") || strAge == _T("") || strSex == _T("") || strBirth == _T("")
+		|| strIDcard == _T("") || strPhone == _T("") || strCertID == _T(""))
 	{
 		return false;
 	}
-	m_userInfo.set<0>(Item->strName);
-	m_userInfo.set<1>(stoi(Item->strAge));
-	m_userInfo.set<2>(Item->strSex);
-	m_userInfo.set<3>(Item->strBirth);
-	m_userInfo.set<4>(Item->strIDcard);
-	m_userInfo.set<5>(Item->strPhone);
-	m_userInfo.set<6>(Item->strCertID);
+	m_userInfo.set<0>(strName);
+	m_userInfo.set<1>(stoi(strAge));
+	m_userInfo.set<2>(strSex);
+	m_userInfo.set<3>(strBirth);
+	m_userInfo.set<4>(strIDcard);
+	m_userInfo.set<5>(strPhone);
+	m_userInfo.set<6>(strCertID);
 	m_userInfo.set<7>(false);
 
 	return true;
@@ -159,7 +156,7 @@ void RegisterUI::handle1(Poco::Notification* pNf)
 		userpic->SetWidth(width);
 		userpic->SetHeight(height);
 
-		std::string path = photoPath::GetPhotoPath();
+		std::string path = CPaintManagerUI::GetInstancePath();
 		std::string imageName = userpic->out2bmp(path);
 
 		CControlUI* hLyt = dynamic_cast<CControlUI*>(m_PaintManager.FindControl(_T("photo_wnd")));

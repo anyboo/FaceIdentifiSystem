@@ -45,10 +45,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 	//init database
 	QFileSqlite *pDb = QFileSqlite::getInstance();
 	pDb->createTable(CREATE_USER_INFO_TABLE);
-	//CInitDevice	Init_Device;
-	//Init_Device.InitStart();
-
-	//init userinfo
+	
 	RegUserInfo::init();
 
 	std::auto_ptr<CMainWnd> pFrame(new CMainWnd);
@@ -57,8 +54,8 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 	pFrame->SetIcon(IDI_ICON1);
 	pFrame->CenterWindow();
 	pFrame->ShowWindow(true);
-
-	::ShowWindow(::FindWindow("Shell_TrayWnd", NULL), SW_HIDE);
+	
+//	::ShowWindow(::FindWindow("Shell_TrayWnd", NULL), SW_HIDE);
 
 	CPaintManagerUI::MessageLoop();
 	::CoUninitialize();

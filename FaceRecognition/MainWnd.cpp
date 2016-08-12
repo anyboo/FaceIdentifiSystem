@@ -81,15 +81,6 @@ void CMainWnd::OnMatchWnd(TNotifyUI& msg)
 	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_FRAME, 0L, 1024, 768, 0, 0);
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
-
-	/*if (pDlg->GetResult() == SignIn_OK)
-	{
-		std::auto_ptr<CMonitoringUI> MtpDlg(new CMonitoringUI);
-		assert(MtpDlg.get());
-		MtpDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_FRAME, 0L, 1024, 768, 0, 0);
-		MtpDlg->CenterWindow();
-		MtpDlg->ShowModal();
-	}*/
 }
 
 void CMainWnd::OnMonitoringWnd(TNotifyUI& msg)
@@ -119,9 +110,31 @@ void CMainWnd::OnSignOutWnd(TNotifyUI& msg)
 	pDlg->ShowModal();
 }
 
-void CMainWnd::InitWindow()
+void CMainWnd::Show_Off_loginWnd()
 {
-	int nRet = RegisterHotKey(m_hWnd, 1, MOD_CONTROL, 'f');
+	CButtonUI* btn1 = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("bt_register")));
+	CButtonUI* btn2 = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("bt_setting")));
+	CButtonUI* btn3 = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("bt_close")));
+	if (btn1->IsVisible())
+	{
+		btn1->SetVisible(false);
+		btn2->SetVisible(false);
+		btn3->SetVisible(false);
+	}
+	else
+	{
+		std::auto_ptr<CLogInUI> pDlg(new CLogInUI);
+		assert(pDlg.get());
+		pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_FRAME, 0L, 0, 0, 0, 0);
+		pDlg->CenterWindow();
+		pDlg->ShowModal();
+		if (pDlg->m_LogResult == LogInSucceed)
+		{
+			btn1->SetVisible(true);
+			btn2->SetVisible(true);
+			btn3->SetVisible(true);
+		}
+	}
 }
 
 
@@ -142,64 +155,27 @@ LRESULT CMainWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 		::ShowWindow(::FindWindow("Shell_TrayWnd", NULL), SW_SHOW);
 		::PostQuitMessage(0);
 	}
-		if (uMsg == WM_KEYDOWN)
+	else if (uMsg == WM_KEYDOWN)
+	{
+		if (wParam == 70 && !strHotkey.compare(_T("CTRL+SHIFT")))
 		{
-			if (wParam != VK_CONTROL && wParam != VK_SHIFT && !strHotkey.compare(_T("CTRL+SHIFT")))
-			{
-				if (wParam == 70)
-				{
-					CButtonUI* btn1 = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("bt_register")));
-					CButtonUI* btn2 = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("bt_setting")));
-					CButtonUI* btn3 = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("bt_close")));
-					if (btn1->IsVisible())
-					{
-						btn1->SetVisible(false);
-						btn2->SetVisible(false);
-						btn3->SetVisible(false);
-					}
-					else
-					{
-						std::auto_ptr<CLogInUI> pDlg(new CLogInUI);
-						assert(pDlg.get());
-						pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_FRAME, 0L, 0, 0, 0, 0);
-						pDlg->CenterWindow();
-						pDlg->ShowModal();
-						if (pDlg->m_LogResult == LogInSucceed)
-						{
-
-							btn1->SetVisible(true);
-							btn2->SetVisible(true);
-							btn3->SetVisible(true);
-						}
-					}
-				}
-			}
-			else
-			{
-				if (wParam == VK_CONTROL && !strHotkey.compare(_T("SHIFT")))
-				{
-					strHotkey = std::string(_T("+CTRL")) + strHotkey;
-				}
-				else if (wParam == VK_CONTROL && strHotkey == _T(""))
-				{
-					strHotkey = std::string(_T("CTRL"));
-				}
-				if(wParam == VK_SHIFT && !strHotkey.compare(_T("CTRL")))
-				{
-					strHotkey = strHotkey + std::string(_T("+SHIFT"));
-				}
-				else if (wParam == VK_SHIFT && strHotkey == _T(""))
-				{
-					strHotkey = std::string(_T("SHIFT"));
-				}
-			}
-			return 0;
+			Show_Off_loginWnd();
 		}
-		else if(uMsg == WM_KEYUP)
+		else if (wParam == VK_CONTROL && -1 == strHotkey.find(_T("CTRL")))
 		{
-			strHotkey.clear();
-			return 0;
+			strHotkey = std::string(_T("CTRL")) + strHotkey;
 		}
+		else if (wParam == VK_SHIFT && -1 == strHotkey.find(_T("+SHIFT")))
+		{
+			strHotkey = strHotkey + std::string(_T("+SHIFT"));
+		}
+		return 0;
+	}
+	else if(uMsg == WM_KEYUP)
+	{
+		strHotkey.clear();
+		return 0;
+	}
 
 	return __super::HandleMessage(uMsg, wParam, lParam);
 }

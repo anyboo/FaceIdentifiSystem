@@ -127,13 +127,12 @@ void MatchUI::ShowMatchInfo()
 	userpic->SetWidth(width);
 	userpic->SetHeight(height);
 	
-	std::string path = photoPath::GetPhotoPath();
+	std::string path = CPaintManagerUI::GetInstancePath();
 	std::string imageName = userpic->out2bmp(path);
 
 	CHorizontalLayoutUI* hLyt = dynamic_cast<CHorizontalLayoutUI*>(m_PaintManager.FindControl(_T("photo_video")));
-	hLyt->SetBkImage(imageName.c_str());
-
 	CButtonUI* btn_SignIn = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("Sign_In")));
+	hLyt->SetBkImage(imageName.c_str());
 	btn_SignIn->SetEnabled(true);
 }
 
@@ -143,9 +142,8 @@ void MatchUI::handle1(Poco::Notification* pNf)
 
 	poco_check_ptr(pNf);
 	Notification::Ptr pf(pNf);
-	if ((m_count % 5) == 0)
+	if ((m_count % 5) == 0 && enableCompare)
 	{
-		if (enableCompare)
 		example.enqueueNotification(pf);
 	}
 	m_count++;
@@ -155,15 +153,10 @@ void MatchUI::handle1(Poco::Notification* pNf)
 	Util::DrawSomething(pic, Image, GetHWND());
 }
 
-IsSignIn MatchUI::GetResult()
-{
-	return m_IsSignIn;
-}
 
 void MatchUI::onTimer(Poco::Timer& timer)
 {
 	enableCompare = !example.queryResult();
-
 	if (!enableCompare)
 	{
 		painting = false;
