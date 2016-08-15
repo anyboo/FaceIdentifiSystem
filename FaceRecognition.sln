@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FaceRecognition", "FaceRecognition\ConsoleApplication1.vcxproj", "{EBF5723A-1E6C-4CB3-A4D8-957E6F1FE1B7}"
 EndProject
@@ -12,6 +12,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FaceAttendServer", "sample\FaceVerify1024-768\NVL-TEST.vcxproj", "{22D8896E-1206-470A-A9D6-54FC4239C0E6}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FaceRecognitionSerV", "FaceRecognitionSerV\FaceRecognitionSerV.vcxproj", "{C513C3B4-61F0-4C8E-8781-696108936122}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RtspTest", "RtspTest\RtspTest.vcxproj", "{905F94CE-C99D-4BFA-88B9-BBB7B113801E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,12 @@ Global
 		{C513C3B4-61F0-4C8E-8781-696108936122}.Release|Win32.ActiveCfg = Release|Win32
 		{C513C3B4-61F0-4C8E-8781-696108936122}.Release|Win32.Build.0 = Release|Win32
 		{C513C3B4-61F0-4C8E-8781-696108936122}.Release|x64.ActiveCfg = Release|Win32
+		{905F94CE-C99D-4BFA-88B9-BBB7B113801E}.Debug|Win32.ActiveCfg = Debug|Win32
+		{905F94CE-C99D-4BFA-88B9-BBB7B113801E}.Debug|Win32.Build.0 = Debug|Win32
+		{905F94CE-C99D-4BFA-88B9-BBB7B113801E}.Debug|x64.ActiveCfg = Debug|Win32
+		{905F94CE-C99D-4BFA-88B9-BBB7B113801E}.Release|Win32.ActiveCfg = Release|Win32
+		{905F94CE-C99D-4BFA-88B9-BBB7B113801E}.Release|Win32.Build.0 = Release|Win32
+		{905F94CE-C99D-4BFA-88B9-BBB7B113801E}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
