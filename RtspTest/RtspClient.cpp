@@ -91,6 +91,7 @@ bool RtspClient::start(const char* pURL, DownloadCallback callback, PVOID pDlg)
 		if (packet->stream_index != videoStream)
 		{
 			//Sleep(50);
+			av_packet_unref(packet);
 			continue;
 		}
 		
@@ -100,6 +101,7 @@ bool RtspClient::start(const char* pURL, DownloadCallback callback, PVOID pDlg)
 		{
 			TRACE("frameFinished is false");
 			//Sleep(50);
+			av_packet_unref(packet);
 			continue;
 		}
 
