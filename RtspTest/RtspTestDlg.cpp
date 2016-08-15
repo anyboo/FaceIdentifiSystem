@@ -167,10 +167,10 @@ void CRtspTestDlg::OnBnClickedButton1()
 
 void CRtspTestDlg::DrawPicToHDC(cv::Mat srcMat, UINT ID)
 {
-	/*HWND hFrameWnd;
+	HWND hFrameWnd;
 	GetDlgItem(ID, &hFrameWnd);
-	RtspClient::DrawBmpBuf(srcMat, hFrameWnd);*/
-	IplImage * Image;
+	RtspClient::DrawBmpBuf(srcMat, hFrameWnd);
+	/*IplImage * Image;
 	CvSize Size = cvSize(srcMat.rows, srcMat.cols);
 	Image = cvCreateImage(Size, IPL_DEPTH_8U, 3);
 	memcpy(Image->imageData, srcMat.data, srcMat.rows*srcMat.cols * 3);
@@ -186,7 +186,7 @@ void CRtspTestDlg::DrawPicToHDC(cv::Mat srcMat, UINT ID)
 
 	cimg.DrawToHDC(hDC, &rect);
 	ReleaseDC(pDC);
-	cvReleaseImage(&Image);
+	cvReleaseImage(&Image);*/
 }
 
 void CRtspTestDlg::RealFrameCBK(LPBYTE lpRealFrame, UINT nSize, int nWidth, int nHeight, UINT nUser)
@@ -195,6 +195,6 @@ void CRtspTestDlg::RealFrameCBK(LPBYTE lpRealFrame, UINT nSize, int nWidth, int 
 
 	cv::Mat srcMat1(nWidth, nHeight, CV_8UC3, (char *)lpRealFrame);
 	//RtspClient::MirrorDIB((LPSTR)srcMat1.data, nWidth, nHeight, TRUE, 24);
-	//RtspClient::MirrorDIB((LPSTR)srcMat1.data, nWidth, nHeight, FALSE, 24);
+	RtspClient::MirrorDIB((LPSTR)srcMat1.data, nWidth, nHeight, FALSE, 24);
 	ptThis->DrawPicToHDC(srcMat1, IDC_VIDEO);
 }

@@ -93,6 +93,7 @@ bool RtspClient::start(const char* pURL, DownloadCallback callback, PVOID pDlg)
 			//Sleep(50);
 			continue;
 		}
+		
 
 		avcodec_decode_video2(pCodecCtx, pFrame, &frameFinished, packet);
 		if (!frameFinished)
@@ -126,7 +127,7 @@ bool RtspClient::start(const char* pURL, DownloadCallback callback, PVOID pDlg)
 		}
 
 		callback((const char *)buffer, pCodecCtx->width * pCodecCtx->height * 3, pCodecCtx->width, pCodecCtx->height, (UINT)pDlg);
-
+		av_packet_unref(packet);
 		//Sleep(10);
 	}
 
