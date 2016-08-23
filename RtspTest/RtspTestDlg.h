@@ -5,6 +5,7 @@
 #pragma once
 
 #include "RtspClient.h"
+#include "afxwin.h"
 
 // CRtspTestDlg ¶Ô»°¿ò
 class CRtspTestDlg : public CDialogEx
@@ -34,7 +35,14 @@ public:
 	afx_msg void OnBnClickedButton1();
 private:
 	RtspClient *m_rtspClient;
+	CString m_IP;
+	bool  m_bStart;
 public:
-	static void __stdcall RealFrameCBK(LPBYTE lpRealFrame, UINT nSize, int nWidth, int nHeight, UINT nUser);
+	static void __stdcall RealFrameCBK(const char *  lpRealFrame, UINT nSize, int nWidth, int nHeight, UINT nUser);
 	void DrawPicToHDC(cv::Mat srcMat, UINT ID);
+	afx_msg void OnBnClickedButton2();
+	afx_msg void OnDestroy();	
+	
+private:
+	bool checkIp(CString IP);
 };

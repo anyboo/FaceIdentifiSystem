@@ -8,6 +8,7 @@
 #include "afxdialogex.h"
 #include <string>
 #include "CvvImage.h"
+#include <regex>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -51,13 +52,17 @@ END_MESSAGE_MAP()
 
 CRtspTestDlg::CRtspTestDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(CRtspTestDlg::IDD, pParent)
+	, m_IP(_T(""))
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+	m_rtspClient = new RtspClient();
+	m_bStart = false;
 }
 
 void CRtspTestDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
+	DDX_Text(pDX, IDC_EDIT1, m_IP);
 }
 
 BEGIN_MESSAGE_MAP(CRtspTestDlg, CDialogEx)
@@ -65,6 +70,8 @@ BEGIN_MESSAGE_MAP(CRtspTestDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(IDC_BUTTON1, &CRtspTestDlg::OnBnClickedButton1)
+	ON_BN_CLICKED(IDC_BUTTON2, &CRtspTestDlg::OnBnClickedButton2)
+	ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
 
@@ -100,6 +107,14 @@ BOOL CRtspTestDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO:  在此添加额外的初始化代码
+	cv::Mat srcMat(640, 480, CV_8UC3);
+	DrawPicToHDC(srcMat, IDC_VIDEO);
+
+	CString csIp = "192.168.0.15";
+	SetDlgItemText(IDC_EDIT1, csIp);
+	SetDlgItemInt(IDC_EDIT2, 554);
+	CString csAdmin = "admin";
+	SetDlgItemText(IDC_EDIT3, csAdmin);
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -157,12 +172,55 @@ HCURSOR CRtspTestDlg::OnQueryDragIcon()
 
 void CRtspTestDlg::OnBnClickedButton1()
 {
-	RtspClient::init();
+	
 	//std::string szRtspURL("rtsp://184.72.239.149/vod/mp4://BigBuckBunny_175k.mov");
-	std::string szRtspURL("rtsp://192.168.0.15:554/user=admin&password=&channel=1&stream=0.sdp");
+	//std::string szRtspURL("rtsp://192.168.0.15:554/user=admin&password=&channel=1&stream=0.sdp");
 	//std::string szRtspURL("rtsp://172.16.0.180:554/user=admin&password=&channel=1&stream=0.sdp");
-	m_rtspClient->start(szRtspURL.c_str(), (DownloadCallback)CRtspTestDlg::RealFrameCBK, this);
-	RtspClient::uninit();
+	
+		
+	GetDlgItemText(IDC_EDIT1, m_IP);
+	CString csPort;
+	GetDlgItemText(IDC_EDIT2, csPort);
+	CString csUser;
+	GetDlgItemText(IDC_EDIT3, csUser);
+	CString csPwd;
+	GetDlgItemText(IDC_EDIT4, csPwd);
+
+	if (m_IP.IsEmpty())
+	{
+		MessageBoxA( "ip地址不能为空", "", MB_OK);
+		return;
+	}
+	if (!checkIp(m_IP))
+	{
+		MessageBoxA("ip格式不正确！", "", MB_OK);
+		return;
+	}
+
+	if (m_bStart)
+	{
+		MessageBoxA("请先按stop按钮！", "", MB_OK);
+		return;
+	}
+	m_bStart = true;
+
+	std::string szRtspURL("rtsp://");
+	szRtspURL += m_IP.GetBuffer(0);
+	szRtspURL += ":";
+	szRtspURL += csPort.GetBuffer(0);
+	szRtspURL += "/user=";
+	szRtspURL += csUser;
+	szRtspURL += "&password=";
+	szRtspURL += csPwd;
+	szRtspURL += "&channel=1&stream=0.sdp";
+
+	
+	if (!m_rtspClient->start(szRtspURL.c_str(), (ThreadCallback)CRtspTestDlg::RealFrameCBK, this))
+	{
+		MessageBoxA("无法打开设备！", "", MB_OK);
+		m_bStart = false;
+		return;
+	}	
 }
 
 void CRtspTestDlg::DrawPicToHDC(cv::Mat srcMat, UINT ID)
@@ -189,12 +247,46 @@ void CRtspTestDlg::DrawPicToHDC(cv::Mat srcMat, UINT ID)
 	cvReleaseImage(&Image);*/
 }
 
-void CRtspTestDlg::RealFrameCBK(LPBYTE lpRealFrame, UINT nSize, int nWidth, int nHeight, UINT nUser)
+void CRtspTestDlg::RealFrameCBK(const char * lpRealFrame, UINT nSize, int nWidth, int nHeight, UINT nUser)
 {
+	
 	CRtspTestDlg * ptThis = (CRtspTestDlg *)nUser;
 
 	cv::Mat srcMat1(nWidth, nHeight, CV_8UC3, (char *)lpRealFrame);
 	//RtspClient::MirrorDIB((LPSTR)srcMat1.data, nWidth, nHeight, TRUE, 24);
 	RtspClient::MirrorDIB((LPSTR)srcMat1.data, nWidth, nHeight, FALSE, 24);
 	ptThis->DrawPicToHDC(srcMat1, IDC_VIDEO);
+}
+
+void CRtspTestDlg::OnBnClickedButton2()
+{
+	if (!m_bStart)
+		return;
+	m_bStart = false;
+	m_rtspClient->stop();
+
+	cv::Mat srcMat(640, 480, CV_8UC3);
+	srcMat = cv::Scalar(255, 255, 255);
+	DrawPicToHDC(srcMat, IDC_VIDEO);
+}
+
+
+void CRtspTestDlg::OnDestroy()
+{
+	CDialogEx::OnDestroy();
+	if (m_rtspClient)
+	{
+		delete m_rtspClient;
+		m_rtspClient = NULL;
+	}	
+}
+
+bool CRtspTestDlg::checkIp(CString IP)
+{	
+	std::string strIP = IP.GetBuffer(0);
+	std::regex pattern("((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])");
+	std::smatch base_match;
+	bool valid = std::regex_match(strIP, base_match, pattern);	
+
+	return valid;
 }

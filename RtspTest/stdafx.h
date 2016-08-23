@@ -35,9 +35,8 @@
 
 
 
-
-
-
+#include <functional>
+typedef std::function<void(const char*, UINT, int, int, UINT)> ThreadCallback;
 
 
 

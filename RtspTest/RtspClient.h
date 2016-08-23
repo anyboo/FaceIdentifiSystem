@@ -33,10 +33,16 @@ extern "C"{
 #pragma comment(lib, "opencv_highgui2410.lib")
 #endif
 
+#include "RtspThread.h"
+#include "Poco/BasicEvent.h"
+#include "Poco/Delegate.h"
+
+using Poco::ThreadPool;
+using Poco::Thread;
+using Poco::Runnable;
 
 
-
-typedef void(__stdcall *DownloadCallback)(const char* LPBYTE, UINT nSize, int nWidth, int nHeight, UINT nUser);
+class RtspThread;
 
 class RtspClient
 {
@@ -46,7 +52,7 @@ public:
 	RtspClient();	
 	~RtspClient();
 
-	bool start(const char* pURL, DownloadCallback callback, PVOID pDlg);
+	bool start(const char* pURL, ThreadCallback callback, PVOID pDlg);
 
 	bool stop();
 
@@ -57,8 +63,19 @@ public:
 	static void DrawBmpBuf(cv::Mat srcMat, HWND hShowWnd);
 
 	static BOOL MirrorDIB(LPSTR lpDIBBits, LONG lWidth, LONG lHeight, BOOL bDirection, int nImageBits);
-protected:
-	
-	
+private:
+	void fireEvent(bool n)
+	{
+		_theEvent(this, n);
+	}
+private:
+	RtspThread *		 _thread;
+	AVFormatContext *    _FormatCtx;
+	AVFrame *			 _Frame;
+	AVFrame *			 _FrameRGB;
+	AVPacket *           _packet;
+	BYTE *				 _buffer;
+	Poco::BasicEvent<bool> _theEvent;
 };
+
 
