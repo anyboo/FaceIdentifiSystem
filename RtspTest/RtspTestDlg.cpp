@@ -219,7 +219,7 @@ void CRtspTestDlg::OnBnClickedButton1()
 	szRtspURL += csPwd;
 	szRtspURL += "&channel=";
 	szRtspURL += csChannel;
-	szRtspURL += "&stream = 0.sdp/*?real_stream*/";
+	szRtspURL += "&stream = 0.sdp";
 
 	
 	if (!m_rtspClient->start(szRtspURL.c_str(), (ThreadCallback)CRtspTestDlg::RealFrameCBK, this))
