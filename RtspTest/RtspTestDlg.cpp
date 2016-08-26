@@ -72,6 +72,8 @@ BEGIN_MESSAGE_MAP(CRtspTestDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON1, &CRtspTestDlg::OnBnClickedButton1)
 	ON_BN_CLICKED(IDC_BUTTON2, &CRtspTestDlg::OnBnClickedButton2)
 	ON_WM_DESTROY()
+	ON_BN_CLICKED(IDC_BUTTON3, &CRtspTestDlg::OnBnClickedButton3)
+	ON_BN_CLICKED(IDC_BUTTON4, &CRtspTestDlg::OnBnClickedButton4)
 END_MESSAGE_MAP()
 
 
@@ -115,6 +117,7 @@ BOOL CRtspTestDlg::OnInitDialog()
 	SetDlgItemInt(IDC_EDIT2, 554);
 	CString csAdmin = "admin";
 	SetDlgItemText(IDC_EDIT3, csAdmin);
+	SetDlgItemInt(IDC_EDIT5, 1);
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -185,6 +188,8 @@ void CRtspTestDlg::OnBnClickedButton1()
 	GetDlgItemText(IDC_EDIT3, csUser);
 	CString csPwd;
 	GetDlgItemText(IDC_EDIT4, csPwd);
+	CString csChannel;
+	GetDlgItemText(IDC_EDIT5, csChannel);
 
 	if (m_IP.IsEmpty())
 	{
@@ -199,20 +204,22 @@ void CRtspTestDlg::OnBnClickedButton1()
 
 	if (m_bStart)
 	{
-		MessageBoxA("请先按stop按钮！", "", MB_OK);
+		MessageBoxA("请先按停止按钮！", "", MB_OK);
 		return;
 	}
 	m_bStart = true;
 
 	std::string szRtspURL("rtsp://");
-	szRtspURL += m_IP.GetBuffer(0);
+	szRtspURL += m_IP;
 	szRtspURL += ":";
-	szRtspURL += csPort.GetBuffer(0);
+	szRtspURL += csPort;
 	szRtspURL += "/user=";
 	szRtspURL += csUser;
 	szRtspURL += "&password=";
 	szRtspURL += csPwd;
-	szRtspURL += "&channel=1&stream=0.sdp";
+	szRtspURL += "&channel=";
+	szRtspURL += csChannel;
+	szRtspURL += "&stream = 0.sdp/*?real_stream*/";
 
 	
 	if (!m_rtspClient->start(szRtspURL.c_str(), (ThreadCallback)CRtspTestDlg::RealFrameCBK, this))
@@ -289,4 +296,107 @@ bool CRtspTestDlg::checkIp(CString IP)
 	bool valid = std::regex_match(strIP, base_match, pattern);	
 
 	return valid;
+}
+
+void CRtspTestDlg::OnBnClickedButton3()
+{
+	GetDlgItemText(IDC_EDIT1, m_IP);
+	CString csPort;
+	GetDlgItemText(IDC_EDIT2, csPort);
+	CString csUser;
+	GetDlgItemText(IDC_EDIT3, csUser);
+	CString csPwd;
+	GetDlgItemText(IDC_EDIT4, csPwd);
+	CString csChannel;
+	GetDlgItemText(IDC_EDIT5, csChannel);
+
+	if (m_IP.IsEmpty())
+	{
+		MessageBoxA("ip地址不能为空", "", MB_OK);
+		return;
+	}
+	if (!checkIp(m_IP))
+	{
+		MessageBoxA("ip格式不正确！", "", MB_OK);
+		return;
+	}
+
+	if (m_bStart)
+	{
+		MessageBoxA("请先按停止按钮！", "", MB_OK);
+		return;
+	}
+	m_bStart = true;
+
+	std::string szRtspURL("rtsp://");
+	szRtspURL += csUser;	
+	szRtspURL += ":";
+	szRtspURL += csPwd;
+	szRtspURL += "@";
+	szRtspURL += m_IP;
+	szRtspURL += ":";
+	szRtspURL += csPort;
+	szRtspURL += "/h264/ch";
+	szRtspURL += csChannel;
+	szRtspURL += "/main/av_stream";
+
+
+	if (!m_rtspClient->start(szRtspURL.c_str(), (ThreadCallback)CRtspTestDlg::RealFrameCBK, this))
+	{
+		MessageBoxA("无法打开设备！", "", MB_OK);
+		m_bStart = false;
+		return;
+	}
+}
+
+
+void CRtspTestDlg::OnBnClickedButton4()
+{
+	GetDlgItemText(IDC_EDIT1, m_IP);
+	CString csPort;
+	GetDlgItemText(IDC_EDIT2, csPort);
+	CString csUser;
+	GetDlgItemText(IDC_EDIT3, csUser);
+	CString csPwd;
+	GetDlgItemText(IDC_EDIT4, csPwd);
+	CString csChannel;
+	GetDlgItemText(IDC_EDIT5, csChannel);
+
+	if (m_IP.IsEmpty())
+	{
+		MessageBoxA("ip地址不能为空", "", MB_OK);
+		return;
+	}
+	if (!checkIp(m_IP))
+	{
+		MessageBoxA("ip格式不正确！", "", MB_OK);
+		return;
+	}
+
+	if (m_bStart)
+	{
+		MessageBoxA("请先按停止按钮！", "", MB_OK);
+		return;
+	}
+	m_bStart = true;
+
+	std::string szRtspURL("rtsp://");
+	szRtspURL += csUser;
+	szRtspURL += ":";
+	szRtspURL += csPwd;
+	szRtspURL += "@";
+	szRtspURL += m_IP;
+	szRtspURL += ":";
+	szRtspURL += csPort;
+	szRtspURL += "/cam/realmonitor?channel=";
+	szRtspURL += csChannel;
+	szRtspURL += "&subtype=0";
+
+
+	if (!m_rtspClient->start(szRtspURL.c_str(), (ThreadCallback)CRtspTestDlg::RealFrameCBK, this))
+	{
+		MessageBoxA("无法打开设备！", "", MB_OK);
+		m_bStart = false;
+		return;
+	}
 }

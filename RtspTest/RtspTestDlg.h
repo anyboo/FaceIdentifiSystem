@@ -45,4 +45,7 @@ public:
 	
 private:
 	bool checkIp(CString IP);
+public:
+	afx_msg void OnBnClickedButton3();
+	afx_msg void OnBnClickedButton4();
 };
