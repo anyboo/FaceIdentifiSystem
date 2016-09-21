@@ -6,9 +6,16 @@
 #include "SettingConfig.h"
 #include "ClipUI.h"
 
+
 #include "Mmsystem.h"
+
+#include "Employee.h"
+
+
 RegisterUI::RegisterUI()
-:m_photo_agin(false), r(new Camera)
+:m_photo_agin(false)
+, r(new Camera)
+, bAlreadyTaked(false)
 {
 	m_closeApp = true;
 }
@@ -19,9 +26,15 @@ RegisterUI::~RegisterUI()
 }
 
 DUI_BEGIN_MESSAGE_MAP(RegisterUI, WindowImplBase)
+
 DUI_ON_CLICK_CTRNAME(BT_CLOSERWND, OnCloseRWnd)
-DUI_ON_CLICK_CTRNAME(BT_GETPHOTO, OnGetPhoto)
-DUI_ON_CLICK_CTRNAME(BT_OK_REGISTER, OnRegister)
+//DUI_ON_CLICK_CTRNAME(BT_GETPHOTO, OnGetPhoto)
+//DUI_ON_CLICK_CTRNAME(BT_OK_REGISTER, OnRegister)
+
+DUI_ON_CLICK_CTRNAME(BT_CLOSERWND, Backward)
+DUI_ON_CLICK_CTRNAME(BT_GETPHOTO, TakePhoto)
+DUI_ON_CLICK_CTRNAME(BT_OK_REGISTER, SignUp)
+
 DUI_END_MESSAGE_MAP()
 
 LPCTSTR RegisterUI::GetWindowClassName() const
@@ -59,59 +72,88 @@ void RegisterUI::Notify(TNotifyUI& msg)
 	WindowImplBase::Notify(msg);
 }
 
+
 void RegisterUI::OnCloseRWnd(TNotifyUI& msg)
 {
 	m_closeApp = false;
 	Close();
 }
 
+
 void RegisterUI::InitWindow()
 {	
 	addObserver(*this);
 	r.start();
+	BandingSubControl();
 }
 
-void RegisterUI::OnRegister(TNotifyUI& msg)
+
+void RegisterUI::BandingSubControl()
 {
-	CLabelUI* lab_Prompt = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("lab_Prompt")));
-	bool bRet =	SaveRegisterInfo();
-	if (!bRet)
-	{
-		std::string str = LangueConfig::GetShowText(1);
-		lab_Prompt->SetText(str.c_str());
-		return;
-	}
-	if (!m_photo_agin)
+	_name		 =	dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_Name")));
+	_age		 =	dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_Age")));
+	_sex		 =	dynamic_cast<CComboUI*>(m_PaintManager.FindControl(_T("combo_sex")));
+	_birth		 =	dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_Birth")));
+	_address	 =	dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_Address")));
+	_phone		 =	dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_Phone")));
+	_certificate =	dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_IDnumber")));
+	
+	_prompt		 =	dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("lab_Prompt")));
+	
+	_shutter	 =	dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("photo")));
+}
+
+void RegisterUI::Backward(TNotifyUI& msg)
+{
+	Close();
+}
+
+void RegisterUI::SignUp(TNotifyUI& msg)
+{
+	if (!bAlreadyTaked)
 	{
 		std::string str = LangueConfig::GetShowText(2);
-		lab_Prompt->SetText(str.c_str());
-		return;
+		return _prompt->SetText(str.c_str());
 	}
+
+	if (!isValidInformation())
+	{
+		std::string str = LangueConfig::GetShowText(1);
+		return _prompt->SetText(str.c_str());
+	}
+
 
 	RegUserInfo::addUserInfo(m_userInfo);
 	PlaySoundA(_T("ZC.wav"), NULL, SND_FILENAME | SND_ASYNC);
 	m_closeApp = false;
+
+	SaveRegisterInformation();	
+
 	Close();
 }
 
-void RegisterUI::OnGetPhoto(TNotifyUI& msg)
+void RegisterUI::TakePhoto(TNotifyUI& msg)
 {
+
 	CButtonUI* btn_photo = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("photo")));
 	if (m_photo_agin)
+
+	if (bAlreadyTaked)
+
 	{
 		std::string str = LangueConfig::GetShowText(3);
-		btn_photo->SetText(str.c_str());
-		m_photo_agin = false;
+		_shutter->SetText(str.c_str());
+		bAlreadyTaked = false;
 	}
 	else
 	{
 		std::string str = LangueConfig::GetShowText(4);
-		btn_photo->SetText(str.c_str());
-		m_photo_agin = true;
+		_shutter->SetText(str.c_str());
+		bAlreadyTaked = true;
 	}
 }
 
-bool RegisterUI::SaveRegisterInfo()
+bool RegisterUI::isValidInformation()
 {
 
 	CEditUI* edit_name = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_Name")));
@@ -145,11 +187,43 @@ bool RegisterUI::SaveRegisterInfo()
 	m_userInfo.set<6>(strCertID);
 	m_userInfo.set<7>(false);
 
+	if (_name->GetText().IsEmpty() ||
+		_age->GetText().IsEmpty() ||
+		_sex->GetText().IsEmpty() ||
+		_birth->GetText().IsEmpty() ||
+		_address->GetText().IsEmpty() ||
+		_phone->GetText().IsEmpty() ||
+		_certificate->GetText().IsEmpty()){
+
+			return false;
+	}
+
+
+		
 	return true;
+}
+
+void RegisterUI::SaveRegisterInformation()
+{
+	Employee e =
+	{
+		_name->GetText(),
+		_age->GetText(),
+		_sex->GetText(),
+		_birth->GetText(),
+		_address->GetText(),
+		_phone->GetText(),
+		_certificate->GetText()
+	};
+	
+	Identity id(e,CurrentImage);
+	IdentityDB::Instance().Add(id);
+	//need photograph data
 }
 
 void RegisterUI::handle1(Poco::Notification* pNf)
 {
+
 	if (m_photo_agin)
 	{
 		Picture::Ptr userpic(new Picture(m_userInfo.get<8>().rawContent(), width * height * magic));
@@ -159,14 +233,17 @@ void RegisterUI::handle1(Poco::Notification* pNf)
 		std::string path = CPaintManagerUI::GetInstancePath();
 		std::string imageName = userpic->out2bmp(path);
 
+	if (bAlreadyTaked) return;
+
+
 		CControlUI* hLyt = dynamic_cast<CControlUI*>(m_PaintManager.FindControl(_T("photo_wnd")));
 		hLyt->SetBkImage(imageName.c_str());
 		return;
 	}
 	poco_check_ptr(pNf);
 	Notification::Ptr pf(pNf);
-	poco_check_ptr(pf.get());
 	CaptureNotification::Ptr nf = pf.cast<CaptureNotification>();
+
 	poco_check_ptr(nf.get());
 	Picture::Ptr pic(nf->data()); 
 	poco_check_ptr(pic.get());
@@ -176,6 +253,14 @@ void RegisterUI::handle1(Poco::Notification* pNf)
 
 	CControlUI* Image = m_PaintManager.FindControl(_T("photo_wnd"));
 	Util::DrawSomething(pic, Image, GetHWND());
+
+	if (nf)
+	{
+		CurrentImage.assign(nf->data());
+		CControlUI* Image = m_PaintManager.FindControl(_T("photo_wnd"));
+		Util::DrawSomething(CurrentImage, Image, GetHWND());
+	}
+
 }
 
 LRESULT RegisterUI::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)

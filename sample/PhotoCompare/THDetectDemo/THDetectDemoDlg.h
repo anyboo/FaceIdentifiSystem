@@ -31,15 +31,20 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnBnClickedDetect();
-	afx_msg void OnDestroy();
-	CString m_strFileName;
+	afx_msg void OnDestroy();	
 	afx_msg void OnBnClickedBrowse();
 	afx_msg void OnBnClickedPlay();
 	afx_msg void OnBnClickedBrowse2();
-	CString m_strPhoto1File;
-	CString m_strPhoto2File;
+	
 protected:
 	virtual void OnCancel();
 public:
 	afx_msg void OnBnClickedBrowse3();
+public:
+	CString m_strFileName;
+	CString m_strPhoto1File;
+	CString m_strPhoto2File;
+	afx_msg void OnBnClickedButton1();
+	afx_msg void OnBnClickedButton2();
+	afx_msg void OnBnClickedButton3();
 };

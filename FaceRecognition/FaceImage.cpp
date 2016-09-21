@@ -33,7 +33,7 @@ FaceImage::FaceImage(Picture::Ptr pic, int picwidth, int picheight)
 	Extract();
 }
 
-FaceImage::FaceImage(const FaceImage& image)
+FaceImage::FaceImage(FaceImage& image)
 :Picture(image.data(),image.len()), _bpp(24)
 , fpos(new FacePosition), feature(new FaceFeature)
 {

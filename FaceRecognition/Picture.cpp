@@ -1,6 +1,11 @@
 #include "stdafx.h"
 #include "Picture.h"
+
 #include "log.h"
+
+
+static std::string SaveBmp(char* data, int width, int height);
+
 
 Picture::Picture(const Picture& pic)
 :buffer(pic.data(),pic.len())
@@ -50,6 +55,11 @@ void Picture::out2bmp()
 std::string Picture::out2bmp(const std::string& path)
 {
 	return SaveBmp(buffer.begin(), _width, _height ,path);
+}
+
+std::string Picture::WriteToDisk()
+{
+	return SaveBmp(buffer.begin(), _width, _height, _T("D:\\bmp\\test.bmp"));
 }
 
 const char* Picture::data() const
@@ -127,6 +137,7 @@ void Picture::MirrorDIB(const char* lpDIBBits, long lWidth, long lHeight, bool b
 using Poco::TemporaryFile;
 using Poco::FileOutputStream;
 
+
 std::string Picture::SaveBmp(char* data, int width, int height, const std::string& path)
 {
 	BITMAPINFOHEADER bih;
@@ -152,7 +163,7 @@ std::string Picture::SaveBmp(char* data, int width, int height, const std::strin
 	std::string Path = path;
 	std::string name = "test";
 	std::string ext = ".bmp";
-//	name += std::to_string(::GetTickCount()).c_str();
+	//	name += std::to_string(::GetTickCount()).c_str();
 	Path.append(name);
 	Path.append(ext);
 
