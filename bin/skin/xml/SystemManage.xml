@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window size="1024,768" caption="0,0,0,0" roundcorner="4,4" showdirty="false">
+	<Font shared="true" id="1" name="微软雅黑" size="18" bold="false" />
+	<Font shared="true" id="8" name="微软雅黑" size="26" bold="false" />
+	<VerticalLayout bkimage="file='skin/RegBJ.png'" height="765" bordersize="3" bordercolor="0x12345678" inset="3,3,3,3">
+		<HorizontalLayout width="1024" height="70" >
+			<Button name="close_btn2" width="44" height="44" padding="10,10,0,0" tooltip="返回" normalimage="file='skin/back_normal.png'" hotimage="file='skin/back_hot.png'" pushedimage="file='skin/back_push.png'"/>
+			<Label text="系统管理" font="8" padding="400,0,0,0" textcolor="#FFFFFFFF" align="center" />
+		</HorizontalLayout>
+		<HorizontalLayout width="1018" height="692">
+			<VerticalLayout width="200" bkimage="file='skin/bj.png'">
+				<Button name="btn_Device" text="设备管理" font="1" width="140" height="80" padding="30,50,20,30" selectedimage="file='skin/cxbt.png'" normalimage="file='skin/add_normal.png'" hotimage="file='skin/cxbt.png'" pushedimage="file='skin/add_push.png'"/>
+				<Button name="btn_User" text="用户管理" font="1" width="140" height="80" padding="30,30,20,30" normalimage="file='skin/add_normal.png'" hotimage="file='skin/cxbt.png'" pushedimage="file='skin/add_push.png'"/>
+				<Button name="btn_Workfoce" text="排班管理" font="1" width="140" height="80" padding="30,30,20,30" normalimage="file='skin/add_normal.png'" hotimage="file='skin/cxbt.png'" pushedimage="file='skin/add_push.png'"/>
+				<Button name="btn_SysSet" text="系统管理" font="1" width="140" height="80" padding="30,30,20,30" normalimage="file='skin/add_normal.png'" hotimage="file='skin/cxbt.png'" pushedimage="file='skin/add_push.png'"/>
+			</VerticalLayout>
+			<VerticalLayout name="Manage_Lyt" width="818" height="692">
+			</VerticalLayout>
+		</HorizontalLayout>
+	</VerticalLayout>
+</Window>

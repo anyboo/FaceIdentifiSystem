@@ -18,7 +18,7 @@ CMonitoringUI::CMonitoringUI()
 	m_closeApp = true;
 	m_bSendMsg = false;
 	ValueSetting vSet;
-	m_timeInterval = vSet.SetTime_interval() * 1000 - 15000;
+	m_timeInterval = std::stoi(vSet.GetTime_interval()) * 1000 - 15000;
 	//m_pCompare = new BitMapCompare(this);
 	//Poco::ThreadPool::defaultPool().start(*m_pCompare);
 }

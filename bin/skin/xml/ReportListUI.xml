@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window >
+	<Font shared="true" id="4" name="微软雅黑" size="14" bold="false" />
+	<Font shared="true" id="5" name="宋体" size="14" bold="false" />
+	<ListContainerElement height="140" width="800" bordersize="1" bordercolor="0x12345678" >
+		<HorizontalLayout >
+			<Control width="100" height="120" padding="20,10,30,10" bkimage="file='skin/aobama.png'" bordersize="1" bordercolor="0x12345678"/>
+			<Label text="奥巴马" width="150" font="5" align="center"/>		
+			<Label text="432143197403028939" width="150" font="5" align="center"/>
+			<Label text="13888888888" width="150" font="5" align="center"/>
+			<Label text="在岗" width="150"  font="5" align="center"/>
+		</HorizontalLayout>
+	</ListContainerElement>
+</Window>

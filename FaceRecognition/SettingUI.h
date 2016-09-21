@@ -1,5 +1,6 @@
 #pragma once
 #include <DuiLib/UIlib.h>
+#include "DeviceManage.h"
 
 
 #define BT_CLOSESWnd		(_T("close_btn2"))
@@ -14,6 +15,7 @@ public:
 	CSettingUI();
 	~CSettingUI();
 
+	virtual void InitWindow();
 	virtual void OnFinalMessage(HWND hWnd);
 	virtual void Notify(TNotifyUI& msg);
 
@@ -24,13 +26,17 @@ public:
 	void OnSaveConfig(TNotifyUI& msg);
 	void OnResetConfig(TNotifyUI& msg);
 
-	void WriteConfig(std::string& timeD, std::string& siml, std::string& facesize);
+	void OnSwitchWindow(TNotifyUI& msg);
 
+//	void WriteConfig(const std::string timeD, const std::string siml, const std::string facesize);
+//	void ReadConfig(std::string& timeD, std::string& siml, std::string& facesize);
+	void ShowConfig();
+	void SetCombText(const std::string value, CComboUI* pComb);
 
 	virtual LRESULT HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 private:
 	bool		m_closeApp;
-
+	CDeviceManage		_deviceManage;
 protected:
 	virtual LPCTSTR GetWindowClassName() const;
 	virtual CDuiString GetSkinFolder();

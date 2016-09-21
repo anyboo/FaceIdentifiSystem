@@ -25,28 +25,28 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 	HRESULT Hr = ::CoInitialize(NULL);
 	if (FAILED(Hr)) return 0;
 
-	Loggering::Logger_initiation();
+//	Loggering::Logger_initiation();
 
 	//init face
-	THFI_Param param;
-	ValueSetting set;
-	param.nMinFaceSize = set.SetFaceSize();
-	param.nRollAngle = 145;
-	param.bOnlyDetect = true;
-	THFI_Create(1, &param);
+	//THFI_Param param;
+//	ValueSetting set;
+//	param.nMinFaceSize = std::stoi(set.GetFaceSize());
+	//param.nRollAngle = 145;
+	//param.bOnlyDetect = true;
+	//THFI_Create(1, &param);
 
-	short ret = EF_Init(1);
-	if (ret == 1)
-	{
-		cout << "Feature init ok" << endl;
-	}
+	//short ret = EF_Init(1);
+	//if (ret == 1)
+	//{
+	//	cout << "Feature init ok" << endl;
+	//}
 
 
 	//init database
 	QFileSqlite *pDb = QFileSqlite::getInstance();
 	pDb->createTable(CREATE_USER_INFO_TABLE);
 	
-	RegUserInfo::init();
+//	RegUserInfo::init();
 
 	std::auto_ptr<CMainWnd> pFrame(new CMainWnd);
 	assert(pFrame.get());
@@ -55,13 +55,13 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 	pFrame->CenterWindow();
 	pFrame->ShowWindow(true);
 	
-//	::ShowWindow(::FindWindow("Shell_TrayWnd", NULL), SW_HIDE);
+	::ShowWindow(::FindWindow("Shell_TrayWnd", NULL), SW_HIDE);
 
 	CPaintManagerUI::MessageLoop();
 	::CoUninitialize();
 
-	THFI_Release();
-	EF_Release();
+//	THFI_Release();
+//	EF_Release();
 
 
 	return 0;

@@ -56,7 +56,7 @@ bool FaceImage::Compare(FaceImage& image)
 	//OutputDebugStringA(ostr.str().c_str());
 	poco_information_f2(logger_handle, "Compare :%Ld similarity : %f", Poco::Clock(sw.elapsed()).microseconds(), similarity);
 	ValueSetting vset;
-	float leastSiml = vset.SetSimilarity();
+	float leastSiml = std::stof(vset.GetSimilarity());
 	return (similarity >= leastSiml);
 }
 
