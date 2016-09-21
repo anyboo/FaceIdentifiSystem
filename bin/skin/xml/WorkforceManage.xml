@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window size="1024,768" caption="0,0,0,0" roundcorner="4,4" showdirty="false">
+	<Font shared="true" id="1" name="微软雅黑" size="18" bold="false" />
+	<Font shared="true" id="8" name="微软雅黑" size="26" bold="false" />
+	<VerticalLayout name="subwindow" width="818" height="692">
+		<HorizontalLayout width="740" height="60" padding="60,80,30,0">
+			<Label text="时间：" font="1" width="125" height="40" align="center" padding="10,20,0,0"/>
+			<Edit name="Device_Type" width="290" height="40" font="1"  padding="0,20,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
+		</HorizontalLayout>
+		<HorizontalLayout width="740" height="60" padding="60,30,30,0">
+			<Label text="人员：" font="1" width="125" height="40" align="center" padding="10,20,0,0"/>
+			<Edit name="Device_Type" width="290" height="40" font="1"  padding="0,20,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
+		</HorizontalLayout>
+		<HorizontalLayout width="740" height="60" padding="60,30,30,0">
+			<Label text="方式：" font="1" width="125" height="40" align="center" padding="10,20,0,0"/>
+			<Edit name="Device_Type" width="290" height="40" font="1"  padding="0,20,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
+		</HorizontalLayout>
+		<Button name="bt_report" text="上报" textcolor="0xFFFF0000" font="1" width="150" height="60" padding="250,50,0,0" textcolor="#FFFFFFFF" normalimage="file='skin/regok_normal.png'" hotimage="file='skin/regok_hot.png'" pushedimage="file='skin/regok_push.png'"/>
+	</VerticalLayout>
+</Window>

@@ -21,7 +21,7 @@
 						<Label text="电话号码：" font="1" width="100" height="40" align="left" padding="10,10,0,0"/>
 						<Label text="证书编号：" font="1" width="100" height="40" align="left" padding="10,10,0,0"/>
 						<Label text="职业及等级：" font="1" width="120" height="40" align="left" padding="10,10,0,0"/>
-						<Label text="发证时间：" font="1" width="100" height="40" align="left" padding="10,10,0,0"/>
+						<Label text="证书扫描件" font="1" width="100" height="40" align="left" padding="10,10,0,0"/>
 					</VerticalLayout>
 					<VerticalLayout width="310">
 						<Edit name="Edit_Name" width="290" height="40" font="1"  padding="0,10,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>

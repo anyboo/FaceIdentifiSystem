@@ -24,10 +24,7 @@ public:
 	DUI_DECLARE_MESSAGE_MAP();
 
 	void OnCloseSWnd(TNotifyUI& msg);
-
 	void OnLogIn(TNotifyUI& msg);
-
-
 
 
 protected:

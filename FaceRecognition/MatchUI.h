@@ -18,6 +18,7 @@ public:
 	MatchUI();
 	~MatchUI();
 	void InitWindow();
+
 	virtual void OnFinalMessage(HWND hWnd);
 	virtual void Notify(TNotifyUI& msg);
 	virtual void handle1(Poco::Notification* pNf);
@@ -27,18 +28,25 @@ public:
 	void Backward(TNotifyUI& msg);
 	void SignIn(TNotifyUI& msg);
 	void ShowMatchInfo();
+	virtual LRESULT HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
 private:
 	int				m_nBmp;
 	CRegisterInfo*	m_RegInfo;
-	Recorder r;
+	Recorder recoder;
 	ActivityDispatcher example;
 	long  m_count;
 
-	Poco::Timer t;
+	Poco::Timer checktime;
 	Poco::TimerCallback<MatchUI> tc;
 	bool enableCompare;
 	bool painting;
+
+	bool   m_closeApp;
+	const int width = 640;
+	const int height = 480;
+	const int magic = 3;
+
 
 	CLabelUI*	_name;
 	CLabelUI*	_age;

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window size="1024,768" caption="0,0,0,0" roundcorner="4,4" showdirty="false">
+	<Font shared="true" id="1" name="微软雅黑" size="18" bold="false" />
+	<Font shared="true" id="8" name="微软雅黑" size="26" bold="false" />
+	<Include source="skin/scrollbar.xml" />
+	<VerticalLayout name="subwindow" width="818" height="692">
+		<List name="RepotList" width="780" padding="10,10,5,0" bkcolor="#FFFFFFFF" inset="1,1,1,1" bordersize="1" bordercolor="0x12345678" itemshowhtml="true" vscrollbar="true" headerbkimage="file='skin/lbl.png'" itemalign="center" itembkcolor="" itemaltbk="true">
+			<ListHeader height="31" menu="true">
+				<ListHeaderItem text="照片" font="1" width="150" hotimage="file='skin/lbl.png'" pushedimage="file='skin/lbl.png'" sepimage="file='skin/lbl.png'" sepwidth="1" dragable="false"/>
+				<Control bkimage="file='skins/st.png'" width="1" />
+				<ListHeaderItem text="姓名" font="1" width="150" hotimage="file='skin/lbl.png'" pushedimage="file='skin/lbl.png'" sepimage="file='skin/lbl.png'" sepwidth="1" dragable="false"/>
+				<Control bkimage="file='skins/st.png'" width="1" />
+				<ListHeaderItem text="证件号码" font="1" width="150" hotimage="file='skin/lbl.png'" pushedimage="file='skin/lbl.png'" sepimage="file='skin/lbl.png'" sepwidth="1" dragable="false"/>
+				<Control bkimage="file='skins/st.png'" width="1" />
+				<ListHeaderItem text="手机号码" font="1" width="150" hotimage="file='skin/lbl.png'" pushedimage="file='skin/lbl.png'" sepimage="file='skin/lbl.png'" sepwidth="1" dragable="false"/>
+				<Control bkimage="file='skins/st.png'" width="1" />
+				<ListHeaderItem text="用户在岗状态" font="1" width="150" hotimage="file='skin/lbl.png'" pushedimage="file='skin/lbl.png'" sepimage="file='skin/lbl.png'" sepwidth="1" dragable="false"/>
+			</ListHeader>
+		</List>	
+	</VerticalLayout>
+</Window>

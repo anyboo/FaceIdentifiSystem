@@ -11,13 +11,14 @@
 class ActivityDispatcher
 {
 public:
-	ActivityDispatcher(size_t channelNum);
+	ActivityDispatcher();
 
 	void start();
 	void stop();
 
 	void enqueueNotification(Poco::Notification::Ptr pNotification);
 	bool queryResult();
+	int queryPerson();
 protected:
 	void runActivity();
 	void commitResult(bool result);
@@ -28,7 +29,11 @@ private:
 	Poco::NotificationQueue _queue;
 	static Poco::FastMutex  _mutex;
 	bool _results;
+
+	int _serial;
+
 	std::list<Result> _resultSet;
 	size_t _channelNum;
+
 };
 

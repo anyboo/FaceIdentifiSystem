@@ -8,13 +8,17 @@
 #include "Util.h"
 
 #include "Mmsystem.h"
-
+#include "CaptureNotification.h"
 #include "WaittingUI.h"
+#include "SettingConfig.h"
 
 CMonitoringUI::CMonitoringUI()
-	:m_nBmp(0), r(new Camera)
+	:r(new Camera)
 {
-	m_testID = 100001;
+	m_closeApp = true;
+	m_bSendMsg = false;
+	ValueSetting vSet;
+	m_timeInterval = std::stoi(vSet.GetTime_interval()) * 1000 - 15000;
 	//m_pCompare = new BitMapCompare(this);
 	//Poco::ThreadPool::defaultPool().start(*m_pCompare);
 }
@@ -31,7 +35,6 @@ CMonitoringUI::~CMonitoringUI()
 
 DUI_BEGIN_MESSAGE_MAP(CMonitoringUI, WindowImplBase)
 DUI_ON_CLICK_CTRNAME(BT_CLOSE_MonWnd, OnCloseWnd)
-DUI_ON_CLICK_CTRNAME(BT_REMOVE_ALARM, OnRemoveAlarm)
 DUI_END_MESSAGE_MAP()
 
 LPCTSTR CMonitoringUI::GetWindowClassName() const
@@ -60,96 +63,65 @@ void CMonitoringUI::OnFinalMessage(HWND hWnd)
 
 void CMonitoringUI::Notify(TNotifyUI& msg)
 {
-	if (msg.sType == DUI_MSGTYPE_CLICK && msg.pSender->GetName() == _T("test"))
-	{
-	//	ShowMonitInfoList();
-	}
 	WindowImplBase::Notify(msg);
 }
 
 void CMonitoringUI::OnCloseWnd(TNotifyUI& msg)
 {
+	m_closeApp = false;
 	Close();
 }
 
-void CMonitoringUI::OnRemoveAlarm(TNotifyUI& msg)
+void CMonitoringUI::OnInitCtrl()
 {
-	std::auto_ptr<CWaittingUI> pDlg(new CWaittingUI);
-	assert(pDlg.get());
-	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_FRAME, 0L, 1024, 768, 0, 0);
-	pDlg->CenterWindow();
-	pDlg->ShowModal();
+	m_Main_Lyt = dynamic_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("vLyt_")));
+	m_Prompt_lab = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("result")));
+	m_photo_Ctrl = dynamic_cast<CControlUI*>(m_PaintManager.FindControl(_T("photo_video")));
+}
 
-	CVerticalLayoutUI* vLyt = dynamic_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("vLyt_")));
-	CButtonUI* btn = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("btm_remove")));
-	CLabelUI* lab = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("result")));
-	lab->SetVisible(false);
-	btn->SetVisible(false);
-	vLyt->SetBkColor(0x00000000);
-	KillTimer(GetHWND(), 2);
-	SetTimer(GetHWND(), 1, 10000, nullptr);
+void CMonitoringUI::OnRemoveAlarm()
+{
+	//std::auto_ptr<CWaittingUI> pDlg(new CWaittingUI);
+	//assert(pDlg.get());
+	//pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_FRAME, 0L, 1024, 768, 0, 0);
+	//pDlg->CenterWindow();
+	//pDlg->ShowModal();
 }
 
 void CMonitoringUI::InitWindow()
 {
-	SetTimer(GetHWND(), 1, 10000, nullptr);
+	SetTimer(GetHWND(), 1, m_timeInterval, nullptr);
 	addObserver(*this);
 	r.start();
 	example.start();
 	m_count = 0;
 }
 
-void CMonitoringUI::ShowMonitInfoList()
-{
-	CDialogBuilder builder;
-	CListContainerElementUI* SubList = (CListContainerElementUI*)(builder.Create(_T("xml//RegInfoList.xml"), (UINT)0, NULL, &m_PaintManager));
-	CListUI* pList = dynamic_cast<CListUI*>(m_PaintManager.FindControl(_T("Refer_InfoList")));
-	pList->Add(SubList);
-	CControlUI* photoUI = dynamic_cast<CControlUI*>(m_PaintManager.FindSubControlByClass(SubList, DUI_CTR_CONTROL));
-	CLabelUI* lab_ID = dynamic_cast<CLabelUI*>(m_PaintManager.FindSubControlByClass(SubList, DUI_CTR_LABEL, 1));
-	CLabelUI* lab_similarity = dynamic_cast<CLabelUI*>(m_PaintManager.FindSubControlByClass(SubList, DUI_CTR_LABEL, 3));
-	CLabelUI* lab_time = dynamic_cast<CLabelUI*>(m_PaintManager.FindSubControlByClass(SubList, DUI_CTR_LABEL, 5));
-
-	std::string strName = std::string(_T("file = 'bmp/test")) + std::to_string(m_nBmp) + std::string(".bmp'");
-	photoUI->SetBkImage(strName.c_str());
-	lab_ID->SetText(std::to_string(m_testID).c_str());
-	lab_similarity->SetText("76%");
-	lab_time->SetText("2016-7-29 17:12:55");
-
-	if (m_testID % 3 == 0)
-	{
-		SubList->SetBkColor(0xFFFFDDDD);
-	}
-	m_testID++;
-}
 
 std::queue<CapBitmapData>& CMonitoringUI::getCapDataQueue()
 {
 	return m_capdata;
 }
 
-#include "CaptureNotification.h"
+
 void CMonitoringUI::handle1(Poco::Notification* pNf)
 {
 	poco_check_ptr(pNf);
 
 	Notification::Ptr pf(pNf);
 	poco_check_ptr(pf.get());
-	if ((m_count % 5) == 0)
-	{
-		example.enqueueNotification(pf);
+	if (m_bSendMsg && m_count % 10 == 0)
+	{	
+		example.enqueueNotification(pf);	
+		m_count++;
 	}
-	m_count++;
-
+	
 	CaptureNotification::Ptr nf = pf.cast<CaptureNotification>();
 	poco_check_ptr(nf.get());
 	Picture::Ptr pic(nf->data());
 	poco_check_ptr(pic.get());
 
-
-
-	CControlUI* Image = m_PaintManager.FindControl(_T("photo_video"));
-	Util::DrawSomething(pic, Image, GetHWND());
+	Util::DrawSomething(pic, m_photo_Ctrl, GetHWND());
 }
 
 LRESULT CMonitoringUI::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
@@ -158,6 +130,13 @@ LRESULT CMonitoringUI::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lPar
 	switch (uMsg)
 	{
 	case WM_TIMER: lRes = OnTimer(uMsg, wParam, lParam, bHandled); break;
+	case WM_DESTROY:
+		if (m_closeApp)
+		{
+			::ShowWindow(::FindWindow("Shell_TrayWnd", NULL), SW_SHOW);
+			::PostQuitMessage(0);
+		}
+		break;
 	}
 	bHandled = FALSE;
 	return 0;
@@ -165,34 +144,65 @@ LRESULT CMonitoringUI::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lPar
 
 LRESULT CMonitoringUI::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-	if (wParam == 1)
+	switch (wParam)
 	{
-		if (!example.queryResult()){
-			SetTimer(GetHWND(), 2, 500, nullptr);
-			KillTimer(GetHWND(), 1);
-		}
-	}
-	else if (wParam == 2)
-	{
-		if (example.queryResult())
-		{
-			CLabelUI* lab = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("result")));
-			CButtonUI* btn = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("btm_remove")));
-			btn->SetVisible(true);
-			lab->SetVisible(true);
-		}
-		PlaySoundA(_T("msg.wav"), NULL, SND_FILENAME | SND_ASYNC);
-		CVerticalLayoutUI* vLyt = dynamic_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("vLyt_")));
-		DWORD bkcolor = vLyt->GetBkColor();
-		if (bkcolor == 0xFFFF9999)
-		{
-			vLyt->SetBkColor(0x00000000);
-		}
-		else
-		{
-			vLyt->SetBkColor(0xFFFF9999);
-		}
+	case 1: OnTimer1();	break;
+	case 2: OnTimer2(); break;
+	case 3: OnTimer3(); break;
+	case 4: OnTimer4(); break;
+	default:
+		break;
 	}
 	return 0;
+}
 
+void CMonitoringUI::OnTimer1()
+{
+	m_bSendMsg = true;
+	time(&m_lastTime);
+	SetTimer(GetHWND(), 2, 250, nullptr);
+	KillTimer(GetHWND(), 1);
+}
+
+void CMonitoringUI::OnTimer2()
+{
+	time(&m_nowTime);
+	if (example.queryResult() && m_nowTime - m_lastTime <= 15)
+	{
+		m_bSendMsg = false;
+		KillTimer(GetHWND(), 2);
+		SetTimer(GetHWND(), 1, m_timeInterval, nullptr);
+	}
+	else if (!example.queryResult() && m_nowTime - m_lastTime > 15)
+	{
+		KillTimer(GetHWND(), 2);
+		SetTimer(GetHWND(), 3, 500, nullptr);
+		SetTimer(GetHWND(), 4, 1000, nullptr);
+	}
+}
+
+void CMonitoringUI::OnTimer3()
+{
+	if (example.queryResult())
+	{
+		KillTimer(GetHWND(), 3);
+		KillTimer(GetHWND(), 4);
+		SetTimer(GetHWND(), 1, m_timeInterval, nullptr);
+		m_bSendMsg = false;
+		m_Prompt_lab->SetVisible(true);
+		m_Main_Lyt->SetBkColor(0x00000000);
+	}
+	else
+	{
+		PlaySoundA(_T("BJ.wav"), NULL, SND_FILENAME | SND_ASYNC);
+		m_Prompt_lab->SetVisible(false);
+		DWORD bkcolor = m_Main_Lyt->GetBkColor();
+		DWORD itembkcolor = bkcolor == 0x00000000 ? 0xFFFF9999 : 0x00000000;
+		m_Main_Lyt->SetBkColor(itembkcolor);
+	}
+}
+
+void CMonitoringUI::OnTimer4()
+{
+	m_bSendMsg = (m_bSendMsg == false ? true : false);
 }

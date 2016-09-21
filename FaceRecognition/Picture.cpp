@@ -1,7 +1,11 @@
 #include "stdafx.h"
 #include "Picture.h"
 
+#include "log.h"
+
+
 static std::string SaveBmp(char* data, int width, int height);
+
 
 Picture::Picture(const Picture& pic)
 :buffer(pic.data(),pic.len())
@@ -45,12 +49,17 @@ void Picture::SetHeight(size_t height)
 
 void Picture::out2bmp()
 {
-	SaveBmp(buffer.begin(),_width, _height);
+	SaveBmp(buffer.begin(),_width, _height, _T("D:\\bmp\\test.bmp"));
+}
+
+std::string Picture::out2bmp(const std::string& path)
+{
+	return SaveBmp(buffer.begin(), _width, _height ,path);
 }
 
 std::string Picture::WriteToDisk()
 {
-	return SaveBmp(buffer.begin(), _width, _height);
+	return SaveBmp(buffer.begin(), _width, _height, _T("D:\\bmp\\test.bmp"));
 }
 
 const char* Picture::data() const
@@ -128,7 +137,8 @@ void Picture::MirrorDIB(const char* lpDIBBits, long lWidth, long lHeight, bool b
 using Poco::TemporaryFile;
 using Poco::FileOutputStream;
 
-std::string SaveBmp(char* data, int width, int height)
+
+std::string Picture::SaveBmp(char* data, int width, int height, const std::string& path)
 {
 	BITMAPINFOHEADER bih;
 	bih.biSize = 40; 						// header size
@@ -150,15 +160,16 @@ std::string SaveBmp(char* data, int width, int height)
 	int iHeight = bih.biHeight;
 
 	DWORD word = 0;
-	std::string Path = "d:\\bmp\\";
+	std::string Path = path;
 	std::string name = "test";
 	std::string ext = ".bmp";
-	name += std::to_string(::GetTickCount()).c_str();
+	//	name += std::to_string(::GetTickCount()).c_str();
 	Path.append(name);
 	Path.append(ext);
 
 	TemporaryFile file(Path);
 	FileOutputStream fs(Path);
+
 	//fileheader
 	BITMAPFILEHEADER bmfh;
 	int nBitsOffset = sizeof(BITMAPFILEHEADER)+bi.bmiHeader.biSize;
@@ -175,5 +186,5 @@ std::string SaveBmp(char* data, int width, int height)
 	fs.write((char*)data, bih.biSizeImage);
 	fs.close();
 
-	return name;
+	return Path;
 }
