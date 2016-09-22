@@ -19,8 +19,6 @@ class CMainWnd :
 public:
 	CMainWnd();
 	~CMainWnd();
-
-	virtual void InitWindow();
 	virtual void OnFinalMessage(HWND hWnd);
 	virtual void Notify(TNotifyUI& msg);
 
@@ -33,13 +31,10 @@ public:
 	void OnSettingWnd(TNotifyUI& msg);
 	void OnSignOutWnd(TNotifyUI& msg);
 
-	void Show_HideTask(bool IsHide);
-
 	LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM /*lParam*/, bool& bHandled);
-
 	LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-
+	void Show_Off_loginWnd();
 private:
 	UINT			m_Mod;
 	bool			m_IsSet;

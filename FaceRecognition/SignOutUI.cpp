@@ -3,16 +3,22 @@
 #include "RegisterInfo.h"
 #include "Util.h"
 #include "CaptureNotification.h"
-#include "LangueConfig.h"
+#include "SettingConfig.h"
 
 #include "RegUserInfo.h"
 #include <vector>
+
+#include "Mmsystem.h"
+#include "Picture.h"
+
+
 
 CSignOutUI::CSignOutUI()
 :m_nBmp(0), r(new Camera)
 , t(100, 1000), tc(*this, &CSignOutUI::onTimer)
 , enableCompare(false), painting(true)
 {
+	m_closeApp = true;
 }
 
 
@@ -55,7 +61,7 @@ void CSignOutUI::endTime()
 	removeObserver(*this);
 	r.stop();
 	example.stop();
-	t.stop();
+	t.restart(0); 
 }
 
 void CSignOutUI::InitWindow()
@@ -77,17 +83,20 @@ void CSignOutUI::Notify(TNotifyUI& msg)
 
 void CSignOutUI::OnCloseWnd(TNotifyUI& msg)
 {
+	m_closeApp = false;
 	Close();
 }
 
 void CSignOutUI::OnFilishMatch(TNotifyUI& msg)
 {
+	PlaySoundA(_T("QT.wav"), NULL, SND_FILENAME | SND_ASYNC);
+	m_closeApp = false;
 	Close();
 }
 
 void CSignOutUI::ShowMatchInfo()
 {
-	r.stop();
+	//r.stop();
 	int n = example.queryPerson();
 	std::vector<readUserInfo> m_readInfo = RegUserInfo::getUserInfo();
 	std::string strName = m_readInfo[n].get<1>();
@@ -98,6 +107,7 @@ void CSignOutUI::ShowMatchInfo()
 	std::string strIDcard = m_readInfo[n].get<5>();
 	std::string strPhone = m_readInfo[n].get<6>();
 	std::string strCertID = m_readInfo[n].get<7>();
+
 
 	CLabelUI* edit_name = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("Edit_Name")));
 	CLabelUI* edit_age = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("Edit_Age")));
@@ -115,16 +125,18 @@ void CSignOutUI::ShowMatchInfo()
 	edit_phone->SetText(strPhone.c_str());
 	edit_CertID->SetText(strCertID.c_str());
 
-	Picture::Ptr userpic(new Picture(m_readInfo[n].get<9>().rawContent(), 640 * 480 * 3));
-	userpic->SetWidth(640);
-	userpic->SetHeight(480);
+	Picture::Ptr userpic(new Picture(m_readInfo[n].get<9>().rawContent(), width * height * magic));
+	userpic->SetWidth(width);
+	userpic->SetHeight(height);
 
-	CControlUI* Image = m_PaintManager.FindControl(_T("photo_video"));
-	Util::DrawSomething(userpic, Image, GetHWND());
+	std::string path = CPaintManagerUI::GetInstancePath();
+	std::string imageName = userpic->out2bmp(path);
 
-	Sleep(2000);
-	CButtonUI* btn = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("Sign_out")));
-	btn->SetEnabled(true);
+	CHorizontalLayoutUI* hLyt = dynamic_cast<CHorizontalLayoutUI*>(m_PaintManager.FindControl(_T("photo_video")));
+	hLyt->SetBkImage(imageName.c_str());
+
+	CButtonUI* btn_SignIn = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("Sign_out")));
+	btn_SignIn->SetEnabled(true);
 }
 
 void CSignOutUI::handle1(Poco::Notification* pNf)
@@ -147,11 +159,9 @@ void CSignOutUI::handle1(Poco::Notification* pNf)
 
 void CSignOutUI::match_resulut()
 {
-	CButtonUI* btn = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("Sign_out")));
 	CLabelUI* lab = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("match_result")));
 	std::string str = LangueConfig::GetShowText(6);
 	lab->SetText(str.c_str());
-	btn->SetEnabled(true);
 	ShowMatchInfo();
 }
 
@@ -162,6 +172,18 @@ void CSignOutUI::onTimer(Poco::Timer& timer)
 	{
 		painting = false;
 		match_resulut();
-		//t.stop();
+		endTime();
 	}
 }
+
+LRESULT CSignOutUI::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+{
+	if (uMsg == WM_DESTROY && m_closeApp)
+	{
+		::ShowWindow(::FindWindow("Shell_TrayWnd", NULL), SW_SHOW);
+		::PostQuitMessage(0);
+	}
+	bHandled = FALSE;
+	return 0;
+}
+

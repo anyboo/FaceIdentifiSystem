@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "LogInUI.h"
-#include "LangueConfig.h"
+#include "SettingConfig.h"
 
 CLogInUI::CLogInUI()
 {
