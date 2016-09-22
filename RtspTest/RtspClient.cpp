@@ -78,7 +78,7 @@ bool RtspClient::start(const char* pURL, ThreadCallback callback, PVOID pDlg)
 		return false;
 	}
 
-	av_dump_format(_FormatCtx, 0, pURL, 0);
+	//av_dump_format(_FormatCtx, 0, pURL, 0);
 	//save AVFrame	
 	_Frame = av_frame_alloc();
 	_FrameRGB = av_frame_alloc();
