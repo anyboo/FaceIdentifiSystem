@@ -105,6 +105,7 @@ void CSettingUI::OnSaveLog(TNotifyUI& msg)
 	ofn.Flags = OFN_CREATEPROMPT | OFN_PATHMUSTEXIST | OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT;
 	ofn.lpstrTitle = TEXT("±£´æµ½");
 	BOOL bSel = GetSaveFileName(&ofn);
+<<<<<<< HEAD
 }
 
 
@@ -211,4 +212,6 @@ LRESULT CSettingUI::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam,
 	}
 	bHandled = FALSE;
 	return 0;
+=======
+>>>>>>> remotes/origin/TheFirstVersion
 }

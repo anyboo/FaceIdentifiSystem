@@ -15,10 +15,13 @@
 CMonitoringUI::CMonitoringUI()
 	:r(new Camera)
 {
+<<<<<<< HEAD
 	m_closeApp = true;
 	m_bSendMsg = false;
 	ValueSetting vSet;
 	m_timeInterval = std::stoi(vSet.GetTime_interval()) * 1000 - 15000;
+=======
+>>>>>>> remotes/origin/TheFirstVersion
 	//m_pCompare = new BitMapCompare(this);
 	//Poco::ThreadPool::defaultPool().start(*m_pCompare);
 }
@@ -121,7 +124,13 @@ void CMonitoringUI::handle1(Poco::Notification* pNf)
 	Picture::Ptr pic(nf->data());
 	poco_check_ptr(pic.get());
 
+<<<<<<< HEAD
 	Util::DrawSomething(pic, m_photo_Ctrl, GetHWND());
+=======
+
+	CControlUI* Image = m_PaintManager.FindControl(_T("photo_video"));
+	Util::DrawSomething(pic, Image, GetHWND());
+>>>>>>> remotes/origin/TheFirstVersion
 }
 
 LRESULT CMonitoringUI::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
@@ -173,6 +182,7 @@ void CMonitoringUI::OnTimer2()
 		KillTimer(GetHWND(), 2);
 		SetTimer(GetHWND(), 1, m_timeInterval, nullptr);
 	}
+<<<<<<< HEAD
 	else if (!example.queryResult() && m_nowTime - m_lastTime > 15)
 	{
 		KillTimer(GetHWND(), 2);
@@ -206,3 +216,7 @@ void CMonitoringUI::OnTimer4()
 {
 	m_bSendMsg = (m_bSendMsg == false ? true : false);
 }
+=======
+	return 0;
+}
+>>>>>>> remotes/origin/TheFirstVersion
