@@ -4,7 +4,8 @@
 	<Font shared="true" id="9" name="微软雅黑" size="80" bold="false" />
 	<VerticalLayout bkimage="file='skin/beijing.png'" height="765" inset="4,4,4,4" bordersize="4" bordercolor="0x12345678">
 		<VerticalLayout width="679" height="425" bkimage="skin/1.png" padding="173,120,0,0">
-			<Label text="人脸识别系统" font="9" width="679" height="425" align="center"/>
+			<Label text="消控室人员" font="9" width="679" height="180" align="center" valign="bottom"/>
+			<Label text="监管系统" font="9" width="679" height="210" align="center" valign="top" padding="0,40,0,0"/>
 		</VerticalLayout>
 		<HorizontalLayout height="200" >
 			<Button name="bt_monitoring" width="100" height="100" text="监控" font="0" textpadding="0,46,0,0" foreimage="file='skin/4.png' dest='22,10,78,51'"  padding="20,80,10,20" normalimage="file='skin/push.png'" pushedimage="file='skin/hotimage.png'" hotimage="file='skin/normal.png'"/>

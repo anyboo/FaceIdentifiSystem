@@ -3,7 +3,21 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "MainWnd.h"
+
+
+#include <windows.h>
+#include <objbase.h>
+#include <shellapi.h>
+#include "QMFileSqlite.h"
+#include "RegUserInfo.h"
+#include "log.h"
+#include "SettingConfig.h"
+
+#include "THFaceImage_i.h"
+#include "THFeature_i.h"
+
 #include "AppInitialize.h"
+
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpCmdLine*/, int nCmdShow)
 {
@@ -12,6 +26,29 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 
 	HRESULT Hr = ::CoInitialize(NULL);
 	if (FAILED(Hr)) return 0;
+
+//	Loggering::Logger_initiation();
+
+	//init face
+	//THFI_Param param;
+//	ValueSetting set;
+//	param.nMinFaceSize = std::stoi(set.GetFaceSize());
+	//param.nRollAngle = 145;
+	//param.bOnlyDetect = true;
+	//THFI_Create(1, &param);
+
+	//short ret = EF_Init(1);
+	//if (ret == 1)
+	//{
+	//	cout << "Feature init ok" << endl;
+	//}
+
+
+	//init database
+	QFileSqlite *pDb = QFileSqlite::getInstance();
+	pDb->createTable(CREATE_USER_INFO_TABLE);
+	
+//	RegUserInfo::init();
 
 	CAppInitialize  initial;
 	
@@ -22,7 +59,14 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 	pFrame->CenterWindow();
 	pFrame->ShowWindow(true);
 
+	
+	::ShowWindow(::FindWindow("Shell_TrayWnd", NULL), SW_HIDE);
+
 	CPaintManagerUI::MessageLoop();
+
+//	THFI_Release();
+//	EF_Release();
+
 
 	::CoUninitialize();
 

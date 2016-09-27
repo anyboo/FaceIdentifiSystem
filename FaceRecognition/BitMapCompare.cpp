@@ -2,6 +2,7 @@
 #include "BitMapCompare.h"
 #include <queue>
 #include "MonitoringUI.h"
+#include "log.h"
 
 
 using namespace cv;
@@ -95,6 +96,7 @@ void BitMapCompare::CompareBitmap(BYTE *pFirst, BYTE *pSecond, long nFirstWidth,
 		t_end = GetTickCount();
 		char sztmp[50] = { 0 };
 		sprintf_s(sztmp, "compare result:%f, time: %d", score, t_end - t_start);
+		
 		std::cout << sztmp << std::endl;
 	}
 	else
