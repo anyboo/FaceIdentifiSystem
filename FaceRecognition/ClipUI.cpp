@@ -1,16 +1,17 @@
 #include "stdafx.h"
 #include "ClipUI.h"
 
-CClipUI::CClipUI()
+CClipUI::CClipUI():
+t(100, 50), tc(*this, &CClipUI::onTimer)
 {
-	
+	t.start(tc);
 }
 
 
 CClipUI::~CClipUI()
 {
+	t.stop();
 }
-
 
 LPCTSTR CClipUI::GetClass() const
 {
@@ -23,24 +24,38 @@ LPVOID CClipUI::GetInterface(LPCTSTR pstrName)
 	return CControlUI::GetInterface(pstrName);
 }
 
+void CClipUI::onTimer(Poco::Timer& timer)
+{
+	Invalidate();
+}
+
+#include <sstream>
+
+void debug_msg(std::string tip, unsigned long seconds)
+{
+	std::stringstream ss;
+	ss << tip << "- StopWatch:" << seconds << "ms" << std::endl;
+	OutputDebugStringA(ss.str().c_str());
+}
 bool CClipUI::DoPaint(HDC hDC, const RECT& rcPaint, CControlUI* pStopControl)
 {
-	if (_picture.isNull()) return true;
-
-	poco_check_ptr(_picture.get());
-	_picture->MirrorDIB(true);
-
-	//PAINTSTRUCT ps;
-	//::BeginPaint(hwnd, &ps);
-
-
 	::SetStretchBltMode(hDC, COLORONCOLOR);
 
+	::StretchDIBits(hDC, GetX(), GetY(), GetWidth(), GetHeight(),
+		0, 0, _image->width(), _image->height(), _image->data(), &bi,
+		DIB_RGB_COLORS, SRCCOPY);
+	sw.stop();
+
+	return true;
+}
+
+void CClipUI::CreateBitmapInfo()
+{
 	BITMAPINFOHEADER bih;
 
 	bih.biSize = 40;
-	bih.biWidth = _picture->width();
-	bih.biHeight = _picture->height();
+	bih.biWidth = _image->width();
+	bih.biHeight = _image->height();
 	bih.biPlanes = 1;
 	bih.biBitCount = 24;
 	bih.biCompression = BI_RGB;
@@ -50,17 +65,17 @@ bool CClipUI::DoPaint(HDC hDC, const RECT& rcPaint, CControlUI* pStopControl)
 	bih.biClrUsed = 0;
 	bih.biClrImportant = 0;
 
-	BITMAPINFO bi;
+	
 	memset(&bi, 0, sizeof(bi));
 	memcpy(&(bi.bmiHeader), &bih, sizeof(BITMAPINFOHEADER));
 	int iWidth = bih.biWidth;
 	int iHeight = bih.biHeight;
-
-	::StretchDIBits(hDC, GetX(), GetY(), GetWidth(), GetHeight(),
-		0, 0, _picture->width(), _picture->height(), _picture->data(), &bi,
-		DIB_RGB_COLORS, SRCCOPY);
-
-	/*::EndPaint(hwnd, &ps);
-	::ReleaseDC(hwnd, hDC);*/
-	return true;
 }
+
+void CClipUI::PushImage(Picture::Ptr pic)
+{
+	_image = pic;
+	_image->MirrorDIB(true);
+	CreateBitmapInfo();
+}
+

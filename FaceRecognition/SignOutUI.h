@@ -29,6 +29,7 @@ public:
 
 	void ShowMatchInfo();
 
+
 private:
 	int				m_nBmp;
 	CRegisterInfo*	m_RegInfo;
@@ -40,6 +41,14 @@ private:
 	Poco::TimerCallback<CSignOutUI> tc;
 	bool enableCompare;
 	bool painting;
+
+	const int width = 640;
+	const int height = 480;
+	const int magic = 3;
+
+	bool		m_closeApp;
+	virtual LRESULT HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+
 protected:
 	virtual LPCTSTR GetWindowClassName() const;
 	virtual CDuiString GetSkinFolder();

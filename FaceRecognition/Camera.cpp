@@ -4,6 +4,7 @@
 #include <Poco/Buffer.h>
 #include <Poco/NotificationCenter.h>
 #include "CaptureNotification.h"
+#include "log.h"
 
 using Poco::NotificationCenter;
 using Poco::Buffer;
@@ -21,6 +22,7 @@ Camera::Camera()
 	}
 	catch (Poco::Exception& e)
 	{
+		poco_information_f3(logger_handle, "Camera Init %s : width :%l, height :%l", e.message(), _width, _height);
 	}
 	
 }

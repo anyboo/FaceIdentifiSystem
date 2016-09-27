@@ -20,7 +20,6 @@ void Recorder::start()
 		poco_check_ptr(_camera.get());
 		_camera->Open();
 		t.start(tc);
-		sw.start();
 		_running = true;
 	}
 }
@@ -32,8 +31,6 @@ void Recorder::stop()
 		poco_check_ptr(_camera.get());
 		_camera->Close();
 		t.stop();
-		sw.stop();
-		sw.reset();
 		_running = false;
 	}
 }

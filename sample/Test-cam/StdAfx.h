@@ -23,17 +23,15 @@
 #include <afxcmn.h>			// MFC support for Windows Common Controls
 #endif // _AFX_NO_AFXCMN_SUPPORT
 
-#include "cv.h"
-#include "cxcore.h"
-#include "highgui.h"
-
-using namespace cv;
 
 #include "../../include-mt/THFaceImage_i.h"
 #pragma comment (lib, "../../lib-mt/THFaceImage.lib")
 
 #include "../../include-mt/THFeature_i.h"
 #pragma comment(lib,"../../lib-mt/THFeature.lib")
+
+//#include "../../include-mt/THFace_i.h"
+//#pragma comment (lib, "../../lib-mt/THFace.lib")
 
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++ will insert additional declarations immediately before the previous line.

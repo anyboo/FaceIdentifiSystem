@@ -1,36 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Window size="1024,768" caption="0,0,0,0" roundcorner="4,4" showdirty="false">
+<Window>
 	<Font shared="true" id="1" name="微软雅黑" size="18" bold="false" />
 	<Font shared="true" id="8" name="微软雅黑" size="26" bold="false" />
-	<VerticalLayout bkimage="file='skin/RegBJ.png'" height="765" bordersize="3" bordercolor="0x12345678">
-		<HorizontalLayout width="1024" height="70" >
-			<Button name="close_btn2" width="44" height="44" padding="10,10,0,0" tooltip="返回" normalimage="file='skin/back_normal.png'" hotimage="file='skin/back_hot.png'" pushedimage="file='skin/back_push.png'"/>
-			<Label text="系统设置" font="8" padding="400,0,0,0" textcolor="#FFFFFFFF" align="center" />
-		</HorizontalLayout>
-		<HorizontalLayout padding="80,0,0,0" width="900" height="300">
-					<VerticalLayout width="110">
-						<Label text="摄像头1：" font="1" width="100" height="40" align="left" padding="10,20,0,0"/>
-						<Label text="摄像头2：" font="1" width="100" height="40" align="left" padding="10,10,0,0"/>
-						<Label text="频率：" font="1" width="100" height="40" align="left" padding="10,10,0,0"/>
-						<Label text="间隔时间：" font="1" width="100" height="40" align="left" padding="10,10,0,0"/>
-						<Button text="保存日志" textcolor="0xFFFF0000" font="1" width="100" height="40" padding="10,10,0,0" textcolor="#FFFFFFFF" normalimage="file='skin/regok_normal.png'" hotimage="file='skin/regok_hot.png'" pushedimage="file='skin/regok_push.png'"/>
-					</VerticalLayout>
-					<VerticalLayout width="300">
-						<Edit name="Edit_Name" width="290" height="40" font="1"  padding="0,20,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
-						<Edit name="Edit_Age" width="290" height="40" font="1"  padding="0,10,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
-						<Edit name="Edit_Birth" width="290" height="40" font="1"  padding="0,10,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
-						<Edit name="Edit_Address" width="290" height="40" font="1"  padding="0,10,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
-					</VerticalLayout>
-					<VerticalLayout>
-						<Label text="(IP)" font="1" width="100" height="40" align="left" padding="0,20,0,0"/>
-						<Label text="(IP)" font="1" width="100" height="40" align="left" padding="0,10,0,0"/>
-						<Label text="秒" font="1" width="100" height="40" align="left" padding="0,10,0,0"/>
-						<Label text="分钟" font="1" width="100" height="40" align="left" padding="0,10,0,0"/>
-					</VerticalLayout>
-		</HorizontalLayout  >
-		<HorizontalLayout padding="80,0,0,0" width="900">
-			<Button name="saveConfig" text="保存配置" textcolor="0xFFFF0000" font="1" width="100" height="40" padding="10,10,0,0" textcolor="#FFFFFFFF" normalimage="file='skin/regok_normal.png'" hotimage="file='skin/regok_hot.png'" pushedimage="file='skin/regok_push.png'"/>
-			<Button name="resetConfig" text="重置配置" textcolor="0xFFFF0000" font="1" width="100" height="40" padding="80,10,0,0" textcolor="#FFFFFFFF" normalimage="file='skin/regok_normal.png'" hotimage="file='skin/regok_hot.png'" pushedimage="file='skin/regok_push.png'"/>
-		</HorizontalLayout>
+	<VerticalLayout name="subwindow" width="818" height="692">
+		<VerticalLayout>
+			<HorizontalLayout width="740" height="60" padding="60,0,10,0">
+				<Label text="摄像头1：" font="1" width="125" height="40" align="left" padding="10,20,0,0"/>
+				<Edit name="edit_c1" width="290" height="40" font="1"  padding="0,20,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
+				<Label text="(IP)" font="1" width="100" height="40" align="left" padding="10,20,0,0"/>
+			</HorizontalLayout>
+			<HorizontalLayout width="740" height="60" padding="60,0,10,0">
+				<Label text="摄像头2：" font="1" width="125" height="40" align="left" padding="10,20,0,0"/>
+				<Edit name="edit_c1" width="290" height="40" font="1"  padding="0,20,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
+				<Label text="(IP)" font="1" width="100" height="40" align="left" padding="10,20,0,0"/>
+			</HorizontalLayout>
+			<HorizontalLayout width="740" height="60" padding="60,0,10,0">
+				<Label text="最低识别度：" font="1" width="125" height="40" align="left" padding="10,10,0,0"/>
+				<Combo name="combo_siml" height="40" width="290" padding="0,10,0,0" dropboxsize="0,240" itemfont="1" itemlinecolor="0x12345678" bkimage="file='skin/edit.png'" normalimage="file='skin/normol_bntcmb.png' dest='250,0,290,40'" hotimage="file='skin/hot_btncmb.png' dest='250,0,290,40'" pushedimage="file='skin/push_btncmb.png' dest='250,0,290,40'" itemhotimage="file='skin/item1.png'">
+					<ListLabelElement name="Item1" text="0.4" bordersize="1" bordercolor="0x12345678"/>
+					<ListLabelElement name="Item2" text="0.5" bordersize="1" bordercolor="0x12345678"/>
+					<ListLabelElement name="Item3" text="0.6" bordersize="1" bordercolor="0x12345678" selected="true"/>
+					<ListLabelElement name="Item4" text="0.7" bordersize="1" bordercolor="0x12345678"/>
+					<ListLabelElement name="Item5" text="0.8" bordersize="1" bordercolor="0x12345678"/>
+					<ListLabelElement name="Item6" text="0.9" bordersize="1" bordercolor="0x12345678"/>
+				</Combo>
+			</HorizontalLayout>
+			<HorizontalLayout width="740" height="60" padding="60,0,10,0">
+				<Label text="间隔时间：" font="1" width="125" height="40" align="left" padding="10,10,0,0"/>
+				<Combo name="combo_time" height="40" width="290" padding="0,10,0,0" dropboxsize="0,200" itemfont="1" itemlinecolor="0x12345678" bkimage="file='skin/edit.png'" normalimage="file='skin/normol_bntcmb.png' dest='250,0,290,40'" hotimage="file='skin/hot_btncmb.png' dest='250,0,290,40'" pushedimage="file='skin/push_btncmb.png' dest='250,0,290,40'" itemhotimage="file='skin/item1.png'">
+					<ListLabelElement name="tab1" text="30" bordersize="1" bordercolor="0x12345678" selected="true"/>
+					<ListLabelElement name="tab2" text="60" bordersize="1" bordercolor="0x12345678"/>
+					<ListLabelElement name="tab3" text="300" bordersize="1" bordercolor="0x12345678"/>
+					<ListLabelElement name="tab4" text="600" bordersize="1" bordercolor="0x12345678"/>
+					<ListLabelElement name="tab5" text="1800" bordersize="1" bordercolor="0x12345678"/>
+				</Combo>
+				<Label text="秒" font="1" width="100" height="40" align="left" padding="10,10,0,0"/>
+			</HorizontalLayout>
+			<HorizontalLayout width="740" height="60" padding="60,0,10,0">
+				<Label text="面部捕获大小：" font="1" width="125" height="40" align="left" padding="10,10,0,0"/>
+				<Combo name="combo_FaceSize" height="40" width="290" padding="0,10,0,0" dropboxsize="0,200" itemfont="1" itemlinecolor="0x12345678" bkimage="file='skin/edit.png'" normalimage="file='skin/normol_bntcmb.png' dest='250,0,290,40'" hotimage="file='skin/hot_btncmb.png' dest='250,0,290,40'" pushedimage="file='skin/push_btncmb.png' dest='250,0,290,40'" itemhotimage="file='skin/item1.png'">
+					<ListLabelElement name="choice1" text="50" bordersize="1" bordercolor="0x12345678"/>
+					<ListLabelElement name="choice2" text="70" bordersize="1" bordercolor="0x12345678"/>
+					<ListLabelElement name="choice3" text="90" bordersize="1" bordercolor="0x12345678"/>
+					<ListLabelElement name="choice4" text="110" bordersize="1" bordercolor="0x12345678"/>
+					<ListLabelElement name="choice5" text="130" bordersize="1" bordercolor="0x12345678"/>
+					<ListLabelElement name="choice6" text="150" bordersize="1" bordercolor="0x12345678" selected="true"/>
+				</Combo>
+			</HorizontalLayout>
+			<HorizontalLayout width="740" height="80" padding="60,0,10,0">
+				<Button name="saveLog" text="保存日志" textcolor="0xFFFF0000" font="1" width="100" height="40" padding="10,30,0,0" textcolor="#FFFFFFFF" normalimage="file='skin/regok_normal.png'" hotimage="file='skin/regok_hot.png'" pushedimage="file='skin/regok_push.png'"/>
+				<Button name="saveConfig" text="保存配置" textcolor="0xFFFF0000" font="1" width="100" height="40" padding="60,30,0,0" textcolor="#FFFFFFFF" normalimage="file='skin/regok_normal.png'" hotimage="file='skin/regok_hot.png'" pushedimage="file='skin/regok_push.png'"/>
+				<Button name="resetConfig" text="重置配置" textcolor="0xFFFF0000" font="1" width="100" height="40" padding="60,30,0,0" textcolor="#FFFFFFFF" normalimage="file='skin/regok_normal.png'" hotimage="file='skin/regok_hot.png'" pushedimage="file='skin/regok_push.png'"/>
+			</HorizontalLayout>
+			<Label name="result" text="" textcolor="#FFFF0000" font="8" width="300" height="40" padding="70,30,0,0" />
+		</VerticalLayout>
 	</VerticalLayout>
 </Window>

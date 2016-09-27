@@ -88,18 +88,22 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ActivityDispatcher.h" />
-    <ClInclude Include="BitMapCompare.h" />
+    <ClInclude Include="AppInitialize.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CaptureNotification.h" />
     <ClInclude Include="CaptureNotify.h" />
     <ClInclude Include="ClipUI.h" />
+
+    <ClInclude Include="DeviceManage.h" />
+
+    <ClInclude Include="Employee.h" />
     <ClInclude Include="FaceImage.h" />
     <ClInclude Include="FaceMatch.h" />
     <ClInclude Include="FacePosition.h" />
     <ClInclude Include="FaceFeature.h" />
     <ClInclude Include="InitDevice.h" />
     <ClInclude Include="DatabaseException.h" />
-    <ClInclude Include="LangueConfig.h" />
+    <ClInclude Include="SettingConfig.h" />
     <ClInclude Include="log.h" />
     <ClInclude Include="LogInUI.h" />
     <ClInclude Include="MainWnd.h" />
@@ -121,11 +125,15 @@
   <ItemGroup>
     <ClCompile Include="ActivityDispatcher.cpp" />
     <ClCompile Include="App.cpp" />
-    <ClCompile Include="BitMapCompare.cpp" />
+    <ClCompile Include="AppInitialize.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CaptureNotification.cpp" />
     <ClCompile Include="CaptureNotify.cpp" />
     <ClCompile Include="ClipUI.cpp" />
+
+    <ClCompile Include="DeviceManage.cpp" />
+
+    <ClCompile Include="Employee.cpp" />
     <ClCompile Include="FaceImage.cpp" />
     <ClCompile Include="FaceMatch.cpp" />
     <ClCompile Include="FacePosition.cpp" />
