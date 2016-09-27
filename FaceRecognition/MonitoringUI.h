@@ -27,13 +27,12 @@ public:
 	DUI_DECLARE_MESSAGE_MAP();
 
 	void OnCloseWnd(TNotifyUI& msg);
-<<<<<<< HEAD
+
 	void OnRemoveAlarm();
 	void OnInitCtrl();
-=======
+
 	void OnRemoveAlarm(TNotifyUI& msg);
 
->>>>>>> remotes/origin/TheFirstVersion
 
 	virtual LRESULT HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	virtual LRESULT OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
@@ -54,7 +53,7 @@ private:
 	}
 
 private:
-<<<<<<< HEAD
+
 	std::queue<writeCompareInfo>		 m_compare;
 	Poco::BasicEvent<bool>				 m_theEvent;
 	BitMapCompare*						 m_pCompare;
@@ -73,15 +72,6 @@ private:
 	CVerticalLayoutUI*					m_Main_Lyt;
 	CControlUI*							m_photo_Ctrl;
 	CLabelUI*							m_Prompt_lab;
-=======
-	std::queue<writeCompareInfo> m_compare;
-	Poco::BasicEvent<bool> m_theEvent;
-	BitMapCompare *m_pCompare;
-	std::queue<CapBitmapData> m_capdata;
-	Recorder r;
-	ActivityDispatcher example;
-	long  m_count;
->>>>>>> remotes/origin/TheFirstVersion
 
 protected:
 	virtual LPCTSTR GetWindowClassName() const;

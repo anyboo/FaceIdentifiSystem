@@ -112,12 +112,6 @@ void MatchUI::SignIn(TNotifyUI& msg)
 
 void MatchUI::ShowMatchInfo()
 {
-<<<<<<< HEAD
-
-	//r.stop();
-=======
-	r.stop();
->>>>>>> remotes/origin/TheFirstVersion
 	int n = example.queryPerson();
 	std::vector<readUserInfo> m_readInfo = RegUserInfo::getUserInfo();
 	std::string strName = m_readInfo[n].get<1>();
@@ -145,22 +139,14 @@ void MatchUI::ShowMatchInfo()
 	edit_address->SetText(strIDcard.c_str());
 	edit_phone->SetText(strPhone.c_str());
 	edit_CertID->SetText(strCertID.c_str());
-
-<<<<<<< HEAD
 	Picture::Ptr userpic(new Picture(m_readInfo[n].get<9>().rawContent(), width * height * magic));
 	userpic->SetWidth(width);
 	userpic->SetHeight(height);
 	
 	std::string path = CPaintManagerUI::GetInstancePath();
 	std::string imageName = userpic->out2bmp(path);
-=======
-	Picture::Ptr userpic(new Picture(m_readInfo[n].get<9>().rawContent(), 640 * 480 * 3));
-	userpic->SetWidth(640);
-	userpic->SetHeight(480);
-	CControlUI* Image = m_PaintManager.FindControl(_T("photo_video"));
-	Util::DrawSomething(userpic, Image, GetHWND());
->>>>>>> remotes/origin/TheFirstVersion
 
+	
 	CHorizontalLayoutUI* hLyt = dynamic_cast<CHorizontalLayoutUI*>(m_PaintManager.FindControl(_T("photo_video")));
 	CButtonUI* btn_SignIn = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("Sign_In")));
 	hLyt->SetBkImage(imageName.c_str());

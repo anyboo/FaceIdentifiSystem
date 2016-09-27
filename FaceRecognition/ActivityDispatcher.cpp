@@ -70,14 +70,11 @@ void ActivityDispatcher::runActivity()
 						{
 							_serial = i;
 						}
-<<<<<<< HEAD
 						t_end = GetTickCount();
 						poco_information_f2(logger_handle, "compare result:%d, time:%d", (int)ret, (int)(t_end - t_start));
-=======
 						std::stringstream ostr;
 						ostr << "result:" << ret << std::endl;
 						OutputDebugStringA(ostr.str().c_str());
->>>>>>> remotes/origin/TheFirstVersion
 						commitResult(ret);
 					}					
 					FaceMatch::AddArgs args = { pic };
@@ -110,7 +107,6 @@ int ActivityDispatcher::queryPerson()
 
 bool ActivityDispatcher::queryResult()
 {
-<<<<<<< HEAD
 //	return false;
 
 	Poco::Stopwatch sw;
@@ -154,12 +150,8 @@ void ActivityDispatcher::PrepareChannel()
 	}
 }
 
-=======
-	return _results;
-}
+//int ActivityDispatcher::queryPerson()
+//{
+//	return _serial;
+//}
 
-int ActivityDispatcher::queryPerson()
-{
-	return _serial;
-}
->>>>>>> remotes/origin/TheFirstVersion

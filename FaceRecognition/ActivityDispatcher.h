@@ -29,15 +29,10 @@ private:
 	Poco::NotificationQueue _queue;
 	static Poco::FastMutex  _mutex;
 	bool _results;
-<<<<<<< HEAD
 
 	int _serial;
 
 	std::list<Result> _resultSet;
 	size_t _channelNum;
-
-=======
-	int _serial;
->>>>>>> remotes/origin/TheFirstVersion
 };
 

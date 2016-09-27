@@ -96,11 +96,8 @@ void CSignOutUI::OnFilishMatch(TNotifyUI& msg)
 
 void CSignOutUI::ShowMatchInfo()
 {
-<<<<<<< HEAD
 	//r.stop();
-=======
 	r.stop();
->>>>>>> remotes/origin/TheFirstVersion
 	int n = example.queryPerson();
 	std::vector<readUserInfo> m_readInfo = RegUserInfo::getUserInfo();
 	std::string strName = m_readInfo[n].get<1>();
@@ -111,10 +108,6 @@ void CSignOutUI::ShowMatchInfo()
 	std::string strIDcard = m_readInfo[n].get<5>();
 	std::string strPhone = m_readInfo[n].get<6>();
 	std::string strCertID = m_readInfo[n].get<7>();
-<<<<<<< HEAD
-
-=======
->>>>>>> remotes/origin/TheFirstVersion
 
 	CLabelUI* edit_name = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("Edit_Name")));
 	CLabelUI* edit_age = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("Edit_Age")));
@@ -131,16 +124,9 @@ void CSignOutUI::ShowMatchInfo()
 	edit_address->SetText(strIDcard.c_str());
 	edit_phone->SetText(strPhone.c_str());
 	edit_CertID->SetText(strCertID.c_str());
-
-<<<<<<< HEAD
 	Picture::Ptr userpic(new Picture(m_readInfo[n].get<9>().rawContent(), width * height * magic));
 	userpic->SetWidth(width);
 	userpic->SetHeight(height);
-=======
-	Picture::Ptr userpic(new Picture(m_readInfo[n].get<9>().rawContent(), 640 * 480 * 3));
-	userpic->SetWidth(640);
-	userpic->SetHeight(480);
->>>>>>> remotes/origin/TheFirstVersion
 
 	std::string path = CPaintManagerUI::GetInstancePath();
 	std::string imageName = userpic->out2bmp(path);
