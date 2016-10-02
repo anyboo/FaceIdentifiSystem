@@ -60,8 +60,8 @@ void CMainWnd::Notify(TNotifyUI& msg)
 
 void CMainWnd::OnCloseWnd(TNotifyUI& msg)
 {
-	::ShowWindow(::FindWindow("Shell_TrayWnd", NULL), SW_SHOW);
-	::PostQuitMessage(0L);
+	/*::ShowWindow(::FindWindow("Shell_TrayWnd", NULL), SW_SHOW);
+	::PostQuitMessage(0L);*/
 }
 
 void CMainWnd::OnRegisterWnd(TNotifyUI& msg)
@@ -152,8 +152,8 @@ LRESULT CMainWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	if (uMsg == WM_DESTROY)
 	{
-		::ShowWindow(::FindWindow("Shell_TrayWnd", NULL), SW_SHOW);
-		::PostQuitMessage(0);
+		/*::ShowWindow(::FindWindow("Shell_TrayWnd", NULL), SW_SHOW);
+		::PostQuitMessage(0);*/
 	}
 	else if (uMsg == WM_KEYDOWN)
 	{
