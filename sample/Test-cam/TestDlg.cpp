@@ -5,7 +5,6 @@
 #include "Test.h"
 #include "TestDlg.h"
 #include <math.h>
-#include <iostream>
 /*
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -15,7 +14,7 @@ static char THIS_FILE[] = __FILE__;
 
   */
 
-static void SaveBmp(BITMAPINFO& bi, BYTE* pDataBuf);
+
 /////////////////////////////////////////////////////////////////////////////
 // CAboutDlg dialog used for App About
 
@@ -66,6 +65,7 @@ END_MESSAGE_MAP()
 
 CTestDlg::CTestDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CTestDlg::IDD, pParent)
+	, ptfp(CTestDlg::maxFace)
 {
 	//{{AFX_DATA_INIT(CTestDlg)
 	m_bEnroll = FALSE;
@@ -76,6 +76,9 @@ CTestDlg::CTestDlg(CWnd* pParent /*=NULL*/)
 	m_pCap=NULL;
 
 	m_nFeatureSize=0;
+
+	m_pGrayCached = new BYTE[MAXIMG_W_H];
+	m_pGrayZoom = new BYTE[MAXIMG_W_H];
 }
 
 void CTestDlg::DoDataExchange(CDataExchange* pDX)
@@ -130,11 +133,14 @@ BOOL CTestDlg::OnInitDialog()
 	//  when the application's main window is not a dialog
 	SetIcon(m_hIcon, TRUE);			// Set big icon
 	SetIcon(m_hIcon, FALSE);		// Set small icon
-
+#ifdef NEWSDK
+	THFaceInit(0);
+	m_nFeatureSize = THFaceGetFeatureSize();
+#else
 	THFI_Param param;
 
-	param.nMinFaceSize=150;
-	param.nRollAngle=145;
+	param.nMinFaceSize=50;
+	param.nRollAngle=45;
 	param.bOnlyDetect=true;
 	THFI_Create(1,&param);
 
@@ -143,8 +149,8 @@ BOOL CTestDlg::OnInitDialog()
 	{
 		//AfxMessageBox("Feature init ok");
 	}
-
-	m_nFeatureSize=EF_Size();
+	m_nFeatureSize = EF_Size();
+#endif
 	m_pEnrollFeature=new BYTE[m_nFeatureSize];
 
 	CString str;
@@ -208,13 +214,15 @@ HCURSOR CTestDlg::OnQueryDragIcon()
 
 BOOL CTestDlg::DestroyWindow() 
 {
-	//bool b = m_pCap->SetVideoFile("video.avi");
+
 	KillTimer(100);
 	Sleep(200);
-
+#ifdef NEWSDK
+	THFaceUnInit();
+#else
 	THFI_Release();
 	EF_Release();
-	
+#endif
 
 	try
 	{
@@ -240,37 +248,6 @@ BOOL CTestDlg::DestroyWindow()
 	return CDialog::DestroyWindow();
 }
 
-BYTE* LoadBmpFile(std::string strFilePath, long& nlen, long& nWidth, long& nHeight)
-{	
-	Mat im1 = imread(strFilePath);
-
-	if (im1.empty())
-	{
-		std::cout << ("Load Photo1 File failed.") << std::endl;
-		return NULL;
-	}
-
-	nWidth = im1.cols;
-	nHeight = im1.rows;
-
-	nlen = im1.total();
-	if (nlen > 0)
-	{
-		BYTE *pdata = new BYTE[nlen];
-		memset(pdata, 0, nlen);
-		memcpy(pdata, im1.data, nlen);
-
-		return  pdata;
-	}
-	
-	return NULL;
-}
-
-Mat LoadBmpFile1(std::string strFilePath)
-{
-	Mat im =imread(strFilePath);
-	return im;
-}
 
 void ContructBih(int nWidth,int nHeight,BITMAPINFOHEADER& bih)
 {
@@ -286,88 +263,6 @@ void ContructBih(int nWidth,int nHeight,BITMAPINFOHEADER& bih)
 	bih.biClrUsed=0;
 	bih.biClrImportant=0;
 }
-
-void CompareBitmap(BYTE *pFirst, BYTE *pSecond, long nFirstWidth, long nSecondWidth, long nFirstHeight, long nSecondHeight, float& fRet)
-{
-	long t_start, t_end;
-	t_start = GetTickCount();
-	int k;
-	//face detect
-	THFI_FacePos ptfp1[1];
-	
-	for (k = 0; k<1; k++)
-	{
-		ptfp1[k].dwReserved = (DWORD)new BYTE[512];
-	}
-	//��ȡ�沿
-	int nNum1 = THFI_DetectFace(0, pFirst, 24, nFirstWidth, nFirstHeight, ptfp1, 1);//only process one face
-
-	//RECT rcFace = ptfp1[0].rcFace;
-	//��һ����Ƭ��Ҫ�Ƚϵ�����
-	BYTE* pFeature1 = new BYTE[EF_Size()];
-
-	//only extract the first face(max size face)��ȡ�沿��Ϣ
-	int ret = EF_Extract(0, pFirst, nFirstWidth, nFirstHeight, 3, (DWORD)&ptfp1[0], pFeature1);
-	if (ret)
-	{
-
-	}
-	else
-	{
-		delete[]pFeature1;
-		pFeature1 = NULL;
-	}
-	for (k = 0; k<1; k++)
-	{
-		delete[](BYTE*)ptfp1[k].dwReserved;
-	}
-
-	//face detect��ȡ�沿��Ϣ
-	THFI_FacePos ptfp2[1];
-	for (k = 0; k<1; k++)
-	{
-		ptfp2[k].dwReserved = (DWORD)new BYTE[512];
-	}
-	int nNum2 = THFI_DetectFace(0, pSecond, 24, nSecondWidth, nSecondHeight, ptfp2, 1);
-	//rcFace = ptfp2[0].rcFace;
-
-	BYTE* pFeature2 = new BYTE[EF_Size()];
-
-	//only extract the first face(max size face)��ȡ�Ƚ�����
-	ret = EF_Extract(0, pSecond, nSecondWidth, nSecondHeight, 3, (DWORD)&ptfp2[0], pFeature2);
-	if (ret)
-	{
-
-	}
-	else
-	{
-		delete[]pFeature2;
-		pFeature2 = NULL;
-	}
-
-	for (k = 0; k<1; k++)
-	{
-		delete[](BYTE*)ptfp2[k].dwReserved;
-	}
-
-	if ((nNum1 > 0) && (nNum2 > 0))
-	{
-		float score = 0.0f;
-		score = EF_Compare(pFeature1, pFeature2);
-		fRet = score;
-		t_end = GetTickCount();		
-		char sztmp[50] = { 0 };
-		sprintf_s(sztmp, "compare result:%f, time: %d", score, t_end - t_start);
-		std::cout << sztmp << std::endl;
-	}
-	else
-	{		
-		char sztmp[50] = { 0 };
-		sprintf_s(sztmp, "first face num:%d, second face num:%d", nNum1, nNum2);
-		std::cout << sztmp << std::endl;
-	}
-}
-#include <string>
 void DrawBmpBuf(BITMAPINFOHEADER& bih,BYTE* pDataBuf,HWND hShowWnd,BOOL bFitWnd)
 {
 	RECT rc;
@@ -380,8 +275,6 @@ void DrawBmpBuf(BITMAPINFOHEADER& bih,BYTE* pDataBuf,HWND hShowWnd,BOOL bFitWnd)
 	memcpy( &(bi.bmiHeader), &bih, sizeof(BITMAPINFOHEADER) );
 	int iWidth=bih.biWidth;
 	int iHeight=bih.biHeight;
-
-	SaveBmp(bi, pDataBuf);
 
 	// display bitmap
 	HDC hdcStill = ::GetDC( hShowWnd );
@@ -403,43 +296,7 @@ void DrawBmpBuf(BITMAPINFOHEADER& bih,BYTE* pDataBuf,HWND hShowWnd,BOOL bFitWnd)
 
 	::EndPaint( hShowWnd, &ps );
 	::ReleaseDC( hShowWnd, hdcStill );
-
 }
-
-
-void SaveBmp(BITMAPINFO& bi, BYTE* pDataBuf)
-{
-	
-	DWORD word = 0;
-	CString Path = "d:\\bmp\\";
-	::CreateDirectory("d:\\bmp\\", NULL);
-	CString name = "test";
-	CString ext = ".bmp";
-	name += std::to_string(::GetTickCount()).c_str();
-	Path.Append(name);
-	Path.Append(ext);
-	::OutputDebugStringA(Path + "\n");
-	HANDLE hfile = CreateFile(Path, GENERIC_WRITE, FILE_SHARE_READ, 0, CREATE_NEW, FILE_ATTRIBUTE_NORMAL, 0);
-	//fileheader
-	BITMAPFILEHEADER bmfh;                         // Other BMP header
-	int nBitsOffset = sizeof(BITMAPFILEHEADER) + bi.bmiHeader.biSize;
-	LONG lImageSize = bi.bmiHeader.biSizeImage;
-	LONG lFileSize = nBitsOffset + lImageSize;
-	bmfh.bfType = 'B' + ('M' << 8);
-	bmfh.bfOffBits = nBitsOffset;
-	bmfh.bfSize = lFileSize;
-	bmfh.bfReserved1 = bmfh.bfReserved2 = 0;
-	WriteFile(hfile, &bmfh, sizeof(BITMAPFILEHEADER), &word, 0);
-	//header
-	WriteFile(hfile, &bi.bmiHeader, sizeof(BITMAPINFOHEADER), &word, 0);
-	//info
-	//WriteFile(hfile, &bi, sizeof(BITMAPINFO), &word, 0);
-	//data
-	int bit = COLORONCOLOR;
-	WriteFile(hfile, pDataBuf, bi.bmiHeader.biWidth * bi.bmiHeader.biHeight * bit/*bih.biBitCount*/, &word, 0);
-	CloseHandle(hfile);
-}
-
 void TiDrawFaceRects(BYTE* pRgbBuf,int nBufWidth,int nBufHeight,
 				   RECT* pFaceRects,int nRectNum,
 				   COLORREF color,int nPenWidth)
@@ -518,18 +375,18 @@ BOOL MirrorDIB(LPSTR lpDIBBits, LONG lWidth, LONG lHeight, BOOL bDirection,int n
 	 LPSTR	lpSrc; 
 	 // 指向要复制区域的指针
 	 LPSTR	lpDst;	 
-	 // 指向复制图像的指�?
+	 // 指向复制图像的指�
 	 LPSTR	lpBits;
 	 HLOCAL	hBits;	 
 	 // 循环变量
 	 LONG	i;
 	 LONG	j;
-	 int nBits;//每像素占的位�?
+	 int nBits;//每像素占的位�
 	 // 图像每行的字节数
 	 LONG lLineBytes;
 	 // 计算图像每行的字节数
 	 lLineBytes = WIDTHBYTES(lWidth *nImageBits);
-	 // 暂时分配内存，以保存一行图�?
+	 // 暂时分配内存，以保存一行图�
 	 hBits = LocalAlloc(LHND, lLineBytes);
 	 if (hBits == NULL)
 	 {
@@ -575,9 +432,9 @@ BOOL MirrorDIB(LPSTR lpDIBBits, LONG lWidth, LONG lHeight, BOOL bDirection,int n
 			 lpDst = (char *)lpDIBBits + lLineBytes * (lHeight - i - 1);		 
 			 // 备份一行，宽度为lWidth
 			 memcpy(lpBits, lpDst, lLineBytes);
-			 // 将倒数第i行象素复制到第i�?
+			 // 将倒数第i行象素复制到第i�
 			 memcpy(lpDst, lpSrc, lLineBytes);
-			 // 将第i行象素复制到倒数第i�?
+			 // 将第i行象素复制到倒数第i�
 			 memcpy(lpSrc, lpBits, lLineBytes);
 			 
 		 }
@@ -589,151 +446,392 @@ BOOL MirrorDIB(LPSTR lpDIBBits, LONG lWidth, LONG lHeight, BOOL bDirection,int n
 	 return TRUE;
 }
 
-void CTestDlg::OnTimer(UINT nIDEvent) 
+#include "FrImageFunc.h"
+#ifdef NEWSDK
+void CTestDlg::NewSDKMethod()
 {
-	long nWidth=m_capParam.szCap.cx;
-	long nHeight=m_capParam.szCap.cy;
-	long lLength=nWidth*nHeight*3;
-	
+	long nWidth = m_capParam.szCap.cx;
+	long nHeight = m_capParam.szCap.cy;
+	long lLength = nWidth*nHeight * 3;
+	int bpp = 24;
+	const int maxFace = 1;
+
 	HWND hFrameWnd;
-	GetDlgItem(IDC_VIDEO,&hFrameWnd);
-	
-	
-	BYTE* pDataBuf=NULL;
-	
-	BYTE* pCamBuf=new BYTE[lLength];
-	BOOL b=m_pCap->GetFrame(pCamBuf, lLength);
-	if(!b)
+	GetDlgItem(IDC_VIDEO, &hFrameWnd);
+
+
+	BYTE* pDataBuf = NULL;
+
+	BYTE* pCamBuf = new BYTE[lLength];
+	BOOL b = m_pCap->GetFrame(pCamBuf, lLength);
+	if (!b)
 	{
-		delete []pCamBuf;
+		delete[]pCamBuf;
 		return;
 	}
-	MirrorDIB((LPSTR)pCamBuf, nWidth, nHeight, TRUE,24);
-	MirrorDIB((LPSTR)pCamBuf, nWidth, nHeight, FALSE,24);
 
-	BYTE* pFeature=new BYTE[m_nFeatureSize];
+	BYTE * ptRgb8 = NULL;
+	ThFacePos ptfp[maxFace];
+	BYTE* pFeature = new BYTE[m_nFeatureSize];
+	int nFace = 0;
 
-	THFI_FacePos ptfp[1];
-	int k;
-	for(k=0;k<1;k++)
 	{
-		ptfp[k].dwReserved=(DWORD)new BYTE[512];
-	}
-	int nFace=THFI_DetectFace(0,pCamBuf,24,nWidth,nHeight,ptfp,1);//only process one face
+		// 转换成灰度图
+		Rgb24_To_Rgb8(pCamBuf, m_pGrayCached, nWidth, nHeight);
+		ptRgb8 = m_pGrayCached;
 
-	CString str;
-
-
-	if(nFace > 0)
-	{
-		RECT* pFace=new RECT[nFace];
-		BOOL bMouth=TRUE;
-		for(int i=0;i<nFace;++i)
+		//缩放为原来图像的一�?		
+		ResizeImage(m_pGrayCached, nWidth, nHeight, m_pGrayZoom, nWidth / 3, nHeight / 3, 1);
+		ptRgb8 = m_pGrayZoom;
+		
+		nFace = THFaceDetectMT(ptRgb8, nWidth / 3, nHeight / 3, ptfp, pFeature);
+		//pThis->vecRect.clear();
+		for (int i = 0; i < nFace; ++i)
 		{
-			pFace[i]=ptfp[i].rcFace;
+			ptfp[i].rcFace.left *= 3;
+			ptfp[i].rcFace.top *= 3;
+			ptfp[i].rcFace.right *= 3;
+			ptfp[i].rcFace.bottom *= 3;
+			ptfp[i].ptRightEye.x *= 3;
+			ptfp[i].ptLeftEye.x *= 3;
+
+			RECT rcFace = ptfp[i].rcFace;
+			//pThis->vecRect.push_back(rcFace);
+	}
+	
+		FlipV_RGB(pCamBuf, nWidth, nHeight, m_pGrayCached, MAXIMG_W_H);
+		ptRgb8 = m_pGrayCached;
+
+		bpp = 8;
+
+		delete[]pCamBuf;
+		pCamBuf = ptRgb8;
+
+
+		nWidth = nWidth / 3;
+		nHeight = nHeight / 3;
+	}
+
+	//MirrorDIB((LPSTR)pCamBuf, nWidth, nHeight, TRUE, bpp);
+	//MirrorDIB((LPSTR)pCamBuf, nWidth, nHeight, FALSE, bpp);
+
+	if (nFace > 0)
+	{
+		RECT* pFace = new RECT[nFace];
+		BOOL bMouth = TRUE;
+		for (int i = 0; i<nFace; ++i)
+		{
+			pFace[i] = ptfp[i].rcFace;
+
+			{
+				RECT f = ptfp[i].rcFace;
+				CString rc;
+				rc.Format("Face Rect: left:%d, top:%d, right:%d, bottom:%d\n", f.left, f.top, f.right, f.bottom);
+				//OutputDebugStringA(rc);
+
+				POINT angle = ptfp[i].ptAngle;
+				CString ale;
+				ale.Format("FaceAngle: x:%d, y:%d", angle.x, angle.y);
+				OutputDebugStringA(ale);
+
+			}
 		}
 
-		if(m_bEnroll)//enroll
+		if (m_bEnroll)//enroll
 		{
-			int ret=EF_Extract(0,pCamBuf,nWidth,nHeight,3,(DWORD)&ptfp[0],m_pEnrollFeature);
+			//int ret = EF_Extract(0, pCamBuf, nWidth, nHeight, 3, (DWORD)&ptfp[0], m_pEnrollFeature);
 
-			m_bEnroll=FALSE;
+			m_bEnroll = FALSE;
 			UpdateData(FALSE);
 			AfxMessageBox("Enroll OK.");
 		}
-		else if(m_bIdentify)//compare
+		else if (m_bIdentify)//compare
 		{
-			int ret=EF_Extract(0,pCamBuf,nWidth,nHeight,3,(DWORD)&ptfp[0],pFeature);
+			long t_start, t_end;
 
-			float score=EF_Compare(pFeature,m_pEnrollFeature);
+			{
+				t_start = GetTickCount();
+
+				float score = THFaceCompare(pFeature, m_pEnrollFeature);
+
+				t_end = GetTickCount();
+				CString time;
+				time.Format("EF_Compare:time : %d\n", t_end - t_start);
+				OutputDebugStringA(time);
 
 			CString str;
-	    	str.Format("score=%d",(int)(score*100));
-			SetDlgItemText(IDC_SCORE,str);
-		}	
+				str.Format("score=%d", (int)(score * 100));
+				SetDlgItemText(IDC_SCORE, str);
+			}
+
+		}
 
 
 		//draw all face rectangle
-		TiDrawFaceRects(pCamBuf,nWidth,nHeight,pFace,nFace,RGB(0,255,0),4);
+		TiDrawFaceRects(pCamBuf, nWidth, nHeight, pFace, nFace, RGB(0, 255, 0), 4);
 
 		//only draw the first face(eye,mouth...) 
-		RECT rcLeft,rcRight,rcMouth,rcNose;
-		int offset=5;
+		RECT rcLeft, rcRight, rcMouth, rcNose;
+		int offset = 5;
 		//left eye rectangle
-		rcLeft.left=ptfp[0].ptLeftEye.x-offset;
-		rcLeft.top=ptfp[0].ptLeftEye.y-offset;
-		rcLeft.right=ptfp[0].ptLeftEye.x+offset;
-		rcLeft.bottom=ptfp[0].ptLeftEye.y+offset;
+		rcLeft.left = ptfp[0].ptLeftEye.x - offset;
+		rcLeft.top = ptfp[0].ptLeftEye.y - offset;
+		rcLeft.right = ptfp[0].ptLeftEye.x + offset;
+		rcLeft.bottom = ptfp[0].ptLeftEye.y + offset;
 
 		//right eye rectangle
-		rcRight.left=ptfp[0].ptRightEye.x-offset;
-		rcRight.top=ptfp[0].ptRightEye.y-offset;
-		rcRight.right=ptfp[0].ptRightEye.x+offset;
-		rcRight.bottom=ptfp[0].ptRightEye.y+offset;
+		rcRight.left = ptfp[0].ptRightEye.x - offset;
+		rcRight.top = ptfp[0].ptRightEye.y - offset;
+		rcRight.right = ptfp[0].ptRightEye.x + offset;
+		rcRight.bottom = ptfp[0].ptRightEye.y + offset;
 
 		//mouth rectangle
-		rcMouth.left=ptfp[0].ptMouth.x-offset;
-		rcMouth.top=ptfp[0].ptMouth.y-offset;
-		rcMouth.right=ptfp[0].ptMouth.x+offset;
-		rcMouth.bottom=ptfp[0].ptMouth.y+offset;
+		rcMouth.left = ptfp[0].ptMouth.x - offset;
+		rcMouth.top = ptfp[0].ptMouth.y - offset;
+		rcMouth.right = ptfp[0].ptMouth.x + offset;
+		rcMouth.bottom = ptfp[0].ptMouth.y + offset;
 
 		//nose rectangle
-		rcNose.left=ptfp[0].ptNose.x-offset;
-		rcNose.top=ptfp[0].ptNose.y-offset;
-		rcNose.right=ptfp[0].ptNose.x+offset;
-		rcNose.bottom=ptfp[0].ptNose.y+offset;
+		rcNose.left = ptfp[0].ptAngle.x - offset;
+		rcNose.top = ptfp[0].ptAngle.y - offset;
+		rcNose.right = ptfp[0].ptAngle.x + offset;
+		rcNose.bottom = ptfp[0].ptAngle.y + offset;
 
 		//draw
-		if(0)
-		{
-			TiDrawFaceRects(pCamBuf,nWidth,nHeight,&rcLeft,1,RGB(0,255,0),4);
-			TiDrawFaceRects(pCamBuf,nWidth,nHeight,&rcRight,1,RGB(0,255,0),4);
-			TiDrawFaceRects(pCamBuf,nWidth,nHeight,&rcMouth,1,RGB(0,255,0),4);
-			TiDrawFaceRects(pCamBuf,nWidth,nHeight,&rcNose,1,RGB(0,255,0),4);
-		}
-		else
 		{
 			RECT temp[4];
-			temp[0]=rcLeft;
-			temp[1]=rcRight;
-			temp[2]=rcMouth;
-			temp[3]=rcNose;
+			temp[0] = rcLeft;
+			temp[1] = rcRight;
+			temp[2] = rcMouth;
+			temp[3] = rcNose;
 
-			TiDrawFaceRects(pCamBuf,nWidth,nHeight,temp,4,RGB(0,255,0),4);
+			TiDrawFaceRects(pCamBuf, nWidth, nHeight, temp, 4, RGB(0, 255, 0), 4);
 		}
 
-		delete []pFace;
-		
-	}
-	else
+		delete[]pFace;
+
+		}
+
+	for (int k = 0; k<1; k++)
 	{
-		SetWindowText("No Face!");
+		delete[](BYTE*)ptfp[k].dwReserved;
 	}
 
-	for(k=0;k<1;k++)
-	{
-		delete [](BYTE*)ptfp[k].dwReserved;
-	}
-	//Mat BmpMat = LoadBmpFile1("D:\\bmp\\test2019744.bmp");
-	////if ()
-	//{
-	//	float fRet = 0.0;
-	//	CompareBitmap(pCamBuf, BmpMat.data, nWidth, BmpMat.cols, nHeight, BmpMat.rows, fRet);
-	//	char szRet[30] = { 0 };
-	//	sprintf_s(szRet, "ret:%f", fRet);
-	//	std::cout << szRet << std::endl;
-	//	//delete pMat;
-	//}	
-
-	MirrorDIB((LPSTR)pCamBuf, nWidth, nHeight, FALSE,24);
-	//释放资源,显示视频�?
+	//MirrorDIB((LPSTR)pCamBuf, nWidth, nHeight, FALSE, bpp);
+	//释放资源,显示视频�
 	BITMAPINFOHEADER bih;
-	ContructBih(nWidth,nHeight,bih);
-	
-	DrawBmpBuf(bih,pCamBuf,hFrameWnd,TRUE);
-	delete []pCamBuf;
-	delete []pFeature;
+	ContructBih(nWidth, nHeight, bih);
 
+	DrawBmpBuf(bih, pCamBuf, hFrameWnd, TRUE);
+	//delete []pCamBuf;
+	delete[]pFeature;
+}
+#else
+
+void CTestDlg::HandleFaceImage()
+{
+	BYTE * ptRgb8 = NULL;
+	long  W = nWidth / 3 , H = nHeight / 3;
+	bpp = 8;
+	//// 转换成灰度图
+	
+	Rgb24_To_Rgb8(pCamBuf, m_pGrayCached, nWidth, nHeight);
+	ptRgb8 = m_pGrayCached;
+
+	//缩放为原来图像的一�?		
+	ResizeImage(m_pGrayCached, nWidth, nHeight, m_pGrayZoom, W, H, 1);
+	ptRgb8 = m_pGrayZoom;
+
+	long t_start, t_end;
+	t_start = GetTickCount();
+
+	MirrorDIB((LPSTR)ptRgb8, W, H, TRUE, bpp);
+	MirrorDIB((LPSTR)ptRgb8, W, H, FALSE, bpp);
+
+	t_end = GetTickCount();
+	CString time;
+	time.Format("MirrorDIB:time : %d\n", t_end - t_start);
+	OutputDebugStringA(time);
+
+	t_start = GetTickCount();
+	ptfp.resize(maxFace);
+
+	int nFace = THFI_DetectFace(0, ptRgb8, bpp, W, H, &ptfp[0], maxFace);//only process one face
+
+	t_end = GetTickCount();
+	time.Format("THFI_DetectFace:time : %d face number : %d  maxFace : %d\n", t_end - t_start, nFace, maxFace);
+	OutputDebugStringA(time);
+
+
+	if (nFace > 0)
+	{
+		pFace.resize(nFace);
+		BOOL bMouth = TRUE;
+		for (int i = 0; i < nFace; ++i)
+		{
+			pFace[i] = ptfp[i].rcFace;
+
+			{
+				RECT f = ptfp[i].rcFace;
+				CString rc;
+				rc.Format("Face Rect: left:%d, top:%d, right:%d, bottom:%d\n", f.left, f.top, f.right, f.bottom);
+				OutputDebugStringA(rc);
+
+				FaceAngle angle = ptfp[i].fAngle;
+				CString ale;
+				ale.Format("FaceAngle: pitch:%d, roll:%d, yaw:%d\n", angle.pitch, angle.roll, angle.yaw);
+				OutputDebugStringA(ale);
+
+				CString other;
+				other.Format("nQuality:%d\n", ptfp[i].nQuality);
+				OutputDebugStringA(rc + ale + other);
+			}
+		}
+
+		if (m_bEnroll)//enroll
+		{
+			int ret = EF_Extract(0, ptRgb8, W, H, 3, (DWORD)&ptfp[0], m_pEnrollFeature);
+
+			m_bEnroll = FALSE;
+			UpdateData(FALSE);
+			//AfxMessageBox("Enroll OK.");
+		}
+		else if (m_bIdentify)//compare
+		{
+			std::vector<BYTE> pFeature(m_nFeatureSize);
+
+			long t_start, t_end;
+
+		{
+				t_start = GetTickCount();
+
+				int ret = EF_Extract(0, ptRgb8, W, H, 3, (DWORD)&ptfp[0], &pFeature[0]);
+
+				t_end = GetTickCount();
+				CString time;
+				time.Format("EF_Extract:time : %d, nWidth:%d, nHeight:%d\n", t_end - t_start, W, H);
+				OutputDebugStringA(time);
+		}
+
+			{
+				t_start = GetTickCount();
+
+				float score = EF_Compare(&pFeature[0], m_pEnrollFeature);
+
+				t_end = GetTickCount();
+				CString time;
+				time.Format("EF_Compare:time : %d, score : %f \n", t_end - t_start, score);
+				OutputDebugStringA(time);
+
+				CString str;
+				str.Format("score=%d", (int)(score * 100));
+				SetDlgItemText(IDC_SCORE, str);
+			}
+		}
+	}
+}
+
+void CTestDlg::DrawFacialfeatures(BYTE* pRgbBuf, int nBufWidth, int nBufHeight)
+{
+	if (ptfp.empty()) return;
+
+	for (size_t i = 0; i < 1; ++i)
+	{
+		//only draw the first face(eye,mouth...) 
+		RECT rcLeft, rcRight, rcMouth, rcNose;
+		int offset = 5;
+		//left eye rectangle
+		rcLeft.left = ptfp[i].ptLeftEye.x - offset;
+		rcLeft.top = ptfp[i].ptLeftEye.y - offset;
+		rcLeft.right = ptfp[i].ptLeftEye.x + offset;
+		rcLeft.bottom = ptfp[i].ptLeftEye.y + offset;
+
+		//right eye rectangle
+		rcRight.left = ptfp[i].ptRightEye.x - offset;
+		rcRight.top = ptfp[i].ptRightEye.y - offset;
+		rcRight.right = ptfp[i].ptRightEye.x + offset;
+		rcRight.bottom = ptfp[i].ptRightEye.y + offset;
+
+		//mouth rectangle
+		rcMouth.left = ptfp[i].ptMouth.x - offset;
+		rcMouth.top = ptfp[i].ptMouth.y - offset;
+		rcMouth.right = ptfp[i].ptMouth.x + offset;
+		rcMouth.bottom = ptfp[i].ptMouth.y + offset;
+
+		//nose rectangle
+		rcNose.left = ptfp[i].ptNose.x - offset;
+		rcNose.top = ptfp[i].ptNose.y - offset;
+		rcNose.right = ptfp[i].ptNose.x + offset;
+		rcNose.bottom = ptfp[i].ptNose.y + offset;
+
+		//draw
+	{
+			RECT temp[4];
+			temp[0] = rcLeft;
+			temp[1] = rcRight;
+			temp[2] = rcMouth;
+			temp[3] = rcNose;
+
+			TiDrawFaceRects(pRgbBuf, nBufWidth, nBufHeight, temp, 4, RGB(0, 255, 0), 4);
+	}
+	}
+}
+
+void CTestDlg::DramFaceRect()
+{
+
+	if (!m_pGrayCached)
+		return;
+
+	HWND hFrameWnd;
+	GetDlgItem(IDC_VIDEO, &hFrameWnd);
+
+	//draw all face rectangle
+	if (!pFace.empty())
+	{
+		TiDrawFaceRects(m_pGrayCached, nWidth, nHeight, &pFace[0], pFace.size(), RGB(0, 255, 0), 4);
+		DrawFacialfeatures(m_pGrayCached, nWidth, nHeight);
+		pFace.clear();
+	}
+
+	//MirrorDIB((LPSTR)m_pGrayCached, nWidth, nHeight, FALSE, bpp);
+	//释放资源,显示视频�
+	BITMAPINFOHEADER bih;
+	ContructBih(nWidth, nHeight, bih);
+	FlipV_RGB(pCamBuf, nWidth, nHeight, m_pGrayCached, MAXIMG_W_H);
+
+	DrawBmpBuf(bih, m_pGrayCached, hFrameWnd, TRUE);
+	
+}
+
+void CTestDlg::OldSDKMethod()
+{
+	nWidth = m_capParam.szCap.cx;
+	nHeight = m_capParam.szCap.cy;
+
+	long lLength = nWidth*nHeight * 3;
+	pCamBuf = new BYTE[lLength];
+
+	BOOL b = m_pCap->GetFrame(pCamBuf, lLength);
+	if (!b)
+	{
+		delete[]pCamBuf;
+		return;
+	}
+
+	HandleFaceImage();
+	DramFaceRect();
+
+	delete[]pCamBuf;
+}
+#endif
+void CTestDlg::OnTimer(UINT nIDEvent) 
+{
+#ifdef NEWSDK
+	NewSDKMethod();
+#else
+	OldSDKMethod();
+#endif
 	CDialog::OnTimer(nIDEvent);
 }
 
@@ -750,7 +848,6 @@ void CTestDlg::OnStart()
 	m_capParam.szCap.cy=480;
 	m_capParam.eType=CAP_WDM;
 	m_capParam.lIndex=0;	
-	//memset(&m_capParam, sizeof(m_capParam),0);
 	
 	m_pCap=CCapture::Create(&m_capParam);
 	
@@ -759,7 +856,6 @@ void CTestDlg::OnStart()
 		AfxMessageBox("Open camera device failed.");
 		return;
 	}
-		
 	BOOL bOK=m_pCap->InitCapture();
 	if(!bOK)
 	{
@@ -770,9 +866,9 @@ void CTestDlg::OnStart()
 	}
 	
 	m_pCap->Play();
-
-	SetTimer(100,100,NULL);	
-
+	// TODO: Add extra initialization here
+	
+	SetTimer(100,50,NULL);	
 
 	GetDlgItem(IDC_START)->EnableWindow(FALSE);
 	

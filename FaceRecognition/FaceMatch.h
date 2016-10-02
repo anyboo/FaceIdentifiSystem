@@ -12,7 +12,6 @@ public:
 	struct AddArgs
 	{
 		Picture::Ptr a;
-		Picture::Ptr b;
 	};
 
 	Poco::ActiveMethod<bool, AddArgs, FaceMatch> activeMatch;

@@ -25,7 +25,11 @@ public:
 	void MirrorDIB(bool bDirection, int nImageBits = 24);
 	static void MirrorDIB(const char* lpDIBBits, long lWidth, long lHeight, bool bDirection, int nImageBits);
 	void out2bmp();
+
 	std::string out2bmp(const std::string& path);
+
+	std::string WriteToDisk();
+
 	virtual ~Picture();
 protected:
 	Picture();

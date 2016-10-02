@@ -97,6 +97,7 @@ void CSignOutUI::OnFilishMatch(TNotifyUI& msg)
 void CSignOutUI::ShowMatchInfo()
 {
 	//r.stop();
+	r.stop();
 	int n = example.queryPerson();
 	std::vector<readUserInfo> m_readInfo = RegUserInfo::getUserInfo();
 	std::string strName = m_readInfo[n].get<1>();
@@ -107,7 +108,6 @@ void CSignOutUI::ShowMatchInfo()
 	std::string strIDcard = m_readInfo[n].get<5>();
 	std::string strPhone = m_readInfo[n].get<6>();
 	std::string strCertID = m_readInfo[n].get<7>();
-
 
 	CLabelUI* edit_name = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("Edit_Name")));
 	CLabelUI* edit_age = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("Edit_Age")));
@@ -124,7 +124,6 @@ void CSignOutUI::ShowMatchInfo()
 	edit_address->SetText(strIDcard.c_str());
 	edit_phone->SetText(strPhone.c_str());
 	edit_CertID->SetText(strCertID.c_str());
-
 	Picture::Ptr userpic(new Picture(m_readInfo[n].get<9>().rawContent(), width * height * magic));
 	userpic->SetWidth(width);
 	userpic->SetHeight(height);

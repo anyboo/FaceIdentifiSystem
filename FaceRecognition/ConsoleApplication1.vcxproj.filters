@@ -65,7 +65,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="ClipUI.cpp" />
+
+    <ClCompile Include="DeviceManage.cpp" />
+
     <ClCompile Include="AppInitialize.cpp" />
+    <ClCompile Include="Employee.cpp" />
+
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -132,10 +137,15 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="ClipUI.h" />
+
     <ClInclude Include="SettingConfig.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="DeviceManage.h" />
+
     <ClInclude Include="AppInitialize.h" />
+    <ClInclude Include="Employee.h" />
+
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ConsoleApplication1.rc" />

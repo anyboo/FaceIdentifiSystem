@@ -18,7 +18,8 @@ CMonitoringUI::CMonitoringUI()
 	m_closeApp = true;
 	m_bSendMsg = false;
 	ValueSetting vSet;
-	m_timeInterval = vSet.SetTime_interval() * 1000 - 15000;
+	m_timeInterval = std::stoi(vSet.GetTime_interval()) * 1000 - 15000;
+
 	//m_pCompare = new BitMapCompare(this);
 	//Poco::ThreadPool::defaultPool().start(*m_pCompare);
 }
@@ -122,6 +123,10 @@ void CMonitoringUI::handle1(Poco::Notification* pNf)
 	poco_check_ptr(pic.get());
 
 	Util::DrawSomething(pic, m_photo_Ctrl, GetHWND());
+
+
+	CControlUI* Image = m_PaintManager.FindControl(_T("photo_video"));
+	Util::DrawSomething(pic, Image, GetHWND());
 }
 
 LRESULT CMonitoringUI::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
@@ -206,3 +211,5 @@ void CMonitoringUI::OnTimer4()
 {
 	m_bSendMsg = (m_bSendMsg == false ? true : false);
 }
+
+

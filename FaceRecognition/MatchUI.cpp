@@ -26,8 +26,8 @@ MatchUI::~MatchUI()
 
 
 DUI_BEGIN_MESSAGE_MAP(MatchUI, WindowImplBase)
-DUI_ON_CLICK_CTRNAME(BT_CLOSE_MatchWnd, OnCloseWnd)
-DUI_ON_CLICK_CTRNAME(BT_OK_FILISH, OnFilishMatch)
+DUI_ON_CLICK_CTRNAME(BT_CLOSE_MatchWnd, Backward)
+DUI_ON_CLICK_CTRNAME(BT_OK_FILISH, SignIn)
 DUI_END_MESSAGE_MAP()
 
 LPCTSTR MatchUI::GetWindowClassName() const
@@ -65,6 +65,22 @@ void MatchUI::endTime()
 void MatchUI::InitWindow()
 {
 	beginTime();
+	BandingSubControl();
+	_confirm->SetEnabled(false);
+}
+
+void MatchUI::BandingSubControl()
+{
+	_name			=	dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("Edit_Name")));
+	_age			=	dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("Edit_Age")));
+	_sex			=	dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("Edit_Sex")));
+	_birth			=	dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("Edit_Birth")));
+	_address		=	dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("Edit_Address")));
+	_phone			=	dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("Edit_Phone")));
+	_certificate	=	dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("Edit_IDnumber")));
+
+	_matchMsg		=	dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("match_result")));
+	_confirm			=	dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("Sign_In")));
 }
 
 void MatchUI::OnFinalMessage(HWND hWnd)
@@ -79,22 +95,23 @@ void MatchUI::Notify(TNotifyUI& msg)
 	WindowImplBase::Notify(msg);
 }
 
-void MatchUI::OnCloseWnd(TNotifyUI& msg)
+void MatchUI::Backward(TNotifyUI& msg)
 {
 	m_closeApp = false;
 	Close();
 }
 
-void MatchUI::OnFilishMatch(TNotifyUI& msg)
+void MatchUI::SignIn(TNotifyUI& msg)
 {
 	PlaySoundA(_T("QD.wav"), NULL, SND_FILENAME | SND_ASYNC);
 	m_closeApp = false;
 	Close();
 }
 
+#include "Employee.h"
+
 void MatchUI::ShowMatchInfo()
 {
-	//r.stop();
 	int n = example.queryPerson();
 	std::vector<readUserInfo> m_readInfo = RegUserInfo::getUserInfo();
 	std::string strName = m_readInfo[n].get<1>();
@@ -122,7 +139,6 @@ void MatchUI::ShowMatchInfo()
 	edit_address->SetText(strIDcard.c_str());
 	edit_phone->SetText(strPhone.c_str());
 	edit_CertID->SetText(strCertID.c_str());
-
 	Picture::Ptr userpic(new Picture(m_readInfo[n].get<9>().rawContent(), width * height * magic));
 	userpic->SetWidth(width);
 	userpic->SetHeight(height);
@@ -130,10 +146,34 @@ void MatchUI::ShowMatchInfo()
 	std::string path = CPaintManagerUI::GetInstancePath();
 	std::string imageName = userpic->out2bmp(path);
 
+	
 	CHorizontalLayoutUI* hLyt = dynamic_cast<CHorizontalLayoutUI*>(m_PaintManager.FindControl(_T("photo_video")));
 	CButtonUI* btn_SignIn = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("Sign_In")));
 	hLyt->SetBkImage(imageName.c_str());
 	btn_SignIn->SetEnabled(true);
+
+	Identity id;
+	IdentityDB::Instance().Get(1, id);
+
+	_name->SetText(id.name().c_str());
+	_age->SetText(id.age().c_str());
+	_sex->SetText(id.sex().c_str());
+	_birth->SetText(id.birth().c_str());
+	_address->SetText(id.address().c_str());
+	_phone->SetText(id.phone().c_str());
+	_certificate->SetText(id.certificate().c_str());
+
+	CControlUI* Image = m_PaintManager.FindControl(_T("photo_video"));
+	//Image->SetBkImage(id.picutre_name().c_str());
+
+	//Picture::Ptr userpic(new Picture(m_readInfo[0].get<9>().rawContent(), 640 * 480 * 3));
+	//userpic->SetWidth(640);
+	//userpic->SetHeight(480);
+	//CControlUI* Image = m_PaintManager.FindControl(_T("photo_video"));
+	//Util::DrawSomething(userpic, Image, GetHWND());
+
+	_confirm->SetEnabled(true);
+
 }
 
 void MatchUI::handle1(Poco::Notification* pNf)
@@ -146,31 +186,49 @@ void MatchUI::handle1(Poco::Notification* pNf)
 	{
 		example.enqueueNotification(pf);
 	}
-	m_count++;
+
+
 	CaptureNotification::Ptr nf = pf.cast<CaptureNotification>();
-	Picture::Ptr pic(nf->data());
-	CControlUI* Image = m_PaintManager.FindControl(_T("photo_video"));
-	Util::DrawSomething(pic, Image, GetHWND());
+	if (nf)
+	{
+		CurrentImage.assign(nf->data());
+		CControlUI* Image = m_PaintManager.FindControl(_T("photo_video"));
+		Util::DrawSomething(CurrentImage, Image, GetHWND());
+	}
 }
 
 
 void MatchUI::onTimer(Poco::Timer& timer)
 {
-	enableCompare = !example.queryResult();
+	enableCompare = !enableCompare;
+
+	std::stringstream ss;
+	ss << "enableCompare" << enableCompare << std::endl;
+
+	OutputDebugStringA(ss.str().c_str());
+	if (!enableCompare)
+	{
+		if (example.queryResult())
+		{
+			match_resulut();
+		}
+	}
+	/* 
+	= !example.queryResult();
 	if (!enableCompare)
 	{
 		painting = false;
 		match_resulut();
 		endTime();
 	}
+	*/
 }
 
 
 void MatchUI::match_resulut()
 {
-	CLabelUI* lab = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("match_result")));
 	std::string str = LangueConfig::GetShowText(6);
-	lab->SetText(str.c_str());
+	_matchMsg->SetText(str.c_str());
 	ShowMatchInfo();
 }
 

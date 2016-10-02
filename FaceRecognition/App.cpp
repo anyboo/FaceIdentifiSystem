@@ -4,6 +4,7 @@
 #include "resource.h"
 #include "MainWnd.h"
 
+
 #include <windows.h>
 #include <objbase.h>
 #include <shellapi.h>
@@ -15,6 +16,7 @@
 #include "THFaceImage_i.h"
 #include "THFeature_i.h"
 
+#include "AppInitialize.h"
 
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpCmdLine*/, int nCmdShow)
@@ -27,10 +29,9 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 
 	Loggering::Logger_initiation();
 
-	//init face
 	THFI_Param param;
 	ValueSetting set;
-	param.nMinFaceSize = set.SetFaceSize();
+	param.nMinFaceSize = std::stoi(set.GetFaceSize());
 	param.nRollAngle = 145;
 	param.bOnlyDetect = true;
 	THFI_Create(1, &param);
@@ -48,21 +49,25 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 	
 	RegUserInfo::init();
 
+	CAppInitialize  initial;
+	
 	std::auto_ptr<CMainWnd> pFrame(new CMainWnd);
 	assert(pFrame.get());
 	pFrame->Create(NULL, NULL, UI_WNDSTYLE_DIALOG, WS_EX_WINDOWEDGE | WS_EX_ACCEPTFILES);
 	pFrame->SetIcon(IDI_ICON1);
 	pFrame->CenterWindow();
 	pFrame->ShowWindow(true);
+
 	
-//	::ShowWindow(::FindWindow("Shell_TrayWnd", NULL), SW_HIDE);
+	::ShowWindow(::FindWindow("Shell_TrayWnd", NULL), SW_HIDE);
 
 	CPaintManagerUI::MessageLoop();
-	::CoUninitialize();
 
 	THFI_Release();
 	EF_Release();
 
+
+	::CoUninitialize();
 
 	return 0;
 }

@@ -27,8 +27,12 @@ public:
 	DUI_DECLARE_MESSAGE_MAP();
 
 	void OnCloseWnd(TNotifyUI& msg);
+
 	void OnRemoveAlarm();
 	void OnInitCtrl();
+
+	void OnRemoveAlarm(TNotifyUI& msg);
+
 
 	virtual LRESULT HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	virtual LRESULT OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
@@ -49,6 +53,7 @@ private:
 	}
 
 private:
+
 	std::queue<writeCompareInfo>		 m_compare;
 	Poco::BasicEvent<bool>				 m_theEvent;
 	BitMapCompare*						 m_pCompare;

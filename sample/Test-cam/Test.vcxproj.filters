@@ -2,15 +2,15 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Source Files">
-      <UniqueIdentifier>{826c0215-2c1f-4d41-ab65-97e4b5bf3e73}</UniqueIdentifier>
+      <UniqueIdentifier>{b63cd441-2846-48f8-89fe-22ebf23a335d}</UniqueIdentifier>
       <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
     </Filter>
     <Filter Include="Header Files">
-      <UniqueIdentifier>{6edeab2c-dcad-4152-b4d8-6a8caa4f96a2}</UniqueIdentifier>
+      <UniqueIdentifier>{2326b064-513d-4ef5-91e5-7c5e0118bbc7}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl</Extensions>
     </Filter>
     <Filter Include="Resource Files">
-      <UniqueIdentifier>{ad4be3d1-d83e-4806-b4c8-a2a1d86188bc}</UniqueIdentifier>
+      <UniqueIdentifier>{8ae8d722-59c5-43a7-a664-d6bf27ec5ff6}</UniqueIdentifier>
       <Extensions>ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe</Extensions>
     </Filter>
   </ItemGroup>
@@ -22,6 +22,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TestDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FrImageFunc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -41,6 +44,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TestDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FrImageFunc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
