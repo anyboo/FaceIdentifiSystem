@@ -121,6 +121,119 @@ THFACEIMAGE_API int		THFI_DetectFace(short nChannelID,BYTE* pImage,int bpp,int n
 	3.if image has face(s),face number less than or equal to nMaxFaceNums
 */
 
+
+/******Feature API(detect face and feature extract)******/
+
+THFACEIMAGE_API int		THFI_GetFeatureSize();
+/*
+ The THFI_GetFeatureSize function will return feature size.
+
+ Parameters:
+	No parameter.
+ Return Values:
+	If the function succeeds, the return value is feature size.
+	If the function fails, the return value is negative;
+ Remarks: 
+	No remark.
+*/
+
+THFACEIMAGE_API int		THFI_DetectFaceFeature(short nChannelID,BYTE* pImage,int bpp,int nWidth,int nHeight,THFI_FacePos* pfps,BYTE* pFeatures,int nMaxFaceNums);
+/*
+ The THFI_DetectFaceFeature function execute face detection and feature extraction.
+
+ Parameters:
+	nChannelID[input],channel ID(from 0 to nChannelNum-1)
+	pImage[input],image data buffer,RGB24 or grayscale format.
+	bpp[input],bits per pixel(8-grayscale image, 24-RGB24 image). 
+	nWidth[input],image width.
+	nHeight[input],image height.
+	pfps[output],the face position information.
+	pFeatures[output],the face feature buffer.
+	nMaxFaceNums[input],max face nums that wanted.
+ Return Values:
+	If the function succeeds, the return value is face number.
+	If the function fails, the return value is negative.
+ Remarks:
+	1.image data buffer(pImage)	size must be nWidth*(bpp/8)*nHeight.
+	2.pfps must be allocated by caller,the memory size is nMaxFaceNums*sizeof(THFI_FacePos).
+	3.pFeatures must be allocated by caller,the memory size is nMaxFaceNums*THFI_GetFeatureSize().
+	4.if image has face(s),face number less than or equal to nMaxFaceNums.
+*/
+
+THFACEIMAGE_API int		THFI_DetectFaceData(short nChannelID,BYTE* pImage,int bpp,int nWidth,int nHeight,THFI_FacePos* pfps,THFI_FaceData* pfds,int nMaxFaceNums);
+/*
+ The THFI_DetectFaceData function execute face detection and return face data.
+
+ Parameters:
+	nChannelID[input],channel ID(from 0 to nChannelNum-1)
+	pImage[input],image data buffer,RGB24 or grayscale format.
+	bpp[input],bits per pixel(8-grayscale image, 24-RGB24 image). 
+	nWidth[input],image width.
+	nHeight[input],image height.
+	pfps[output],the face position information.
+	pfds[output],the face data buffer.
+	nMaxFaceNums[input],max face nums that wanted.
+ Return Values:
+	If the function succeeds, the return value is face number.
+	If the function fails, the return value is negative.
+ Remarks:
+	1.image data buffer(pImage)	size must be nWidth*(bpp/8)*nHeight.
+	2.pfps must be allocated by caller,the memory size is nMaxFaceNums*sizeof(THFI_FacePos).
+	3.pfds must be allocated int heap memory by caller,the memory size is nMaxFaceNums*sizeof(THFI_FaceData).
+	4.if image has face(s),face number less than or equal to nMaxFaceNums.
+*/
+
+THFACEIMAGE_API int		THFI_ExtractFeatureByFaceData(short nChannelID,THFI_FaceData* pfd,BYTE* pFeature);
+/*
+ The THFI_ExtractFeatureByFaceData function execute feature extraction by face data.
+
+ Parameters:
+	nChannelID[input],channel ID(from 0 to nChannelNum-1)
+	pfd[input],one face data information,returned by THFI_DetectFaceData.
+	pFeatures[output],one face feature buffer.
+ Return Values:
+	If the function succeeds, the return value is 1.
+	If the function fails, the return value is negative.
+ Remarks:
+	1.pFeature must be allocated by caller,the memory size is THFI_GetFeatureSize().
+*/
+
+THFACEIMAGE_API int		THFI_ExtractFeatureByFacePos(short nChannelID,BYTE* pImage,int bpp,int nWidth,int nHeight,THFI_FacePos* pfp,BYTE* pFeature);
+/*
+ The THFI_ExtractFeatureByFacePos function execute feature extraction by face position.
+
+ Parameters:
+	nChannelID[input],channel ID(from 0 to nChannelNum-1)
+	pImage[input],image data buffer,RGB24 or grayscale format.
+	bpp[input],bits per pixel(8-grayscale image, 24-RGB24 image). 
+	nWidth[input],image width.
+	nHeight[input],image height.
+	pfp[input],one face position information.
+	pFeatures[output],one face feature buffer.
+ Return Values:
+	If the function succeeds, the return value is 1.
+	If the function fails, the return value is negative.
+ Remarks:
+	1.image data buffer(pImage)	size must be nWidth*(bpp/8)*nHeight.
+	2.pFeature must be allocated by caller,the memory size is THFI_GetFeatureSize().
+*/
+
+THFACEIMAGE_API float	THFI_CompareFeature(short nChannelID,BYTE* pFeature1,BYTE* pFeature2);
+/*
+ The THFI_CompareFeature function execute two face features comparison.
+
+ Parameters:
+	nChannelID[input],channel ID(from 0 to nChannelNum-1)
+	pFeature1[input],point to one face feature buffer.
+	pFeature2[input],point to another face feature buffer.
+ Return Values:
+	If the function succeeds, the return value is the two face features's similarity(0 to 1).
+	If the function fails, the return value is negative.
+ Remarks:
+	No remark.
+ */
+
+
 /******Release API******/
 
 THFACEIMAGE_API void	THFI_Release();
