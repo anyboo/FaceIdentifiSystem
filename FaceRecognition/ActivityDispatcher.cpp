@@ -45,6 +45,7 @@ void ActivityDispatcher::runActivity()
 		Notification::Ptr pNf(_queue.waitDequeueNotification());
 		if (pNf)
 		{
+			/*
 			CaptureNotification::Ptr pWorkNf = pNf.cast<CaptureNotification>();
 			if (pWorkNf)
 			{
@@ -83,7 +84,8 @@ void ActivityDispatcher::runActivity()
 					//result.wait();
 					_resultSet.push_back(result);
 				}
-			}
+				
+			}*/
 		}
 		else break;
 	}

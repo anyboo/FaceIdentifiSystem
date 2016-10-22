@@ -6,25 +6,46 @@
 
 static std::string SaveBmp(char* data, int width, int height);
 
-
-Picture::Picture(const Picture& pic)
-:buffer(pic.data(),pic.len())
-{
-}
-
 Picture::Picture()
 :buffer(512)
 {
 
 }
 
-Picture::Picture(const char* data, size_t len)
-:buffer(data,len)
+Picture::Picture(size_t width, size_t height, size_t bit)
+: _width(width), _height(height), _bit(bit), buffer(0)
 {
+	size_t len = _width * _height * _bit;
+	buffer.resize(len);
+}
+
+Picture::Picture(const Picture& pic)
+:buffer(0)
+{
+	swap(pic);
 }
 
 Picture::~Picture()
 {
+}
+
+Picture& Picture::operator = (const Picture& other)
+{
+	if (this != &other)
+	{
+		Picture tmp(other);
+		swap(tmp);
+	}
+	
+	return *this;
+}
+
+void Picture::swap(const Picture& other)
+{
+	buffer = other.buffer;
+	_width = other._width;
+	_height = other._height;
+	_bit = other._bit;
 }
 
 size_t Picture::width() const
@@ -35,16 +56,6 @@ size_t Picture::width() const
 size_t Picture::height() const
 {
 	return _height;
-}
-
-void Picture::SetWidth(size_t width)
-{
-	_width = width;
-}
-
-void Picture::SetHeight(size_t height)
-{
-	_height = height;
 }
 
 void Picture::out2bmp()
@@ -62,12 +73,12 @@ std::string Picture::WriteToDisk()
 	return SaveBmp(buffer.begin(), _width, _height, _T("D:\\bmp\\test.bmp"));
 }
 
-const char* Picture::data() const
+char* Picture::data()
 {
 	return buffer.begin();
 }
 
-const size_t Picture::len() const
+size_t Picture::len()
 {
 	return buffer.size();
 }

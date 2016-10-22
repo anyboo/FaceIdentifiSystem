@@ -51,7 +51,7 @@ void CSignOutUI::beginTime()
 {
 	addObserver(*this);
 	r.start();
-	example.start();
+	//example.start();
 	m_count = 0;
 	t.start(tc);
 }
@@ -60,7 +60,7 @@ void CSignOutUI::endTime()
 {
 	removeObserver(*this);
 	r.stop();
-	example.stop();
+	//example.stop();
 	t.restart(0); 
 }
 
@@ -124,7 +124,7 @@ void CSignOutUI::ShowMatchInfo()
 	edit_address->SetText(strIDcard.c_str());
 	edit_phone->SetText(strPhone.c_str());
 	edit_CertID->SetText(strCertID.c_str());
-	Picture::Ptr userpic(new Picture(m_readInfo[n].get<9>().rawContent(), width * height * magic));
+	/*Picture::Ptr userpic(new Picture(m_readInfo[n].get<9>().rawContent(), width * height * magic));
 	userpic->SetWidth(width);
 	userpic->SetHeight(height);
 
@@ -135,12 +135,21 @@ void CSignOutUI::ShowMatchInfo()
 	hLyt->SetBkImage(imageName.c_str());
 
 	CButtonUI* btn_SignIn = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("Sign_out")));
-	btn_SignIn->SetEnabled(true);
+	btn_SignIn->SetEnabled(true);*/
 }
 
 void CSignOutUI::handle1(Poco::Notification* pNf)
 {
-	if (!painting) return;
+	poco_check_ptr(pNf);
+	CaptureNotification* nf = dynamic_cast<CaptureNotification*>(pNf);
+	if (nf)
+	{
+		CControlUI* Image = m_PaintManager.FindControl(_T("photo_video"));
+		Util::DrawSomething(nf->data(), Image, GetHWND());
+	}
+
+	pNf->release();
+	/*if (!painting) return;
 	poco_check_ptr(pNf);
 	Notification::Ptr pf(pNf);
 	if ((m_count % 5) == 0)
@@ -153,7 +162,7 @@ void CSignOutUI::handle1(Poco::Notification* pNf)
 	CaptureNotification::Ptr nf = pf.cast<CaptureNotification>();
 	Picture::Ptr pic(nf->data());
 	CControlUI* Image = m_PaintManager.FindControl(_T("photo_video"));
-	Util::DrawSomething(pic, Image, GetHWND());
+	Util::DrawSomething(pic, Image, GetHWND());*/
 }
 
 void CSignOutUI::match_resulut()
@@ -177,11 +186,6 @@ void CSignOutUI::onTimer(Poco::Timer& timer)
 
 LRESULT CSignOutUI::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-	if (uMsg == WM_DESTROY && m_closeApp)
-	{
-		::ShowWindow(::FindWindow("Shell_TrayWnd", NULL), SW_SHOW);
-		::PostQuitMessage(0);
-	}
 	bHandled = FALSE;
 	return 0;
 }

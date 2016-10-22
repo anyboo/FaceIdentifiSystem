@@ -49,17 +49,17 @@ void MatchUI::beginTime()
 {
 	addObserver(*this);
 	recoder.start();
-	example.start();
+	//example.start();
 	m_count = 0;
-	checktime.start(tc);
+	//checktime.start(tc);
 }
 
 void MatchUI::endTime()
 {
 	removeObserver(*this);
 	recoder.stop();
-	example.stop();
-	checktime.restart(0);
+	//example.stop();
+	//checktime.restart(0);
 }
 
 void MatchUI::InitWindow()
@@ -112,6 +112,7 @@ void MatchUI::SignIn(TNotifyUI& msg)
 
 void MatchUI::ShowMatchInfo()
 {
+	/*
 	int n = example.queryPerson();
 	std::vector<readUserInfo> m_readInfo = RegUserInfo::getUserInfo();
 	std::string strName = m_readInfo[n].get<1>();
@@ -173,11 +174,22 @@ void MatchUI::ShowMatchInfo()
 	//Util::DrawSomething(userpic, Image, GetHWND());
 
 	_confirm->SetEnabled(true);
+	*/
 
 }
 
 void MatchUI::handle1(Poco::Notification* pNf)
 {
+	poco_check_ptr(pNf);
+	CaptureNotification* nf = dynamic_cast<CaptureNotification*>(pNf);
+	if (nf)
+	{
+		CControlUI* Image = m_PaintManager.FindControl(_T("photo_video"));
+		Util::DrawSomething(nf->data(), Image, GetHWND());
+	}
+
+	pNf->release();
+	/*
 	if (!painting) return;
 
 	poco_check_ptr(pNf);
@@ -195,6 +207,7 @@ void MatchUI::handle1(Poco::Notification* pNf)
 		CControlUI* Image = m_PaintManager.FindControl(_T("photo_video"));
 		Util::DrawSomething(CurrentImage, Image, GetHWND());
 	}
+	*/
 }
 
 
@@ -235,11 +248,6 @@ void MatchUI::match_resulut()
 
 LRESULT MatchUI::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-	if (uMsg == WM_DESTROY && m_closeApp)
-	{
-		::ShowWindow(::FindWindow("Shell_TrayWnd", NULL), SW_SHOW);
-		::PostQuitMessage(0);
-	}
 	bHandled = FALSE;
 	return 0;
 }

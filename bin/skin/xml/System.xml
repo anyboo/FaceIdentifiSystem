@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window>
+  <Font id="1" name="微软雅黑" size="18" bold="false" />
+  <Font id="8" name="微软雅黑" size="26" bold="false" />
+  <Default shared="true" name="HorizontalLayout" value="width=&quot;740&quot; height=&quot;60&quot; padding=&quot;60,10,10,0&quot; " />
+  <Default shared="true" name="Text" value="width=&quot;125&quot; padding=&quot;60,10,10,0&quot; height=&quot;40&quot; align=&quot;left&quot;"/>
+  <Default shared="true" name="Edit" value="width=&quot;290&quot; height=&quot;40&quot; normalimage=&quot;file='skin/edit.png'&quot; focusedimage=&quot;file='skin/edit_hot.png'&quot;" />
+  <VerticalLayout>
+    <HorizontalLayout>
+      <Text text="考勤摄像头IP" />
+      <Edit name="edit_c1"/>
+    </HorizontalLayout>
+    <HorizontalLayout>
+      <Text text="监控摄像头IP" />
+      <Edit name="edit_c2" />
+    </HorizontalLayout>
+    <HorizontalLayout>
+      <Text text="报警间隔时间(单位：s)" />
+      <Edit />
+    </HorizontalLayout>
+    <HorizontalLayout>
+      <Text text="最低识别度（%）" />
+      <Edit />
+    </HorizontalLayout>
+    <HorizontalLayout>
+      <Text text="面部捕获大小" />
+      <Edit />
+    </HorizontalLayout>
+  </VerticalLayout>
+</Window>

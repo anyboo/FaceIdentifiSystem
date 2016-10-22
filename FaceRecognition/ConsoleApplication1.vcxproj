@@ -55,7 +55,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\duilib;$(ProjectDir)..\include-mt;$(ProjectDir)..\poco\Foundation\include;$(SolutionDir)\poco\Data\SQLite\include;$(SolutionDir)\poco\Data\include;$(SolutionDir)\opencv231\build\include;$(SolutionDir)\opencv231\build\include\opencv;$(SolutionDir)\JSON\include\rapidjson</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\duilib;$(ProjectDir)..\include-mt;$(ProjectDir)..\poco\Net\include;$(ProjectDir)..\poco\Foundation\include;$(SolutionDir)\poco\Data\SQLite\include;$(SolutionDir)\poco\Data\include;$(SolutionDir)\opencv231\build\include;$(SolutionDir)\opencv231\build\include\opencv;$(SolutionDir)\JSON\include\rapidjson</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -93,9 +93,8 @@
     <ClInclude Include="CaptureNotification.h" />
     <ClInclude Include="CaptureNotify.h" />
     <ClInclude Include="ClipUI.h" />
-
     <ClInclude Include="DeviceManage.h" />
-
+    <ClInclude Include="DeviceUI.h" />
     <ClInclude Include="Employee.h" />
     <ClInclude Include="FaceImage.h" />
     <ClInclude Include="FaceMatch.h" />
@@ -103,6 +102,7 @@
     <ClInclude Include="FaceFeature.h" />
     <ClInclude Include="InitDevice.h" />
     <ClInclude Include="DatabaseException.h" />
+    <ClInclude Include="ScheduleUI.h" />
     <ClInclude Include="SettingConfig.h" />
     <ClInclude Include="log.h" />
     <ClInclude Include="LogInUI.h" />
@@ -119,6 +119,8 @@
     <ClInclude Include="SettingUI.h" />
     <ClInclude Include="SignOutUI.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="SystemUI.h" />
+    <ClInclude Include="UserUI.h" />
     <ClInclude Include="WaittingUI.h" />
     <ClInclude Include="Util.h" />
   </ItemGroup>
@@ -130,9 +132,7 @@
     <ClCompile Include="CaptureNotification.cpp" />
     <ClCompile Include="CaptureNotify.cpp" />
     <ClCompile Include="ClipUI.cpp" />
-
     <ClCompile Include="DeviceManage.cpp" />
-
     <ClCompile Include="Employee.cpp" />
     <ClCompile Include="FaceImage.cpp" />
     <ClCompile Include="FaceMatch.cpp" />

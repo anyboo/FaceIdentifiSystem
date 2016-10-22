@@ -20,25 +20,23 @@ CAppInitialize::CAppInitialize()
 	PrepareRegisteredFace();
 
 	LoadUserConfig();
-	//Show_HideTask(true);
 }
 
 CAppInitialize::~CAppInitialize()
 {
 	DetachedSDK();
-	//Show_HideTask(true);
 }
 
 void CAppInitialize::AttatchSDK()
 {
-	THFaceImageSDK();
-	TiCapture2SDK();
+	//THFaceImageSDK();
+	//TiCapture2SDK();
 }
 
 void CAppInitialize::DetachedSDK()
 {
-	THFI_Release();
-	EF_Release();
+	//THFI_Release();
+	//EF_Release();
 }
 
 void CAppInitialize::THFaceImageSDK()
@@ -71,45 +69,14 @@ void CAppInitialize::PrepareCamera()
 void CAppInitialize::PrepareRegisteredFace()
 {
 	//init database
-	QFileSqlite *pDb = QFileSqlite::getInstance();
+	/*QFileSqlite *pDb = QFileSqlite::getInstance();
 	pDb->createTable(CREATE_USER_INFO_TABLE);
-	RegUserInfo::init();
+	RegUserInfo::init();*/
 }
 
 void CAppInitialize::LoadUserConfig()
 {
 
 }
-
-/*
-void Show_HideTask(bool IsHide)
-{
-	int nCwdShow = -1;
-	LPARAM lParam;
-	HWND task = FindWindow(_T("Shell_TrayWnd"), NULL);
-	if (IsHide)
-	{
-		lParam = ABS_AUTOHIDE | ABS_ALWAYSONTOP;
-		nCwdShow = SW_HIDE;
-	}
-	else
-	{
-		lParam = ABS_ALWAYSONTOP;
-		nCwdShow = SW_SHOW;
-	}
-
-	::ShowWindow(task, nCwdShow);
-
-	APPBARDATA apBar;
-	memset(&apBar, 0, sizeof(apBar));
-	apBar.cbSize = sizeof(apBar);
-	apBar.hWnd = task;
-	if (apBar.hWnd != NULL)
-	{
-		apBar.lParam = lParam;
-		SHAppBarMessage(ABM_SETSTATE, &apBar);
-	}
-}
-*/
 
 

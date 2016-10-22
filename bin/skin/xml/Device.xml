@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window>
+	<Font shared="true" id="1" name="微软雅黑" size="18" bold="false" />
+	<Font shared="true" id="8" name="微软雅黑" size="26" bold="false" />
+  <VerticalLayout>
+    <Text text="设备类型" font="1" />
+    <Text text="所属区域" font="1" />
+    <Text text="单位名称" font="1" />
+    <Text text="设备名称" font="1" />
+    <Text text="详细地址" font="1" />
+    <Text text="设备IP" font="1" />
+    <Text text="负责人" font="1" />
+    <Text text="联系电话" font="1" />
+  </VerticalLayout>
+</Window>

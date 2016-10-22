@@ -1,17 +1,9 @@
 #pragma once
 #include <DuiLib/UIlib.h>
-#include "winuser.h"
-#include "LogInUI.h"
+//#include "winuser.h"
 
-class CRegisterInfo;
+//class CRegisterInfo;
 
-
-#define BT_CLOSEMWND		(_T("bt_close"))
-#define BT_RegisterWnd		(_T("bt_register"))
-#define BT_MATCHWND			(_T("bt_match"))
-#define BT_Monitoring		(_T("bt_monitoring"))
-#define BT_SETTINGWND		(_T("bt_setting"))
-#define BT_SIGNOUTWND		(_T("bt_SignOut"))
 
 class CMainWnd :
 	public WindowImplBase
@@ -38,7 +30,7 @@ public:
 private:
 	UINT			m_Mod;
 	bool			m_IsSet;
-	std::string		strHotkey;
+	//std::string		strHotkey;
 protected:
 	virtual LPCTSTR GetWindowClassName() const;
 	virtual CDuiString GetSkinFolder();

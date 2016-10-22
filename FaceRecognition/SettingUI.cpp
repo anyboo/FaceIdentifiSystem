@@ -13,10 +13,10 @@
 #include <tchar.h>
 #include <windows.h>
 #include <fstream>
-
-#include "SettingConfig.h"
-using namespace rapidjson;
-
+#include "DeviceUI.h"
+#include "ScheduleUI.h"
+#include "UserUI.h"
+#include "SystemUI.h"
 #include "SettingConfig.h"
 
 #define BT_SYSTEM_SET		(_T("btn_SysSet"))
@@ -24,34 +24,27 @@ using namespace rapidjson;
 #define BT_WORKFACE_MANAGE	(_T("btn_Workfoce"))
 #define BT_USER_MANAGE		(_T("btn_User"))
 
+#define BT_CLOSESWnd		(_T("close_btn2"))
+#define BT_SAVELOG			(_T("saveLog"))
+#define BT_SAVECONFIG		(_T("saveConfig"))
+#define BT_RESETCONFIG		(_T("resetConfig"))
+
 CSettingUI::CSettingUI()
 {
-	m_closeApp = true;
-	_deviceManage.SetPaintMagager(&m_PaintManager);
-	AddVirtualWnd(_T("DeviceManage"), &_deviceManage);
 }
 
 
 CSettingUI::~CSettingUI()
 {
-	RemoveVirtualWnd(_T("DeviceManage"));
 }
 
 DUI_BEGIN_MESSAGE_MAP(CSettingUI, WindowImplBase)
 DUI_ON_CLICK_CTRNAME(BT_CLOSESWnd, OnCloseSWnd)
-DUI_ON_CLICK_CTRNAME(BT_SAVELOG, OnSaveLog)
-DUI_ON_CLICK_CTRNAME(BT_SAVECONFIG, OnSaveConfig)
-DUI_ON_CLICK_CTRNAME(BT_RESETCONFIG, OnResetConfig)
-
-DUI_ON_CLICK_CTRNAME(BT_SYSTEM_SET, OnSwitchWindow)
-DUI_ON_CLICK_CTRNAME(BT_DEVICE_MANAGE, OnSwitchWindow)
-DUI_ON_CLICK_CTRNAME(BT_WORKFACE_MANAGE, OnSwitchWindow)
-DUI_ON_CLICK_CTRNAME(BT_USER_MANAGE, OnSwitchWindow)
 DUI_END_MESSAGE_MAP()
 
 LPCTSTR CSettingUI::GetWindowClassName() const
 {
-	return _T("SettingUI");
+	return _T("CSettingUI");
 }
 
 CDuiString CSettingUI::GetSkinFolder()
@@ -61,7 +54,7 @@ CDuiString CSettingUI::GetSkinFolder()
 
 CDuiString CSettingUI::GetSkinFile()
 {
-	return _T("xml\\SystemManage.xml");
+	return _T("xml\\SettingUI.xml");
 }
 
 void CSettingUI::OnFinalMessage(HWND hWnd)
@@ -71,24 +64,40 @@ void CSettingUI::OnFinalMessage(HWND hWnd)
 
 void CSettingUI::Notify(TNotifyUI& msg)
 {
-
+	DUITRACE("%s %s",msg.pSender->GetName().GetData() ,msg.sType);
+	OnSwitch(msg);
 	WindowImplBase::Notify(msg);
 }
 
-void CSettingUI::InitWindow()
+CControlUI* CSettingUI::CreateControl(LPCTSTR pstrClass)
 {
-	CVerticalLayoutUI* Manage_Lyt = dynamic_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("Manage_Lyt")));
-	CDialogBuilder builder;
-	CVerticalLayoutUI* SysSetWindow = (CVerticalLayoutUI*)(builder.Create(_T("xml//DeviceManage.xml"), (UINT)0, NULL, &m_PaintManager));
-	Manage_Lyt->Add(SysSetWindow);
+	if (_tcscmp(pstrClass, _T("DeviceUI")) == 0) return new DeviceUI;
+	if (_tcscmp(pstrClass, _T("UserUI")) == 0) return new UserUI;
+	if (_tcscmp(pstrClass, _T("ScheduleUI")) == 0) return new ScheduleUI;
+	if (_tcscmp(pstrClass, _T("SystemUI")) == 0) return new SystemUI;
+	return NULL;
 }
 
 void CSettingUI::OnCloseSWnd(TNotifyUI& msg)
 {
-	m_closeApp = false;
 	Close();
 }
 
+void CSettingUI::OnSwitch(TNotifyUI& msg)
+{
+	CDuiString name = msg.pSender->GetName();
+	CTabLayoutUI* pControl = static_cast<CTabLayoutUI*>(m_PaintManager.FindControl(_T("switch")));
+	if (name == _T("device"))
+		pControl->SelectItem(0);
+	else if (name == _T("user"))
+		pControl->SelectItem(1);
+	else if (name == _T("schedule"))
+		pControl->SelectItem(2);
+	else if (name == _T("system"))
+		pControl->SelectItem(3);
+	else if (name == _T("other"))
+		pControl->SelectItem(4);
+}
 
 void CSettingUI::OnSaveLog(TNotifyUI& msg)
 {
@@ -97,118 +106,12 @@ void CSettingUI::OnSaveLog(TNotifyUI& msg)
 	OPENFILENAME  ofn = { 0 };
 	ofn.lStructSize = sizeof(ofn);
 	ofn.hwndOwner = m_hWnd;
-	ofn.lpstrFilter = _T("TXTÎÄ¼þ(*.txt)\0*.txt\0ËùÓÐÎÄ¼þ(*.*)\0*.*\0");
+	ofn.lpstrFilter = _T("TXTæ–‡ä»¶(*.txt)\0*.txt\0æ‰€æœ‰æ–‡ä»¶(*.*)\0*.*\0");
 	ofn.lpstrInitialDir = _T("D:\\");   
 	ofn.lpstrFile = szBuffer;			//save data path
 	ofn.nMaxFile = sizeof(szBuffer) / sizeof(*szBuffer);
 	ofn.nFilterIndex = 1;
 	ofn.Flags = OFN_CREATEPROMPT | OFN_PATHMUSTEXIST | OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT;
-	ofn.lpstrTitle = TEXT("±£´æµ½");
+	ofn.lpstrTitle = TEXT("save to file");
 	BOOL bSel = GetSaveFileName(&ofn);
-}
-
-
-void CSettingUI::OnResetConfig(TNotifyUI& msg)
-{
-	std::string strTime(_T("30"));
-	std::string strSiml(_T("0.6"));
-	std::string strSize(_T("150"));
-
-	ValueSetting setConfig;
-	setConfig.SaveConfig(strTime, strSiml, strSize);
-
-	ShowConfig();
-	std::string str = LangueConfig::GetShowText(8);
-	CLabelUI* lab = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("result")));
-	lab->SetText(str.c_str());
-}
-
-
-void CSettingUI::OnSaveConfig(TNotifyUI& msg)
-{
-	CComboUI* combo_time = dynamic_cast<CComboUI*>(m_PaintManager.FindControl(_T("combo_time")));
-	CComboUI* combo_siml = dynamic_cast<CComboUI*>(m_PaintManager.FindControl(_T("combo_siml")));
-	CComboUI* combo_FaceSize = dynamic_cast<CComboUI*>(m_PaintManager.FindControl(_T("combo_FaceSize")));
-	std::string strTime = combo_time->GetText();
-	std::string strSiml = combo_siml->GetText();
-	std::string strSize = combo_FaceSize->GetText();
-
-	ValueSetting setConfig;
-	setConfig.SaveConfig(strTime, strSiml, strSize);
-	std::string str = LangueConfig::GetShowText(7);
-	CLabelUI* lab = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("result")));
-	lab->SetText(str.c_str());
-}
-
-void CSettingUI::ShowConfig()
-{
-	CComboUI* combo_time = dynamic_cast<CComboUI*>(m_PaintManager.FindControl(_T("combo_time")));
-	CComboUI* combo_siml = dynamic_cast<CComboUI*>(m_PaintManager.FindControl(_T("combo_siml")));
-	CComboUI* combo_FaceSize = dynamic_cast<CComboUI*>(m_PaintManager.FindControl(_T("combo_FaceSize")));
-	std::string strTime, strSiml, strFacesize;
-	ValueSetting setConfig;
-	strTime = setConfig.GetTime_interval();
-	strSiml = setConfig.GetSimilarity();
-	strFacesize = setConfig.GetFaceSize();
-	SetCombText(strTime, combo_time);
-	SetCombText(strSiml, combo_siml);
-	SetCombText(strFacesize, combo_FaceSize);
-}
-
-void CSettingUI::SetCombText(const std::string value, CComboUI* pComb)
-{
-	int numb = pComb->GetCount();
-	for (int i = 0; i < numb; i++)
-	{
-		CListLabelElementUI* subList = dynamic_cast<CListLabelElementUI*>(m_PaintManager.FindSubControlByClass(pComb, DUI_CTR_LISTLABELELEMENT, i));
-		std::string strTmp = subList->GetText();
-		if (strTmp == value){
-			subList->Select(true);
-		}
-	}
-}
-
-void CSettingUI::OnSwitchWindow(TNotifyUI& msg)
-{
-	CDuiString XmlFileName;
-	if (msg.pSender->GetName() == _T("btn_Device")){
-		XmlFileName.Append(_T("xml//DeviceManage.xml"));
-	}
-	else if (msg.pSender->GetName() == _T("btn_User")){
-		XmlFileName.Append(_T("xml//UserManage.xml"));
-	}
-	else if(msg.pSender->GetName() == _T("btn_Workfoce")){
-		XmlFileName.Append(_T("xml//WorkforceManage.xml"));
-	}
-	else if(msg.pSender->GetName() == _T("btn_SysSet")){
-		XmlFileName.Append(_T("xml//SettingUI.xml"));
-	}
-	CVerticalLayoutUI* Manage_Lyt = dynamic_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("Manage_Lyt")));
-	CVerticalLayoutUI* subLyt = dynamic_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("subwindow")));
-	if (subLyt != nullptr)
-		Manage_Lyt->Remove(subLyt);
-	CDialogBuilder builder;
-	CVerticalLayoutUI* NewSubWindow = (CVerticalLayoutUI*)(builder.Create(XmlFileName.GetData(), (UINT)0, NULL, &m_PaintManager));
-	Manage_Lyt->Add(NewSubWindow);
-	if (msg.pSender->GetName() == _T("btn_SysSet")){
-		ShowConfig();
-	}
-	else if (msg.pSender->GetName() == _T("btn_User"))
-	{
-		CListUI* pList = dynamic_cast<CListUI*>(m_PaintManager.FindSubControlByName(NewSubWindow, _T("RepotList")));
-		CDialogBuilder builder;
-		CListContainerElementUI* ContList = (CListContainerElementUI*)(builder.Create(_T("xml//ReportListUI.xml"), (UINT)0, NULL, &m_PaintManager));
-		pList->Add(ContList);
-	}
-}
-
-LRESULT CSettingUI::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
-{
-	if (uMsg == WM_DESTROY && m_closeApp)
-	{
-		::ShowWindow(::FindWindow("Shell_TrayWnd", NULL), SW_SHOW);
-		::PostQuitMessage(0);
-	}
-	bHandled = FALSE;
-	return 0;
 }

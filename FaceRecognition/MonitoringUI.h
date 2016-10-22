@@ -9,6 +9,8 @@
 #include "CaptureNotify.h"
 #include "ActivityDispatcher.h"
 
+#include "Poco/Data/Session.h"
+
 #define BT_CLOSE_MonWnd		(_T("close_btn2"))
 #define BT_REMOVE_ALARM		(_T("btm_remove"))
 
@@ -41,7 +43,7 @@ public:
 	void OnTimer2();
 	void OnTimer3();
 	void OnTimer4();
-
+	void onTimer(Poco::Timer& timer);
 public:
 	std::queue<writeCompareInfo>& getCompareQueue();
 	std::queue<CapBitmapData>& getCapDataQueue();
@@ -59,7 +61,7 @@ private:
 	BitMapCompare*						 m_pCompare;
 	std::queue<CapBitmapData>			 m_capdata;
 	Recorder							 r;
-	ActivityDispatcher					 example;
+	//ActivityDispatcher					 example;
 	long								 m_count;
 	time_t								 m_lastTime;
 	time_t								 m_nowTime;
@@ -77,4 +79,14 @@ protected:
 	virtual LPCTSTR GetWindowClassName() const;
 	virtual CDuiString GetSkinFolder();
 	virtual CDuiString GetSkinFile();
+
+	Poco::Timer t;
+	Poco::TimerCallback<CMonitoringUI> tc;
+
+	bool is_need_report();
+	void report_to_server();
+	void upload_image();
+	void post_alert_data();
+private:
+	//Poco::Data::Session session;
 };

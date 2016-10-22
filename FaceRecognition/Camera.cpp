@@ -104,18 +104,13 @@ void Camera::GetFrame()
 	if (!_camera && !isRunning) return;
 
 	poco_check_ptr(_camera);
-
-	long len = _width* _height * 3;
-	char* data = new char[len];
-	
-	bool ret = _camera->GetFrame((BYTE*)data, len);
+	int len = _width*_height*3;
+	Picture pic(_width, _height, 3);
+	long l = pic.len();
+	bool ret = _camera->GetFrame((BYTE*)pic.data(),l);
 	if(!ret) return;
 
-	Picture::Ptr pic(new Picture(data, len));
-	poco_check_ptr(pic);
-	pic->SetHeight(_height);
-	pic->SetWidth(_width);
 	NotificationCenter::defaultCenter().postNotification(new CaptureNotification(pic));
 
-	delete[] data;
+	//delete[] data;
 }

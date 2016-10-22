@@ -134,12 +134,7 @@ void RegisterUI::SignUp(TNotifyUI& msg)
 
 void RegisterUI::TakePhoto(TNotifyUI& msg)
 {
-
-	CButtonUI* btn_photo = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("photo")));
-	if (m_photo_agin)
-
 	if (bAlreadyTaked)
-
 	{
 		std::string str = LangueConfig::GetShowText(3);
 		_shutter->SetText(str.c_str());
@@ -223,53 +218,25 @@ void RegisterUI::SaveRegisterInformation()
 
 void RegisterUI::handle1(Poco::Notification* pNf)
 {
-
-	if (m_photo_agin)
-	{
-		Picture::Ptr userpic(new Picture(m_userInfo.get<8>().rawContent(), width * height * magic));
-		userpic->SetWidth(width);
-		userpic->SetHeight(height);
-
-		std::string path = CPaintManagerUI::GetInstancePath();
-		std::string imageName = userpic->out2bmp(path);
-
-	if (bAlreadyTaked) return;
-
-
-		CControlUI* hLyt = dynamic_cast<CControlUI*>(m_PaintManager.FindControl(_T("photo_wnd")));
-		hLyt->SetBkImage(imageName.c_str());
-		return;
-	}
 	poco_check_ptr(pNf);
-	Notification::Ptr pf(pNf);
-	CaptureNotification::Ptr nf = pf.cast<CaptureNotification>();
-
-	poco_check_ptr(nf.get());
-	Picture::Ptr pic(nf->data()); 
-	poco_check_ptr(pic.get());
-
-	Poco::Data::CLOB saveImage((const char*)pic->data(), pic->len());
-	m_userInfo.set<8>(saveImage);
-
-	CControlUI* Image = m_PaintManager.FindControl(_T("photo_wnd"));
-	Util::DrawSomething(pic, Image, GetHWND());
-
-	/*if (nf)
+	if (!bAlreadyTaked)
 	{
-		CurrentImage.assign(nf->data());
-		CControlUI* Image = m_PaintManager.FindControl(_T("photo_wnd"));
-		Util::DrawSomething(CurrentImage, Image, GetHWND());
-	}*/
+		CaptureNotification* nf = dynamic_cast<CaptureNotification*>(pNf);
+		if (nf)
+		{
+			/*Poco::Data::CLOB saveImage((const char*)pic->data(), pic->len());
+			m_userInfo.set<8>(saveImage);*/
 
+			CControlUI* Image = m_PaintManager.FindControl(_T("photo_wnd"));
+			Util::DrawSomething(nf->data(), Image, GetHWND());
+		}
+	}
+	
+	pNf->release();
 }
 
 LRESULT RegisterUI::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-	if (uMsg == WM_DESTROY && m_closeApp)
-	{
-		::ShowWindow(::FindWindow("Shell_TrayWnd", NULL), SW_SHOW);
-		::PostQuitMessage(0);
-	}
 	bHandled = FALSE;
 	return 0;
 }

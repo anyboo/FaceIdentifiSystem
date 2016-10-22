@@ -65,12 +65,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="ClipUI.cpp" />
-
     <ClCompile Include="DeviceManage.cpp" />
-
     <ClCompile Include="AppInitialize.cpp" />
     <ClCompile Include="Employee.cpp" />
-
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -137,15 +134,24 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="ClipUI.h" />
-
     <ClInclude Include="SettingConfig.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="DeviceManage.h" />
-
     <ClInclude Include="AppInitialize.h" />
     <ClInclude Include="Employee.h" />
-
+    <ClInclude Include="DeviceUI.h">
+      <Filter>SettingUI</Filter>
+    </ClInclude>
+    <ClInclude Include="UserUI.h">
+      <Filter>SettingUI</Filter>
+    </ClInclude>
+    <ClInclude Include="ScheduleUI.h">
+      <Filter>SettingUI</Filter>
+    </ClInclude>
+    <ClInclude Include="SystemUI.h">
+      <Filter>SettingUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ConsoleApplication1.rc" />
@@ -163,6 +169,9 @@
     </Filter>
     <Filter Include="头文件">
       <UniqueIdentifier>{fe15a7fe-9d8c-47dd-853e-b8744d46496b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SettingUI">
+      <UniqueIdentifier>{1caadb65-32d0-4cbf-b838-e22e5ff14e91}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

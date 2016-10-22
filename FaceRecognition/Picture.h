@@ -10,17 +10,15 @@ class Picture
 public:
 	typedef Poco::AutoPtr<Picture> Ptr;
 
-	Picture(const char* data, size_t len);
+	Picture(size_t width, size_t height, size_t bit);
 	Picture(const Picture& pic);
+	Picture& operator = (const Picture& other);
 
 	size_t width() const;
 	size_t height() const;
 
-	const char* data() const;
-	const size_t len() const;
-
-	void SetWidth(size_t width);
-	void SetHeight(size_t height);
+	char* data();
+	size_t len();
 
 	void MirrorDIB(bool bDirection, int nImageBits = 24);
 	static void MirrorDIB(const char* lpDIBBits, long lWidth, long lHeight, bool bDirection, int nImageBits);
@@ -34,12 +32,14 @@ public:
 protected:
 	Picture();
 	std::string SaveBmp(char* data, int width, int height, const std::string& path);
+	void swap(const Picture& other);
 private:
-
+	
 	Poco::Buffer<char> buffer;
 
 	size_t _width;
 	size_t _height;
+	size_t _bit;
 };
 
 

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window>
+	<Font shared="true" id="1" name="微软雅黑" size="18" bold="false" />
+	<Font shared="true" id="8" name="微软雅黑" size="26" bold="false" />
+  <VerticalLayout>
+    <Text text="排班表" font="1" />
+  </VerticalLayout>
+</Window>

@@ -11,11 +11,11 @@ class CaptureNotification
 public:
 	typedef Poco::AutoPtr<CaptureNotification> Ptr;
 
-	CaptureNotification(Picture* data);
+	CaptureNotification(Picture& data);
 	~CaptureNotification();
 
-	Picture* data();
+	Picture& data();
 private:
-	Picture::Ptr _data;
+	Picture _data;
 };
 

@@ -2,20 +2,23 @@
 #include "MainWnd.h"
 #include "RegisterUI.h"
 #include "MatchUI.h"
+#include "LogInUI.h"
 #include "MonitoringUI.h"
 #include "SettingUI.h"
 #include "SignOutUI.h"
 
 
-#include "RegisterInfo.h"
+//#include "RegisterInfo.h"
 
-#include <windows.h>
-#include <objbase.h>
-#include <shellapi.h>
+#define BT_CLOSEMWND		(_T("bt_close"))
+#define BT_RegisterWnd		(_T("bt_register"))
+#define BT_MATCHWND			(_T("bt_match"))
+#define BT_Monitoring		(_T("bt_monitoring"))
+#define BT_SETTINGWND		(_T("bt_setting"))
+#define BT_SIGNOUTWND		(_T("bt_SignOut"))
 
 CMainWnd::CMainWnd()
 {
-	strHotkey.clear();
 }
 
 
@@ -60,8 +63,7 @@ void CMainWnd::Notify(TNotifyUI& msg)
 
 void CMainWnd::OnCloseWnd(TNotifyUI& msg)
 {
-	/*::ShowWindow(::FindWindow("Shell_TrayWnd", NULL), SW_SHOW);
-	::PostQuitMessage(0L);*/
+	::PostQuitMessage(0L);
 }
 
 void CMainWnd::OnRegisterWnd(TNotifyUI& msg)
@@ -83,6 +85,7 @@ void CMainWnd::OnMatchWnd(TNotifyUI& msg)
 	pDlg->ShowModal();
 }
 
+
 void CMainWnd::OnMonitoringWnd(TNotifyUI& msg)
 {
 	std::auto_ptr<CMonitoringUI> pDlg(new CMonitoringUI);
@@ -91,6 +94,7 @@ void CMainWnd::OnMonitoringWnd(TNotifyUI& msg)
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
 }
+
 
 void CMainWnd::OnSettingWnd(TNotifyUI& msg)
 {
@@ -150,12 +154,7 @@ LRESULT CMainWnd::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM /*lParam*/, bo
 
 LRESULT CMainWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	if (uMsg == WM_DESTROY)
-	{
-		/*::ShowWindow(::FindWindow("Shell_TrayWnd", NULL), SW_SHOW);
-		::PostQuitMessage(0);*/
-	}
-	else if (uMsg == WM_KEYDOWN)
+	/*else if (uMsg == WM_KEYDOWN)
 	{
 		if (wParam == 70 && !strHotkey.compare(_T("CTRL+SHIFT")))
 		{
@@ -175,7 +174,7 @@ LRESULT CMainWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 		strHotkey.clear();
 		return 0;
-	}
+	}*/
 
 	return __super::HandleMessage(uMsg, wParam, lParam);
 }
