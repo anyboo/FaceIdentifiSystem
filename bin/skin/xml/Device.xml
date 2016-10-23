@@ -2,14 +2,29 @@
 <Window>
 	<Font shared="true" id="1" name="微软雅黑" size="18" bold="false" />
 	<Font shared="true" id="8" name="微软雅黑" size="26" bold="false" />
-  <VerticalLayout>
-    <Text text="设备类型" font="1" />
-    <Text text="所属区域" font="1" />
-    <Text text="单位名称" font="1" />
-    <Text text="设备名称" font="1" />
-    <Text text="详细地址" font="1" />
-    <Text text="设备IP" font="1" />
-    <Text text="负责人" font="1" />
-    <Text text="联系电话" font="1" />
-  </VerticalLayout>
+    <HorizontalLayout>
+      <VerticalLayout width="120">
+        <Text text="设备类型" font="1" width="110" height="40" align="left" padding="10,10,0,0"/>
+        <Text text="所属区域" font="1" width="110" height="40" align="left" padding="10,10,0,0"/>
+        <Text text="单位名称" font="1" width="110" height="40" align="left" padding="10,10,0,0"/>
+        <Text text="设备名称" font="1" width="110" height="40" align="left" padding="10,10,0,0"/>
+        <Text text="详细地址" font="1" width="110" height="40" align="left" padding="10,10,0,0"/>
+        <Text text="设备IP" font="1" width="110" height="40" align="left" padding="10,10,0,0"/>
+        <Text text="负责人1" font="1" width="110" height="40" align="left" padding="10,10,0,0"/>
+        <Text text="联系电话" font="1" width="110" height="40" align="left" padding="10,10,0,0"/>
+      </VerticalLayout>
+      <VerticalLayout width="310">
+        <Edit name="" width="290" height="40" font="1"  padding="0,10,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
+        <Edit name="" width="290" height="40" font="1"  padding="0,10,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
+        <Edit name="" width="290" height="40" font="1"  padding="0,10,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
+        <Edit name="" width="290" height="40" font="1"  padding="0,10,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
+        <Edit name="" width="290" height="40" font="1"  padding="0,10,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
+        <Edit name="" width="290" height="40" font="1"  padding="0,10,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
+        <Edit name="" width="290" height="40" font="1"  padding="0,10,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
+        <Edit name="" width="290" height="40" font="1"  padding="0,10,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
+      </VerticalLayout>
+      <VerticalLayout width="400" height="500" padding="50,40,0,0" >
+        <Button name="photo" width="140" height="60" padding="120,18,0,0" text="注册" font="1" textcolor="#FFFFFFFF" pushedimage="file='skin/push_photo.png'" normalimage="skin/normol_photo.png" hotimage="skin/hot_photo.png"/>
+    </VerticalLayout>
+    </HorizontalLayout>
 </Window>
