@@ -70,7 +70,7 @@ bool CMonitoringUI::is_need_report()
 			into(notify.status),
 			now;
 
-		DUITRACE("%d,%d,%s,%d\n", notify.id, notify.opcode, notify.comment, notify.status);
+		//DUITRACE("%d,%d,%s,%d\n", notify.id, notify.opcode, notify.comment, notify.status);
 
 		if (notify.opcode == 1)
 			return true;
@@ -112,8 +112,10 @@ void CMonitoringUI::report_to_server()
 		while (!select.done())
 		{
 			select.execute();
+			/*
 			DUITRACE("id:%d,filepath:%s,type:%d,timestamp:%s,userid:%d,deviceid:%d\n",
 				alert.id, alert.filepath.c_str(), alert.type, alert.timestamp.c_str(), alert.userid, alert.deviceid);
+			*/
 		}
 	}
 	catch (Poco::Exception& e)
@@ -121,8 +123,6 @@ void CMonitoringUI::report_to_server()
 		DUITRACE(e.displayText().c_str());
 	}
 
-	//http post data
-	//ftp upload image
 	post_alert_data();
 	//upload_image();
 }
@@ -132,14 +132,30 @@ void CMonitoringUI::report_to_server()
 #include <Poco/Net/HTTPResponse.h>
 #include <Poco/StreamCopier.h>
 #include <Poco/Net/NetException.h>
+using Poco::Net::HTTPClientSession;
+using Poco::Net::HTTPRequest;
+using Poco::Net::HTTPResponse;
+using Poco::StreamCopier;
 
+
+void  testPostSmallIdentity()
+{
+	HTTPClientSession s("202.103.191.73");
+	HTTPRequest request(HTTPRequest::HTTP_POST, "/api/index.php?s=/Services/index");
+	std::string body("this is a random request body\r\n0\r\n");
+	request.setContentLength((int)body.length());
+	s.sendRequest(request) << body;
+	HTTPResponse response;
+	std::istream& rs = s.receiveResponse(response);
+	//assert(response.getContentLength() == body.length());
+	std::ostringstream ostr;
+	StreamCopier::copyStream(rs, ostr);
+	//assert(ostr.str() == body);
+}
 void CMonitoringUI::post_alert_data()
 {
-	using Poco::Net::HTTPClientSession;
-	using Poco::Net::HTTPRequest;
-	using Poco::Net::HTTPResponse;
-	using Poco::StreamCopier;
 
+	//testPostSmallIdentity();
 	HTTPClientSession session("202.103.191.73");
 	session.setKeepAlive(true);
 
@@ -147,14 +163,21 @@ void CMonitoringUI::post_alert_data()
 	{
 		HTTPRequest request(HTTPRequest::HTTP_POST, "/api/index.php?s=/Services/index");
 		request.setVersion(HTTPRequest::HTTP_1_1);
-		request.setContentType("multipart/form-data; boundary=----011000010111000001101001");
+		request.setContentType("application/x-www-form-urlencoded");
+		request.setChunkedTransferEncoding(true);
 		request.add("Cache-Control", "no-cache");
 		request.add("Connection", "keep-alive");
-		std::string body("{\"api\":\"wn_add\", \"filepath\":\"http://202.103.191.73/api/3870861421055882.jpg\",\"type\":1,\"timestamp\":\"20161019221808\",\"UserInfoID\":1,\"DeviceID\":1,\"summary\":\"test\"}");	
-		std::ostream& os = session.sendRequest(request);
-		os << "-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"body\"\r\n\r\n{\"api\":\"wn_add\", \"filepath\":\"http://202.103.191.73/api/3870861421055882.jpg\",\"type\":1,\"timestamp\":\"20161019221808\",\"UserInfoID\":1,\"DeviceID\":1,\"summary\":\"test\"}\r\n-----011000010111000001101001--\r\n";
+		request.add("Accept-Charset", "utf8");
+		request.add("Accept", "text/json");
+		request.add("User-Agent", "monitor/1.0.0/1/window");
 
+		std::string body("body={\"api\":\"wn_add\", \"filepath\":\"http://202.103.191.73/api/3870861421055882.jpg\",\"type\":1,\"timestamp\":\"20161019221808\",\"UserInfoID\":1,\"DeviceID\":1,\"summary\":\"test\"}");
+		request.setContentLength((int)body.length());
+		DUITRACE("http data : %s \n", body.c_str());
+		std::ostream& os = session.sendRequest(request);
+		os << body;
 		os.flush();
+
 		Poco::Thread::sleep(200);
 
 		HTTPResponse response;
