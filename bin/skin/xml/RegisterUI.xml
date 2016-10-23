@@ -14,28 +14,36 @@
 				<HorizontalLayout>
 					<VerticalLayout width="120">
 						<Label text="姓名：" font="1" width="110" height="40" align="left" padding="10,10,0,0"/>
-						<Label text="年龄：" font="1" width="110" height="40" align="left" padding="10,10,0,0"/>
 						<Label text="性别：" font="1" width="110" height="40" align="left" padding="10,10,0,0"/>
 						<Label text="出生年月：" font="1" width="110" height="40" align="left" padding="10,10,0,0"/>
+						<Label text="联系地址：" font="1" width="110" height="40" align="left" padding="10,10,0,0"/>
 						<Label text="身份证号：" font="1" width="110" height="40" align="left" padding="10,10,0,0"/>
 						<Label text="电话号码：" font="1" width="100" height="40" align="left" padding="10,10,0,0"/>
 						<Label text="证书编号：" font="1" width="100" height="40" align="left" padding="10,10,0,0"/>
 						<Label text="职业及等级：" font="1" width="120" height="40" align="left" padding="10,10,0,0"/>
-						<Label text="证书扫描件" font="1" width="100" height="40" align="left" padding="10,10,0,0"/>
+						<Label text="签发日期" font="1" width="100" height="40" align="left" padding="10,10,0,0"/>
+						<!-- <Label text="证书扫描件" font="1" width="100" height="40" align="left" padding="10,10,0,0"/> -->
 					</VerticalLayout>
 					<VerticalLayout width="310">
 						<Edit name="Edit_Name" width="290" height="40" font="1"  padding="0,10,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
-						<Edit name="Edit_Age" width="290" height="40" font="1"  padding="0,10,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
 						<Combo name="combo_sex" height="40" width="290" padding="0,10,0,0" dropboxsize="0,80" itemfont="1" itemlinecolor="0x12345678" bkimage="file='skin/edit.png'" normalimage="file='skin/normol_bntcmb.png' dest='250,0,290,40'" hotimage="file='skin/hot_btncmb.png' dest='250,0,290,40'" pushedimage="file='skin/push_btncmb.png' dest='250,0,290,40'" itemhotimage="file='skin/item1.png'">
 							<ListLabelElement name="Item1" text="男" bordersize="1" bordercolor="0x12345678"/>
 							<ListLabelElement name="Item2" text="女" bordersize="1" bordercolor="0x12345678"/>
 						</Combo>
 						<Edit name="Edit_Birth" width="290" height="40" font="1"  padding="0,10,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
 						<Edit name="Edit_Address" width="290" height="40" font="1"  padding="0,10,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
+						<Edit name="Edit_Identify" width="290" height="40" font="1"  padding="0,10,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
 						<Edit name="Edit_Phone" width="290" height="40" font="1"  padding="0,10,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
-						<Edit name="Edit_IDnumber" width="290" height="40" font="1"  padding="0,10,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
-						<Edit name="Edit_grade" width="290" height="40" font="1"  padding="0,10,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
-						<Edit name="Edit_time" width="290" height="40" font="1"  padding="0,10,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
+						<Edit name="Edit_license_code" width="290" height="40" font="1"  padding="0,10,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
+						<Combo name="Edit_license_level" height="40" width="290" padding="0,10,0,0" dropboxsize="0,80" itemfont="1" itemlinecolor="0x12345678" bkimage="file='skin/edit.png'" normalimage="file='skin/normol_bntcmb.png' dest='250,0,290,40'" hotimage="file='skin/hot_btncmb.png' dest='250,0,290,40'" pushedimage="file='skin/push_btncmb.png' dest='250,0,290,40'" itemhotimage="file='skin/item1.png'">
+							<ListLabelElement name="Item1" text="1" bordersize="1" bordercolor="0x12345678"/>
+							<ListLabelElement name="Item2" text="2" bordersize="1" bordercolor="0x12345678"/>
+							<ListLabelElement name="Item1" text="3" bordersize="1" bordercolor="0x12345678"/>
+							<ListLabelElement name="Item2" text="4" bordersize="1" bordercolor="0x12345678"/>
+							<ListLabelElement name="Item1" text="5" bordersize="1" bordercolor="0x12345678"/>
+						</Combo>
+						<Edit name="Edit_issue_date" width="290" height="40" font="1"  padding="0,10,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
+						<!-- <Edit name="Edit_license_image" width="290" height="40" font="1"  padding="0,10,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/> -->
 					</VerticalLayout>
 				</HorizontalLayout>
 			</VerticalLayout>

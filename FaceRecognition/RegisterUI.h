@@ -65,6 +65,9 @@ protected:
 	bool isValidInformation();
 	void SaveRegisterInformation();
 	
+	void add_user_info();
+	void add_user_license();
+	void add_user_identify();
 private:
 	bool   m_photo_agin;
 	Recorder r;
@@ -76,11 +79,20 @@ private:
 	CEditUI*	_birth;
 	CEditUI*	_address;
 	CEditUI*	_phone;
-	CEditUI*	_certificate;
+	CEditUI*	_identify;
+	CEditUI*	_license_code;
+	CComboUI*	_license_level;
+	CEditUI*	_issue_date;
+	CEditUI*	_license_image;
 			   
 	CComboUI*	_sex;
 	CLabelUI*	_prompt;
 	CButtonUI* _shutter;
 
 	bool bAlreadyTaked;
+
+	int _license_id;
+	int _identify_id;
+	int _photo_id;
+	int _unit_id;
 };

@@ -11,18 +11,30 @@
 
 #include "Employee.h"
 
+#include "Poco/Data/Session.h"
+#include "Poco/Data/SQLite/Connector.h"
+#include <Poco/Data/SQLite/SQLiteException.h>
+
+using Poco::Data::Session;
+using Poco::Data::Statement;
+using namespace Poco::Data::Keywords;
+
 
 RegisterUI::RegisterUI()
 :m_photo_agin(false)
 , r(new Camera)
-, bAlreadyTaked(false)
+, bAlreadyTaked(false),
+_license_id(0),
+_identify_id(0),
+_photo_id(0),
+_unit_id(0)
 {
 	m_closeApp = true;
 }
 
 RegisterUI::~RegisterUI()
 {
-	
+
 }
 
 DUI_BEGIN_MESSAGE_MAP(RegisterUI, WindowImplBase)
@@ -54,7 +66,7 @@ CDuiString RegisterUI::GetSkinFile()
 
 CControlUI* RegisterUI::CreateControl(LPCTSTR pstrClass)
 {
-	if (_tcscmp(pstrClass, DUI_CTR_CLIP) == 0) 
+	if (_tcscmp(pstrClass, DUI_CTR_CLIP) == 0)
 		return new CClipUI;
 	return NULL;
 }
@@ -81,7 +93,7 @@ void RegisterUI::OnCloseRWnd(TNotifyUI& msg)
 
 
 void RegisterUI::InitWindow()
-{	
+{
 	addObserver(*this);
 	r.start();
 	BandingSubControl();
@@ -90,17 +102,20 @@ void RegisterUI::InitWindow()
 
 void RegisterUI::BandingSubControl()
 {
-	_name		 =	dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_Name")));
-	_age		 =	dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_Age")));
-	_sex		 =	dynamic_cast<CComboUI*>(m_PaintManager.FindControl(_T("combo_sex")));
-	_birth		 =	dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_Birth")));
-	_address	 =	dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_Address")));
-	_phone		 =	dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_Phone")));
-	_certificate =	dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_IDnumber")));
-	
-	_prompt		 =	dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("lab_Prompt")));
-	
-	_shutter	 =	dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("photo")));
+	_name = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_Name")));
+	_age = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_Age")));
+	_sex = dynamic_cast<CComboUI*>(m_PaintManager.FindControl(_T("combo_sex")));
+	_birth = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_Birth")));
+	_address = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_Address")));
+	_phone = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_Phone")));
+	_identify = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_Identify")));
+	_license_code = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_license_code")));
+	_license_level = dynamic_cast<CComboUI*>(m_PaintManager.FindControl(_T("Edit_license_level")));
+	_issue_date = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_issue_date")));
+	_license_image = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_license_image")));
+	_prompt = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("lab_Prompt")));
+
+	_shutter = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("photo")));
 }
 
 void RegisterUI::Backward(TNotifyUI& msg)
@@ -123,13 +138,22 @@ void RegisterUI::SignUp(TNotifyUI& msg)
 	}
 
 
-	RegUserInfo::addUserInfo(m_userInfo);
-	PlaySoundA(_T("ZC.wav"), NULL, SND_FILENAME | SND_ASYNC);
-	m_closeApp = false;
+	//RegUserInfo::addUserInfo(m_userInfo);
+	try
+	{
+		SaveRegisterInformation();
 
-	SaveRegisterInformation();	
+		PlaySoundA(_T("ZC.wav"), NULL, SND_FILENAME | SND_ASYNC);
+		m_closeApp = false;
 
-	Close();
+		Close();
+	}
+	catch (Poco::Data::SQLite::ConstraintViolationException& e)
+	{
+		e.displayText();
+		_prompt->SetText("register failed!");
+	}
+
 }
 
 void RegisterUI::TakePhoto(TNotifyUI& msg)
@@ -151,69 +175,155 @@ void RegisterUI::TakePhoto(TNotifyUI& msg)
 bool RegisterUI::isValidInformation()
 {
 
-	CEditUI* edit_name = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_Name")));
-	CEditUI* edit_age = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_Age")));
-	CComboUI* combo_sex = dynamic_cast<CComboUI*>(m_PaintManager.FindControl(_T("combo_sex")));
-	CEditUI* edit_birth = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_Birth")));
-	CEditUI* edit_address = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_Address")));
-	CEditUI* edit_phone = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_Phone")));
-	CEditUI* edit_CertID = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_IDnumber")));
-
-	std::string strName = edit_name->GetText();
-	std::string strAge = edit_age->GetText();
-	std::string strSex = combo_sex->GetText();
-	std::string strBirth = edit_birth->GetText();
-	std::string strIDcard = edit_address->GetText();
-	std::string strPhone = edit_phone->GetText();
-	std::string strCertID = edit_CertID->GetText();
-
-
-	if (strName == _T("") || strAge == _T("") || strSex == _T("") || strBirth == _T("")
-		|| strIDcard == _T("") || strPhone == _T("") || strCertID == _T(""))
+	if (_name->GetText().IsEmpty() || _sex->GetText().IsEmpty() || _birth->GetText().IsEmpty()
+		|| _address->GetText().IsEmpty() || _phone->GetText().IsEmpty() || _identify->GetText().IsEmpty())
 	{
 		return false;
 	}
-	m_userInfo.set<0>(strName);
-	m_userInfo.set<1>(stoi(strAge));
-	m_userInfo.set<2>(strSex);
-	m_userInfo.set<3>(strBirth);
-	m_userInfo.set<4>(strIDcard);
-	m_userInfo.set<5>(strPhone);
-	m_userInfo.set<6>(strCertID);
-	m_userInfo.set<7>(false);
 
-	if (_name->GetText().IsEmpty() ||
-		_age->GetText().IsEmpty() ||
-		_sex->GetText().IsEmpty() ||
-		_birth->GetText().IsEmpty() ||
-		_address->GetText().IsEmpty() ||
-		_phone->GetText().IsEmpty() ||
-		_certificate->GetText().IsEmpty()){
-
-			return false;
-	}
-
-
-		
 	return true;
 }
 
 void RegisterUI::SaveRegisterInformation()
 {
-	//Employee e =
-	//{
-	//	_name->GetText(),
-	//	_age->GetText(),
-	//	_sex->GetText(),
-	//	_birth->GetText(),
-	//	_address->GetText(),
-	//	_phone->GetText(),
-	//	_certificate->GetText()
-	//};
-	//
-	//Identity id(e,CurrentImage);
-	//IdentityDB::Instance().Add(id);
-	//need photograph data
+	add_user_license();
+	add_user_identify();
+	add_user_info();
+}
+
+void RegisterUI::add_user_license()
+{
+	struct license
+	{
+		int id;
+		std::string filepath;
+		std::string code;
+		std::string issue_date;
+		int level;
+	};
+
+	int maxid = 0;
+	Session session("SQLite", "D:\\workstation\\code\\GitHub\\FaceIdentifiSystem\\bin\\facerecog.db");
+	session << "SELECT max(id) FROM license",
+		into(maxid),
+		now;
+
+	_license_id = ++maxid;
+
+	int level = _license_level->GetCurSel() + 1;
+
+	license li =
+	{
+		maxid,
+		"testimg",//_license_image->GetText(),
+		_license_code->GetText(),
+		_issue_date->GetText(),
+		level,
+	};
+
+	Statement insert(session);
+
+	insert << "INSERT INTO license VALUES(?, ?, ?, ?, ?)",
+		use(li.id),
+		use(li.filepath),
+		use(li.code),
+		use(li.issue_date),
+		use(li.level);
+
+	insert.execute();
+}
+
+void RegisterUI::add_user_identify()
+{
+	struct identify
+	{
+		int id;
+		std::string filepath;
+		std::string code;
+	};
+
+	int maxid = 0;
+	Session session("SQLite", "D:\\workstation\\code\\GitHub\\FaceIdentifiSystem\\bin\\facerecog.db");
+	session << "SELECT max(id) FROM identify",
+		into(maxid),
+		now;
+
+	_identify_id = ++maxid;
+
+	identify ident =
+	{
+		_identify_id,
+		"xxx",
+		_identify->GetText(),
+	};
+
+	Statement insert(session);
+
+	insert << "INSERT INTO identify VALUES(?, ?, ?)",
+		use(ident.id),
+		use(ident.filepath),
+		use(ident.code);
+
+	insert.execute();
+}
+
+void RegisterUI::add_user_info()
+{
+	struct UserInfo
+	{
+		int id;
+		std::string name;
+		int sex;
+		std::string birthday;
+		std::string address;
+		std::string cellphone;
+		int license_id;
+		int unit_id;
+		int identify_id;
+		int photo_id;
+		bool authorized;
+	};
+
+
+	int maxid = 0;
+	Session session("SQLite", "D:\\workstation\\code\\GitHub\\FaceIdentifiSystem\\bin\\facerecog.db");
+	session << "SELECT max(id) FROM UserInfo",
+		into(maxid),
+		now;
+
+	maxid++;
+
+	UserInfo user_info =
+	{
+		maxid,
+		_name->GetText(),
+		_sex->GetCurSel(),
+		_birth->GetText(),
+		_address->GetText(),
+		_phone->GetText(),
+		_license_id,
+		_unit_id,
+		_identify_id,
+		_photo_id,
+		false,
+	};
+
+	Statement insert(session);
+
+	insert << "INSERT INTO UserInfo VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+		use(user_info.id),
+		use(user_info.name),
+		use(user_info.sex),
+		use(user_info.birthday),
+		use(user_info.address),
+		use(user_info.cellphone),
+		use(user_info.license_id),
+		use(user_info.unit_id),
+		use(user_info.identify_id),
+		use(user_info.photo_id),
+		use(user_info.authorized);
+
+	insert.execute();
 }
 
 void RegisterUI::handle1(Poco::Notification* pNf)
@@ -231,7 +341,7 @@ void RegisterUI::handle1(Poco::Notification* pNf)
 			Util::DrawSomething(nf->data(), Image, GetHWND());
 		}
 	}
-	
+
 	pNf->release();
 }
 
