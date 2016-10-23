@@ -68,6 +68,7 @@
     <ClCompile Include="DeviceManage.cpp" />
     <ClCompile Include="AppInitialize.cpp" />
     <ClCompile Include="Employee.cpp" />
+    <ClCompile Include="ActiveReporter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -152,6 +153,7 @@
     <ClInclude Include="SystemUI.h">
       <Filter>SettingUI</Filter>
     </ClInclude>
+    <ClInclude Include="ActiveReporter.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ConsoleApplication1.rc" />

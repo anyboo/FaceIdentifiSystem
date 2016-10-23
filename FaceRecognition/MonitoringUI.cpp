@@ -15,6 +15,11 @@
 #include "Poco/Data/Session.h"
 #include "Poco/Data/SQLite/Connector.h"
 
+#include "ActiveReporter.h"
+#include "document.h" 
+
+using namespace rapidjson;
+
 using Poco::Data::Session;
 using Poco::Data::Statement;
 using namespace Poco::Data::Keywords;
@@ -127,6 +132,7 @@ void CMonitoringUI::report_to_server()
 	//upload_image();
 }
 
+/*
 #include <Poco/Net/HTTPClientSession.h>
 #include <Poco/Net/HTTPRequest.h>
 #include <Poco/Net/HTTPResponse.h>
@@ -136,65 +142,37 @@ using Poco::Net::HTTPClientSession;
 using Poco::Net::HTTPRequest;
 using Poco::Net::HTTPResponse;
 using Poco::StreamCopier;
+*/
 
-
-void  testPostSmallIdentity()
-{
-	HTTPClientSession s("202.103.191.73");
-	HTTPRequest request(HTTPRequest::HTTP_POST, "/api/index.php?s=/Services/index");
-	std::string body("this is a random request body\r\n0\r\n");
-	request.setContentLength((int)body.length());
-	s.sendRequest(request) << body;
-	HTTPResponse response;
-	std::istream& rs = s.receiveResponse(response);
-	//assert(response.getContentLength() == body.length());
-	std::ostringstream ostr;
-	StreamCopier::copyStream(rs, ostr);
-	//assert(ostr.str() == body);
-}
 void CMonitoringUI::post_alert_data()
 {
-
-	//testPostSmallIdentity();
-	HTTPClientSession session("202.103.191.73");
-	session.setKeepAlive(true);
-
-	try
-	{
-		HTTPRequest request(HTTPRequest::HTTP_POST, "/api/index.php?s=/Services/index");
-		request.setVersion(HTTPRequest::HTTP_1_1);
-		request.setContentType("application/x-www-form-urlencoded");
-		request.setChunkedTransferEncoding(true);
-		request.add("Cache-Control", "no-cache");
-		request.add("Connection", "keep-alive");
-		request.add("Accept-Charset", "utf8");
-		request.add("Accept", "text/json");
-		request.add("User-Agent", "monitor/1.0.0/1/window");
-
-		std::string body("body={\"api\":\"wn_add\", \"filepath\":\"http://202.103.191.73/api/3870861421055882.jpg\",\"type\":1,\"timestamp\":\"20161019221808\",\"UserInfoID\":1,\"DeviceID\":1,\"summary\":\"test\"}");
-		request.setContentLength((int)body.length());
-		DUITRACE("http data : %s \n", body.c_str());
-		std::ostream& os = session.sendRequest(request);
-		os << body;
-		os.flush();
-
-		Poco::Thread::sleep(200);
-
-		HTTPResponse response;
-		std::istream& rs = session.receiveResponse(response);
-		DUITRACE("HTTPResponse status : %d", response.getStatus());
-		assert(response.getStatus() == HTTPResponse::HTTP_OK);
-		std::ostringstream ostr;
-		StreamCopier::copyStream(rs, ostr);
-		std::string message(ostr.str());
-		DUITRACE("HTTPResponse:\n %s", message.c_str());
-	}
-	catch (Poco::Net::NetException& e)
-	{
-		session.reset();
-		DUITRACE(e.displayText().c_str());
-	}
 	
+	HTTPClientSession session("202.103.191.73");
+	ActiveReporter rp(session);
+	
+	/*
+	std::string body("body={\"api\":\"wn_add\", \"filepath\":\"http://202.103.191.73/api/3870861421055882.jpg\",\"type\":1,\"timestamp\":\"20161019221808\",\"UserInfoID\":1,\"DeviceID\":1,\"summary\":\"test\"}");
+		request.setContentLength((int)body.length());
+	*/
+
+	Document d;
+	d.SetObject();
+	d.AddMember("api", "wn_add", d.GetAllocator());
+	d.AddMember("filepath", "http://202.103.191.73/api/3870861421055882.jpg", d.GetAllocator());
+	d.AddMember("type", 1, d.GetAllocator());
+	d.AddMember("timestamp", "20161019221808", d.GetAllocator());
+	d.AddMember("UserInfoID", 1, d.GetAllocator());
+	d.AddMember("DeviceID", 1, d.GetAllocator());
+	d.AddMember("summary", "test", d.GetAllocator());
+	StringBuffer sb;
+	PrettyWriter<StringBuffer> writer(sb);
+	d.Accept(writer);
+	std::string ss = sb.GetString();
+
+	ActiveResult<std::string> result = rp.report(sb.GetString());
+	result.wait();
+	std::string received = result.data();
+	DUITRACE("HTTP RECEIVED : %s", received);
 }
 
 #include <Poco/Net/FTPClientSession.h>

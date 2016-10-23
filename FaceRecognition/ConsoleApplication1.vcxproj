@@ -87,6 +87,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ActiveReporter.h" />
     <ClInclude Include="ActivityDispatcher.h" />
     <ClInclude Include="AppInitialize.h" />
     <ClInclude Include="Camera.h" />
@@ -125,6 +126,7 @@
     <ClInclude Include="Util.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ActiveReporter.cpp" />
     <ClCompile Include="ActivityDispatcher.cpp" />
     <ClCompile Include="App.cpp" />
     <ClCompile Include="AppInitialize.cpp" />
