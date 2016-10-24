@@ -35,7 +35,7 @@
 						<Edit name="Edit_Identify" width="290" height="40" font="1"  padding="0,10,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
 						<Edit name="Edit_Phone" width="290" height="40" font="1"  padding="0,10,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
 						<Edit name="Edit_license_code" width="290" height="40" font="1"  padding="0,10,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
-						<Combo name="Edit_license_level" height="40" width="290" padding="0,10,0,0" dropboxsize="0,80" itemfont="1" itemlinecolor="0x12345678" bkimage="file='skin/edit.png'" normalimage="file='skin/normol_bntcmb.png' dest='250,0,290,40'" hotimage="file='skin/hot_btncmb.png' dest='250,0,290,40'" pushedimage="file='skin/push_btncmb.png' dest='250,0,290,40'" itemhotimage="file='skin/item1.png'">
+						<Combo name="Edit_license_level" height="40" width="290" padding="0,10,0,0" dropboxsize="0,200" itemfont="1" itemlinecolor="0x12345678" bkimage="file='skin/edit.png'" normalimage="file='skin/normol_bntcmb.png' dest='250,0,290,40'" hotimage="file='skin/hot_btncmb.png' dest='250,0,290,40'" pushedimage="file='skin/push_btncmb.png' dest='250,0,290,40'" itemhotimage="file='skin/item1.png'">
 							<ListLabelElement name="Item1" text="1" bordersize="1" bordercolor="0x12345678"/>
 							<ListLabelElement name="Item2" text="2" bordersize="1" bordercolor="0x12345678"/>
 							<ListLabelElement name="Item1" text="3" bordersize="1" bordercolor="0x12345678"/>

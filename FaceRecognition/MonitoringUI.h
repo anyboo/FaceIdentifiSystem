@@ -10,10 +10,14 @@
 #include "ActivityDispatcher.h"
 
 #include "Poco/Data/Session.h"
+#include <Poco/Net/FTPClientSession.h>
+#include "ActivityCommit.h"
 
 #define BT_CLOSE_MonWnd		(_T("close_btn2"))
 #define BT_REMOVE_ALARM		(_T("btm_remove"))
 
+
+struct alert_table;
 
 class CMonitoringUI :
 	public WindowImplBase,
@@ -84,9 +88,9 @@ protected:
 	Poco::TimerCallback<CMonitoringUI> tc;
 
 	bool is_need_report();
-	void report_to_server();
-	void upload_image();
-	void post_alert_data();
-private:
-	//Poco::Data::Session session;
+	void report_to_user();
+
+	ActivityCommit _commit;
+
+	int _notify_status;
 };

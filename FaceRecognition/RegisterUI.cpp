@@ -27,7 +27,8 @@ RegisterUI::RegisterUI()
 _license_id(0),
 _identify_id(0),
 _photo_id(0),
-_unit_id(0)
+_unit_id(0),
+_userinfo_id(0)
 {
 	m_closeApp = true;
 }
@@ -125,19 +126,24 @@ void RegisterUI::Backward(TNotifyUI& msg)
 
 void RegisterUI::SignUp(TNotifyUI& msg)
 {
-	if (!bAlreadyTaked)
-	{
-		std::string str = LangueConfig::GetShowText(2);
-		return _prompt->SetText(str.c_str());
-	}
-
 	if (!isValidInformation())
 	{
 		std::string str = LangueConfig::GetShowText(1);
 		return _prompt->SetText(str.c_str());
 	}
 
+	if (!bAlreadyTaked)
+	{
+		std::string str = LangueConfig::GetShowText(2);
+		return _prompt->SetText(str.c_str());
+	}
 
+	GetDataFromUI();
+	if (IsDuplicate())
+	{
+		std::string str = LangueConfig::GetShowText(10);
+		return _prompt->SetText(str.c_str());
+	}
 	//RegUserInfo::addUserInfo(m_userInfo);
 	try
 	{
@@ -150,14 +156,68 @@ void RegisterUI::SignUp(TNotifyUI& msg)
 	}
 	catch (Poco::Data::SQLite::ConstraintViolationException& e)
 	{
-		e.displayText();
-		_prompt->SetText("register failed!");
+		DUITRACE("ConstraintViolationException: class_name %s, display: %s", e.className(), e.displayText().c_str());
+		std::string str = LangueConfig::GetShowText(11);
+		_prompt->SetText(str.c_str());
 	}
 
 }
 
+bool RegisterUI::IsDuplicate()
+{
+	struct Person
+	{
+		int id;
+		std::string  name;
+		std::string  code;
+	};
+	Person people = {0, "", ""};
+
+	try
+	{
+		Session session("SQLite", "D:\\workstation\\code\\GitHub\\FaceIdentifiSystem\\bin\\facerecog.db");
+		Statement duplicate(session);
+		duplicate << "SELECT identify.id, identify.code, identify.filepath, UserInfo.name \
+				 				 		FROM identify INNER JOIN UserInfo ON identify.code \
+																		= ?",
+																		into(people.id),
+																		into(people.name),
+																		into(people.code),
+																		use(_value_identify_code),
+																		now;
+	}
+	catch (Poco::Data::DataException& e)
+	{
+		DUITRACE(e.displayText().c_str());
+	}
+	
+
+	return !people.name.empty();
+}
+
+void RegisterUI::GetDataFromUI()
+{
+	_value_unit = "lm_tech";
+	_value_name = _name->GetText();
+	_value_birthday = _birth->GetText();
+	_value_address = _address->GetText();
+	_value_cellphone = _phone->GetText();
+	_value_license_code = _license_code->GetText();
+	_value_issue_date = _issue_date->GetText();
+	_value_identify_code = _identify->GetText();
+	_value_photo_path = "D:/workstation/code/GitHub/FaceIdentifiSystem/bin/photo/20161023234543.jpg";
+	_value_sex = _sex->GetCurSel();
+	_value_level = _license_level->GetCurSel() + 1;
+}
+
 void RegisterUI::TakePhoto(TNotifyUI& msg)
 {
+	if (!isValidInformation())
+	{
+		std::string str = LangueConfig::GetShowText(1);
+		return _prompt->SetText(str.c_str());
+	}
+
 	if (bAlreadyTaked)
 	{
 		std::string str = LangueConfig::GetShowText(3);
@@ -189,6 +249,85 @@ void RegisterUI::SaveRegisterInformation()
 	add_user_license();
 	add_user_identify();
 	add_user_info();
+
+	commit_to_server();
+}
+
+#include "ActiveUploader.h"
+#include "ActiveReporter.h"
+#include "prettywriter.h"
+#include "stringbuffer.h"
+#include <Poco/Path.h>
+
+using Poco::Path;
+using namespace rapidjson;
+
+void RegisterUI::commit_to_server()
+{
+	FTPClientSession _ftp("202.103.191.73", FTPClientSession::FTP_PORT, "ftpalert", "1");
+	ActiveUploader ur(_ftp);
+	ActiveResult<bool> upload_result = ur.upload(_value_photo_path);
+
+	HTTPClientSession session("202.103.191.73");
+	ActiveReporter rp(session);
+
+	/*
+	body={"api":"user_add","name":"yuk","sex":1,"birthday":"19830214","address":"fz","phone":"13950424413",
+	"license_code":"li0001", "unit":"lm_tech","identify_code":"352225198215250075",
+	"photo_path":"http://202.103.191.73/api/3870861421055882.jpg", "issue_date":"20110101", "level":5}
+	*/
+	
+	Document d;
+	d.SetObject();
+
+	std::string server_dir("http://202.103.191.73/var/www/sisec_website/photos/");
+	Path p(_value_photo_path);
+	server_dir += p.getFileName();
+
+	d.AddMember("api", "user_add", d.GetAllocator());
+	d.AddMember("name", StringRef(_value_name.c_str()), d.GetAllocator());
+	d.AddMember("sex", _value_sex, d.GetAllocator());
+	d.AddMember("birthday", StringRef(_value_birthday.c_str()), d.GetAllocator());
+	d.AddMember("address", StringRef(_value_address.c_str()), d.GetAllocator());
+	d.AddMember("phone", StringRef(_value_cellphone.c_str()), d.GetAllocator());
+	d.AddMember("license_code", StringRef(_value_license_code.c_str()), d.GetAllocator());
+	d.AddMember("unit", StringRef(_value_unit.c_str()), d.GetAllocator());
+	d.AddMember("identify_code", StringRef(_value_identify_code.c_str()), d.GetAllocator());
+	d.AddMember("photo_path", StringRef(server_dir.c_str()), d.GetAllocator());
+	d.AddMember("issue_date", StringRef(_value_issue_date.c_str()), d.GetAllocator());
+	d.AddMember("level", _value_level, d.GetAllocator());
+
+	StringBuffer sb;
+	Writer<StringBuffer> writer(sb);
+	d.Accept(writer);
+	
+	ActiveResult<std::string> result = rp.report(sb.GetString());
+	result.wait();
+	std::string received = result.data();
+	DUITRACE("HTTP RECEIVED : %s", received);
+
+	if (!received.empty())
+	{
+		Document document;
+		received = received.substr(3, std::string::npos);
+		if (!document.Parse(received.c_str()).HasParseError())
+		{
+			if (document.HasMember("id"))
+			{
+				std::string server_id = document["id"].GetString();
+
+				Session session("SQLite", "D:\\workstation\\code\\GitHub\\FaceIdentifiSystem\\bin\\facerecog.db");
+				Statement update(session);
+				update << "UPDATE UserInfo SET id = ? WHERE id = ?",
+					bind(std::stoi(server_id)),
+					bind(_userinfo_id),
+					now;
+			}
+		}
+	}
+	
+	upload_result.wait();
+	_ftp.close();
 }
 
 void RegisterUI::add_user_license()
@@ -210,15 +349,13 @@ void RegisterUI::add_user_license()
 
 	_license_id = ++maxid;
 
-	int level = _license_level->GetCurSel() + 1;
-
 	license li =
 	{
-		maxid,
+		_license_id,
 		"testimg",//_license_image->GetText(),
-		_license_code->GetText(),
-		_issue_date->GetText(),
-		level,
+		_value_license_code,
+		_value_issue_date,
+		_value_level,
 	};
 
 	Statement insert(session);
@@ -254,7 +391,7 @@ void RegisterUI::add_user_identify()
 	{
 		_identify_id,
 		"xxx",
-		_identify->GetText(),
+		_value_identify_code,
 	};
 
 	Statement insert(session);
@@ -291,16 +428,16 @@ void RegisterUI::add_user_info()
 		into(maxid),
 		now;
 
-	maxid++;
+	_userinfo_id = ++maxid;
 
 	UserInfo user_info =
 	{
-		maxid,
-		_name->GetText(),
-		_sex->GetCurSel(),
-		_birth->GetText(),
-		_address->GetText(),
-		_phone->GetText(),
+		_userinfo_id,
+		_value_name,
+		_value_sex,
+		_value_birthday,
+		_value_address,
+		_value_cellphone,
 		_license_id,
 		_unit_id,
 		_identify_id,

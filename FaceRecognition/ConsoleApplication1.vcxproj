@@ -55,13 +55,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\duilib;$(ProjectDir)..\include-mt;$(ProjectDir)..\poco\Net\include;$(ProjectDir)..\poco\Foundation\include;$(SolutionDir)\poco\Data\SQLite\include;$(SolutionDir)\poco\Data\include;$(SolutionDir)\opencv231\build\include;$(SolutionDir)\opencv231\build\include\opencv;$(SolutionDir)\JSON\include\rapidjson</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\workstation\code\GitHub\FaceIdentifiSystem\ffmpeg\include;$(ProjectDir)..\duilib;$(ProjectDir)..\include-mt;$(ProjectDir)..\poco\Net\include;$(ProjectDir)..\poco\Foundation\include;$(SolutionDir)\poco\Data\SQLite\include;$(SolutionDir)\poco\Data\include;$(SolutionDir)\opencv231\build\include;$(SolutionDir)\opencv231\build\include\opencv;$(SolutionDir)\JSON\include\rapidjson</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>duilib_d.lib;TiCapture2.lib;THFaceImage.lib;THFeature.lib;opencv_core231.lib;opencv_imgproc231.lib;opencv_highgui231.lib;WINMM.LIB;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\lib;$(ProjectDir)..\lib-mt;$(SolutionDir)\opencv231\build\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\lib;$(ProjectDir)..\lib-mt;$(SolutionDir)\opencv231\build\lib;D:\workstation\code\GitHub\FaceIdentifiSystem\ffmpeg\lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -88,6 +88,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ActiveReporter.h" />
+    <ClInclude Include="ActiveUploader.h" />
+    <ClInclude Include="ActivityCommit.h" />
     <ClInclude Include="ActivityDispatcher.h" />
     <ClInclude Include="AppInitialize.h" />
     <ClInclude Include="Camera.h" />
@@ -127,6 +129,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ActiveReporter.cpp" />
+    <ClCompile Include="ActiveUploader.cpp" />
+    <ClCompile Include="ActivityCommit.cpp" />
     <ClCompile Include="ActivityDispatcher.cpp" />
     <ClCompile Include="App.cpp" />
     <ClCompile Include="AppInitialize.cpp" />

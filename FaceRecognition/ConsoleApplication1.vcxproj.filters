@@ -69,6 +69,8 @@
     <ClCompile Include="AppInitialize.cpp" />
     <ClCompile Include="Employee.cpp" />
     <ClCompile Include="ActiveReporter.cpp" />
+    <ClCompile Include="ActiveUploader.cpp" />
+    <ClCompile Include="ActivityCommit.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -154,6 +156,8 @@
       <Filter>SettingUI</Filter>
     </ClInclude>
     <ClInclude Include="ActiveReporter.h" />
+    <ClInclude Include="ActiveUploader.h" />
+    <ClInclude Include="ActivityCommit.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ConsoleApplication1.rc" />

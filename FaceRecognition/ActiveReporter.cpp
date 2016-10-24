@@ -45,11 +45,14 @@ std::string ActiveReporter::reportImp(const std::string& json)
 	HTTPResponse response;
 	std::istream& rs = _session.receiveResponse(response);
 	DUITRACE("HTTPResponse status : %d", response.getStatus());
-	assert(response.getStatus() == HTTPResponse::HTTP_OK);
-	std::ostringstream ostr;
-	StreamCopier::copyStream(rs, ostr);
-	std::string message(ostr.str());
-	DUITRACE("HTTPResponse:\n %s", message.c_str());
+	if (response.getStatus() == HTTPResponse::HTTP_OK)
+	{
+		std::ostringstream ostr;
+		StreamCopier::copyStream(rs, ostr);
+		std::string message(ostr.str());
+		DUITRACE("HTTPResponse:\n %s", message.c_str());
+		return message;
+	}
 
-	return message;
+	return "";
 }

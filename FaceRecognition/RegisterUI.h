@@ -63,8 +63,10 @@ protected:
 	void SignUp(TNotifyUI& msg);
 	
 	bool isValidInformation();
-	void SaveRegisterInformation();
-	
+	void SaveRegisterInformation(); 
+	void commit_to_server();
+	void GetDataFromUI();
+	bool IsDuplicate();
 	void add_user_info();
 	void add_user_license();
 	void add_user_identify();
@@ -91,8 +93,21 @@ private:
 
 	bool bAlreadyTaked;
 
+	int _userinfo_id;
 	int _license_id;
 	int _identify_id;
 	int _photo_id;
 	int _unit_id;
+
+	std::string _value_unit;
+	std::string _value_name;
+	std::string _value_birthday;
+	std::string _value_address;
+	std::string _value_cellphone;
+	std::string _value_license_code;
+	std::string _value_issue_date;
+	std::string _value_identify_code;
+	std::string _value_photo_path;
+	int _value_sex;
+	int _value_level;
 };

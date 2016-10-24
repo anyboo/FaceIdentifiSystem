@@ -15,17 +15,18 @@
 #include "Poco/Data/Session.h"
 #include "Poco/Data/SQLite/Connector.h"
 
-#include "ActiveReporter.h"
-#include "document.h" 
 
-using namespace rapidjson;
+//#include "document.h" 
+//
+//using namespace rapidjson;
 
 using Poco::Data::Session;
 using Poco::Data::Statement;
 using namespace Poco::Data::Keywords;
 
 CMonitoringUI::CMonitoringUI()
-:r(new Camera), t(100, 1000), tc(*this, &CMonitoringUI::onTimer)
+:r(new Camera), t(100, 2000), tc(*this, &CMonitoringUI::onTimer),
+_notify_status(0)
 {
 	m_closeApp = true;
 	m_bSendMsg = false;
@@ -33,6 +34,7 @@ CMonitoringUI::CMonitoringUI()
 	m_timeInterval = std::stoi(vSet.GetTime_interval()) * 1000 - 15000;
 
 	t.start(tc);
+	_commit.start();
 }
 
 
@@ -50,7 +52,7 @@ void CMonitoringUI::onTimer(Poco::Timer& timer)
 	DUITRACE("CMonitoringUI::onTimer");
 	if (is_need_report())
 	{
-		report_to_server();
+		report_to_user();
 	}
 }
 
@@ -77,127 +79,23 @@ bool CMonitoringUI::is_need_report()
 
 		//DUITRACE("%d,%d,%s,%d\n", notify.id, notify.opcode, notify.comment, notify.status);
 
-		if (notify.opcode == 1)
-			return true;
-	}
-	catch (Poco::Exception& e)
-	{
-		DUITRACE(e.displayText().c_str());
-	}
-	
-	return false;
-}
-
-void CMonitoringUI::report_to_server()
-{
-	struct alert_table
-	{
-		int id;
-		std::string filepath;
-		int type;
-		std::string timestamp;
-		int userid;
-		int deviceid;
-	};
-
-	try
-	{
-		Session session("SQLite", "D:\\workstation\\code\\GitHub\\FaceIdentifiSystem\\bin\\facerecog.db");
-		Statement select(session);
-		alert_table alert;
-		select << "SELECT id, filepath, type, timestamp, UserInfoID, DeviceID FROM alert",
-			into(alert.id),
-			into(alert.filepath),
-			into(alert.type),
-			into(alert.timestamp),
-			into(alert.userid),
-			into(alert.deviceid),
-			range(0, 1);
-
-		while (!select.done())
-		{
-			select.execute();
-			/*
-			DUITRACE("id:%d,filepath:%s,type:%d,timestamp:%s,userid:%d,deviceid:%d\n",
-				alert.id, alert.filepath.c_str(), alert.type, alert.timestamp.c_str(), alert.userid, alert.deviceid);
-			*/
-		}
+		_notify_status = notify.status;
 	}
 	catch (Poco::Exception& e)
 	{
 		DUITRACE(e.displayText().c_str());
 	}
 
-	post_alert_data();
-	//upload_image();
+	return _notify_status;
 }
 
-/*
-#include <Poco/Net/HTTPClientSession.h>
-#include <Poco/Net/HTTPRequest.h>
-#include <Poco/Net/HTTPResponse.h>
-#include <Poco/StreamCopier.h>
-#include <Poco/Net/NetException.h>
-using Poco::Net::HTTPClientSession;
-using Poco::Net::HTTPRequest;
-using Poco::Net::HTTPResponse;
-using Poco::StreamCopier;
-*/
-
-void CMonitoringUI::post_alert_data()
+void CMonitoringUI::report_to_user()
 {
-	
-	HTTPClientSession session("202.103.191.73");
-	ActiveReporter rp(session);
-	
-	/*
-	std::string body("body={\"api\":\"wn_add\", \"filepath\":\"http://202.103.191.73/api/3870861421055882.jpg\",\"type\":1,\"timestamp\":\"20161019221808\",\"UserInfoID\":1,\"DeviceID\":1,\"summary\":\"test\"}");
-		request.setContentLength((int)body.length());
-	*/
-
-	Document d;
-	d.SetObject();
-	d.AddMember("api", "wn_add", d.GetAllocator());
-	d.AddMember("filepath", "http://202.103.191.73/api/3870861421055882.jpg", d.GetAllocator());
-	d.AddMember("type", 1, d.GetAllocator());
-	d.AddMember("timestamp", "20161019221808", d.GetAllocator());
-	d.AddMember("UserInfoID", 1, d.GetAllocator());
-	d.AddMember("DeviceID", 1, d.GetAllocator());
-	d.AddMember("summary", "test", d.GetAllocator());
-	StringBuffer sb;
-	PrettyWriter<StringBuffer> writer(sb);
-	d.Accept(writer);
-	std::string ss = sb.GetString();
-
-	ActiveResult<std::string> result = rp.report(sb.GetString());
-	result.wait();
-	std::string received = result.data();
-	DUITRACE("HTTP RECEIVED : %s", received);
-}
-
-#include <Poco/Net/FTPClientSession.h>
-#include <Poco/StreamCopier.h>
-#include <Poco/FileStream.h>
-#include <sstream>
-
-void CMonitoringUI::upload_image()
-{
-	using Poco::Net::FTPClientSession;
-	using Poco::StreamCopier;
-	using Poco::FileInputStream;
-
-	std::string host("202.103.191.73");
-	std::string username("ftpalert");
-	std::string passwd("1");
-	FTPClientSession  session(host, FTPClientSession::FTP_PORT, username, passwd);
-	
-	session.setWorkingDirectory("/var/www/sisec_website/photos");
-	DUITRACE(session.getWorkingDirectory().c_str());
-	FileInputStream fis("D:/workstation/code/GitHub/FaceIdentifiSystem/bin/photo/20161020114211.jpg");
-	std::ostream& ostr = session.beginUpload("20161020114211.jpg");
-	StreamCopier::copyStream(fis, ostr);
-	session.endUpload();
-	session.close();
+	PlaySoundA(_T("ALARM7.wav"), NULL, SND_FILENAME | SND_ASYNC);
+	//m_Prompt_lab->SetVisible(false);
+	/*DWORD bkcolor = m_Main_Lyt->GetBkColor();
+	DWORD itembkcolor = bkcolor == 0x00000000 ? 0xFFFF9999 : 0x00000000;
+	m_Main_Lyt->SetBkColor(itembkcolor);*/
 }
 
 LPCTSTR CMonitoringUI::GetWindowClassName() const
