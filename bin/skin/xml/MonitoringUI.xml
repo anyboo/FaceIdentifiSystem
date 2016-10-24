@@ -10,9 +10,25 @@
 			<Label text="信息监控" font="7" padding="400,0,0,0" textcolor="#FFFFFFFF" align="center" />
 		</HorizontalLayout>
 		<VerticalLayout name="vLyt_" height="698">
-			<VerticalLayout  width="600" height="500" inset="2,2,2,2" bordersize="2" bordercolor="0x88888888" padding="200,30,40,0">
-				<Control name="photo_video" width="600" height="500" bkimage="file='skin/bsbj.png'"/>
+			<HorizontalLayout>
+				<HorizontalLayout  width="600" height="500" inset="2,2,2,2" bordersize="2" bordercolor="0x88888888" padding="20,30,10,0">
+					<Control name="photo_video" visible="true" width="600" height="500" bkimage="file='skin/bsbj.png'"/>
+				</HorizontalLayout>
+				<VerticalLayout>
+				<HorizontalLayout  width="360" height="160" visible="true" inset="2,2,2,2" bordersize="2" bordercolor="0x88888888" padding="2,30,0,0">
+					<Button name="" width="180" height="160" text="1" visible="true" padding="0,10,0,0" textcolor="#88888888" font="1" bkimage="file='skin/aobama.png'"/>
+					<Button name="" width="180" height="160" text="2" visible="true" padding="2,10,0,0" textcolor="#88888888" font="1" normalimage="file='skin/current.jpg'"/>
+				</HorizontalLayout>
+				<HorizontalLayout  width="360" height="160" inset="2,2,2,2" bordersize="2" bordercolor="0x88888888" padding="2,10,10,0">
+					<Button name="" width="180" height="160" text="1" visible="true" padding="0,10,0,0" textcolor="#88888888" font="1" bkimage="file='skin/aobama.png'"/>
+					<Button name="" width="180" height="160" text="2" visible="true" padding="2,10,0,0" textcolor="#88888888" font="1" normalimage="file='skin/current.jpg'"/>
+				</HorizontalLayout>
+				<HorizontalLayout  width="360" height="160" inset="2,2,2,2" bordersize="2" bordercolor="0x88888888" padding="2,10,10,0">
+					<Button name="" width="180" height="160" text="1" visible="true" padding="0,10,0,0" textcolor="#88888888" font="1" bkimage="file='skin/aobama.png'"/>
+					<Button name="" width="180" height="160" text="2" visible="true" padding="2,10,0,0" textcolor="#88888888" font="1" normalimage="file='skin/current.jpg'"/>
+				</HorizontalLayout>
 			</VerticalLayout>
+			</HorizontalLayout>
 			<Label name="result" text="信息匹配成功！" visible="false" font="7" width="200" height="40" textcolor="#FFFF0000" padding="400,20,0,0"/>
 			<Button name="btm_remove" width="140" height="60" text="解除警报" visible="false" padding="400,10,0,0" textcolor="#FFFFFFFF" font="1" normalimage="file='skin/regok_normal.png'" hotimage="file='skin/regok_hot.png'" pushedimage="file='skin/regok_push.png'"/>
 		</VerticalLayout>
