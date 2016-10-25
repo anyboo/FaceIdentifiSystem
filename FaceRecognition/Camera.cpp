@@ -18,7 +18,7 @@ Camera::Camera()
 {
 	try
 	{
-		Prepare();
+		//Prepare();
 	}
 	catch (Poco::Exception& e)
 	{
@@ -29,11 +29,6 @@ Camera::Camera()
 
 Camera::~Camera()
 {
-	if (_camera)
-	{
-		delete _camera;
-		_camera = 0;
-	}
 }
 
 void Camera::Prepare()
@@ -65,7 +60,6 @@ void Camera::Open()
 	if (_camera && !isRunning)
 	{
 		isRunning = _camera->Play();
-		poco_assert(isRunning);
 	}
 }
 

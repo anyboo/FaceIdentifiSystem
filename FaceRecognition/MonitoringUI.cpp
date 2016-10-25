@@ -68,7 +68,7 @@ bool CMonitoringUI::is_need_report()
 
 	try
 	{
-		Session session("SQLite", "D:\\workstation\\code\\GitHub\\FaceIdentifiSystem\\bin\\facerecog.db");
+		Session session("SQLite", "facerecog.db");
 		notify_main notify;
 		session << "SELECT id, opcode, comment, status FROM notify_main",
 			into(notify.id),

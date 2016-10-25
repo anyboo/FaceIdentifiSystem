@@ -45,51 +45,66 @@ void ActivityCommit::stop()
 	_activity.wait();
 //	_ftp.close();
 }
+#include <Poco/Data/SQLite/SQLiteException.h>
 
 void ActivityCommit::runActivity()
 {
 	while (!_activity.isStopped())
 	{
-		Session session("SQLite", "D:\\workstation\\code\\GitHub\\FaceIdentifiSystem\\bin\\facerecog.db");
-		Statement select(session);
-		alert_table alert;
-		select << "SELECT id, filepath, type, timestamp, UserInfoID, DeviceID FROM alert WHERE hasUpload = 0",
-			into(alert.id),
-			into(alert.filepath),
-			into(alert.type),
-			into(alert.timestamp),
-			into(alert.userid),
-			into(alert.deviceid),
-			range(1, 1);
-
-		while (!select.done())
+		DUITRACE("ActivityCommit::runActivity");
+		try
 		{
-			try 
-			{ 
-				select.execute(); 
+			Session session("SQLite", "facerecog.db");
+			Statement select(session);
+			alert_table alert;
+			select << "SELECT id, filepath, type, timestamp, UserInfoID, DeviceID FROM alert WHERE hasUpload = 0",
+				into(alert.id),
+				into(alert.filepath),
+				into(alert.type),
+				into(alert.timestamp),
+				into(alert.userid),
+				into(alert.deviceid),
+				range(1, 1);
+
+			while (!select.done())
+			{
+
+				select.execute();
 				FTPClientSession _ftp("202.103.191.73", FTPClientSession::FTP_PORT, "ftpalert", "1");
 				ActiveUploader ur(_ftp);
 				ActiveResult<bool> result = ur.upload(alert.filepath);
 				post_alert_data(alert);
 
-				Statement update(session);
-				update << "UPDATE alert SET hasUpload = 1 WHERE id = ?",
-					use(alert.id),
-					now;
+				try
+				{
+					Statement update(session);
+					update << "UPDATE alert SET hasUpload = 1 WHERE id = ?",
+						use(alert.id),
+						now;
+				}
+				catch (Poco::Data::SQLite::DBLockedException& e)
+				{
+					DUITRACE(e.displayText().c_str());
+					Thread::sleep(1000);
+					Statement update(session);
+					update << "UPDATE alert SET hasUpload = 1 WHERE id = ?",
+						use(alert.id),
+						now;
+				}
 
 				result.wait();
-				_ftp.close();
-			}
-			catch (Poco::Exception& e)
-			{
-				DUITRACE(e.displayText().c_str());
+
 			}
 		}
-
+		catch (Poco::Exception& e)
+		{
+			DUITRACE(e.displayText().c_str());
+		}
 		Thread::sleep(2000);
 	}
 }
 
+#include <Poco/Exception.h>
 #include <Poco/Path.h>
 using Poco::Path;
 
@@ -103,7 +118,7 @@ void ActivityCommit::post_alert_data(alert_table& alert)
 	std::string body("body={\"api\":\"wn_add\", \"filepath\":\"http://202.103.191.73/api/3870861421055882.jpg\",\"type\":1,\"timestamp\":\"20161019221808\",\"UserInfoID\":1,\"DeviceID\":1,\"summary\":\"test\"}");
 	request.setContentLength((int)body.length());
 	*/
-	std::string server_dir("http://202.103.191.73/var/www/sisec_website/photos/");
+	std::string server_dir("http://202.103.191.73/photos/");
 	Path p(alert.filepath);
 	server_dir += p.getFileName();
 
@@ -124,4 +139,14 @@ void ActivityCommit::post_alert_data(alert_table& alert)
 	result.wait();
 	std::string received = result.data();
 	DUITRACE("HTTP RECEIVED : %s", received);
+
+	if (received.empty())
+		throw Poco::Exception("HTTP RECEIVED FAILED - NO RECEIVED!");
+	
+	Document document;
+	received = received.substr(3, std::string::npos);
+	if (document.Parse(received.c_str()).HasParseError() || !document.HasMember("id"))
+	{
+		throw Poco::Exception("HTTP RECEIVED PARSE FAILED -  NO ID!");
+	}
 }

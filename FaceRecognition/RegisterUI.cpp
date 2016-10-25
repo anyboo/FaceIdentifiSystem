@@ -5,7 +5,7 @@
 #include "Util.h"
 #include "SettingConfig.h"
 #include "ClipUI.h"
-
+#include "CameraUI.h"
 
 #include "Mmsystem.h"
 
@@ -14,9 +14,24 @@
 #include "Poco/Data/Session.h"
 #include "Poco/Data/SQLite/Connector.h"
 #include <Poco/Data/SQLite/SQLiteException.h>
+#include "ActiveUploader.h"
+#include "ActiveReporter.h"
+#include "prettywriter.h"
+#include "stringbuffer.h"
+#include <Poco/Path.h>
+#include <Poco/File.h>
+#include <Poco/Timestamp.h>
+
+using Poco::File;
+using Poco::Path;
+using namespace rapidjson;
 
 using Poco::Data::Session;
 using Poco::Data::Statement;
+
+using Poco::DateTimeFormatter;
+using Poco::LocalDateTime;
+
 using namespace Poco::Data::Keywords;
 
 
@@ -69,13 +84,15 @@ CControlUI* RegisterUI::CreateControl(LPCTSTR pstrClass)
 {
 	if (_tcscmp(pstrClass, DUI_CTR_CLIP) == 0)
 		return new CClipUI;
+	if (_tcscmp(pstrClass, DUI_CTR_CAMERAUI) == 0)
+		return new CameraUI;
 	return NULL;
 }
 
 void RegisterUI::OnFinalMessage(HWND hWnd)
 {
 	removeObserver(*this);
-	r.stop();
+	//r.stop();
 
 	WindowImplBase::OnFinalMessage(hWnd);
 }
@@ -96,7 +113,7 @@ void RegisterUI::OnCloseRWnd(TNotifyUI& msg)
 void RegisterUI::InitWindow()
 {
 	addObserver(*this);
-	r.start();
+	//r.start();
 	BandingSubControl();
 }
 
@@ -144,6 +161,24 @@ void RegisterUI::SignUp(TNotifyUI& msg)
 		std::string str = LangueConfig::GetShowText(10);
 		return _prompt->SetText(str.c_str());
 	}
+
+	Path path(_value_photo_path);
+	path.makeAbsolute();
+
+	File photo(path);
+	if (!photo.exists())
+	{
+		std::string str = LangueConfig::GetShowText(2);
+		return _prompt->SetText(str.c_str());
+	}
+	
+	LocalDateTime now;
+	std::string newName = path.parent().toString();
+	newName.append(DateTimeFormatter::format(now, "%Y%n%d%H%M%S")).append(".").append(path.getExtension());
+
+	photo.renameTo(newName);
+	_value_photo_path = photo.path();
+
 	//RegUserInfo::addUserInfo(m_userInfo);
 	try
 	{
@@ -175,7 +210,7 @@ bool RegisterUI::IsDuplicate()
 
 	try
 	{
-		Session session("SQLite", "D:\\workstation\\code\\GitHub\\FaceIdentifiSystem\\bin\\facerecog.db");
+		Session session("SQLite", "facerecog.db");
 		Statement duplicate(session);
 		duplicate << "SELECT identify.id, identify.code, identify.filepath, UserInfo.name \
 				 				 		FROM identify INNER JOIN UserInfo ON identify.code \
@@ -191,7 +226,6 @@ bool RegisterUI::IsDuplicate()
 		DUITRACE(e.displayText().c_str());
 	}
 	
-
 	return !people.name.empty();
 }
 
@@ -205,7 +239,7 @@ void RegisterUI::GetDataFromUI()
 	_value_license_code = _license_code->GetText();
 	_value_issue_date = _issue_date->GetText();
 	_value_identify_code = _identify->GetText();
-	_value_photo_path = "D:/workstation/code/GitHub/FaceIdentifiSystem/bin/photo/20161023234543.jpg";
+	_value_photo_path = "photoshop/regiter.jpg";
 	_value_sex = _sex->GetCurSel();
 	_value_level = _license_level->GetCurSel() + 1;
 }
@@ -253,15 +287,6 @@ void RegisterUI::SaveRegisterInformation()
 	commit_to_server();
 }
 
-#include "ActiveUploader.h"
-#include "ActiveReporter.h"
-#include "prettywriter.h"
-#include "stringbuffer.h"
-#include <Poco/Path.h>
-
-using Poco::Path;
-using namespace rapidjson;
-
 void RegisterUI::commit_to_server()
 {
 	FTPClientSession _ftp("202.103.191.73", FTPClientSession::FTP_PORT, "ftpalert", "1");
@@ -280,7 +305,7 @@ void RegisterUI::commit_to_server()
 	Document d;
 	d.SetObject();
 
-	std::string server_dir("http://202.103.191.73/var/www/sisec_website/photos/");
+	std::string server_dir("http://202.103.191.73/photos/");
 	Path p(_value_photo_path);
 	server_dir += p.getFileName();
 
@@ -316,7 +341,7 @@ void RegisterUI::commit_to_server()
 			{
 				std::string server_id = document["id"].GetString();
 
-				Session session("SQLite", "D:\\workstation\\code\\GitHub\\FaceIdentifiSystem\\bin\\facerecog.db");
+				Session session("SQLite", "facerecog.db");
 				Statement update(session);
 				update << "UPDATE UserInfo SET id = ? WHERE id = ?",
 					bind(std::stoi(server_id)),
@@ -327,7 +352,6 @@ void RegisterUI::commit_to_server()
 	}
 	
 	upload_result.wait();
-	_ftp.close();
 }
 
 void RegisterUI::add_user_license()
@@ -342,7 +366,7 @@ void RegisterUI::add_user_license()
 	};
 
 	int maxid = 0;
-	Session session("SQLite", "D:\\workstation\\code\\GitHub\\FaceIdentifiSystem\\bin\\facerecog.db");
+	Session session("SQLite", "facerecog.db");
 	session << "SELECT max(id) FROM license",
 		into(maxid),
 		now;
@@ -365,9 +389,8 @@ void RegisterUI::add_user_license()
 		use(li.filepath),
 		use(li.code),
 		use(li.issue_date),
-		use(li.level);
-
-	insert.execute();
+		use(li.level),
+		now;
 }
 
 void RegisterUI::add_user_identify()
@@ -380,7 +403,7 @@ void RegisterUI::add_user_identify()
 	};
 
 	int maxid = 0;
-	Session session("SQLite", "D:\\workstation\\code\\GitHub\\FaceIdentifiSystem\\bin\\facerecog.db");
+	Session session("SQLite", "facerecog.db");
 	session << "SELECT max(id) FROM identify",
 		into(maxid),
 		now;
@@ -399,9 +422,8 @@ void RegisterUI::add_user_identify()
 	insert << "INSERT INTO identify VALUES(?, ?, ?)",
 		use(ident.id),
 		use(ident.filepath),
-		use(ident.code);
-
-	insert.execute();
+		use(ident.code),
+		now;
 }
 
 void RegisterUI::add_user_info()
@@ -419,11 +441,12 @@ void RegisterUI::add_user_info()
 		int identify_id;
 		int photo_id;
 		bool authorized;
+		std::string photo_file_path;
 	};
 
 
 	int maxid = 0;
-	Session session("SQLite", "D:\\workstation\\code\\GitHub\\FaceIdentifiSystem\\bin\\facerecog.db");
+	Session session("SQLite", "facerecog.db");
 	session << "SELECT max(id) FROM UserInfo",
 		into(maxid),
 		now;
@@ -443,11 +466,12 @@ void RegisterUI::add_user_info()
 		_identify_id,
 		_photo_id,
 		false,
+		_value_photo_path,
 	};
 
 	Statement insert(session);
 
-	insert << "INSERT INTO UserInfo VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+	insert << "INSERT INTO UserInfo VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
 		use(user_info.id),
 		use(user_info.name),
 		use(user_info.sex),
@@ -458,9 +482,9 @@ void RegisterUI::add_user_info()
 		use(user_info.unit_id),
 		use(user_info.identify_id),
 		use(user_info.photo_id),
-		use(user_info.authorized);
-
-	insert.execute();
+		use(user_info.authorized),
+		use(user_info.photo_file_path),
+		now;
 }
 
 void RegisterUI::handle1(Poco::Notification* pNf)

@@ -71,6 +71,7 @@
     <ClCompile Include="ActiveReporter.cpp" />
     <ClCompile Include="ActiveUploader.cpp" />
     <ClCompile Include="ActivityCommit.cpp" />
+    <ClCompile Include="CameraUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -158,6 +159,7 @@
     <ClInclude Include="ActiveReporter.h" />
     <ClInclude Include="ActiveUploader.h" />
     <ClInclude Include="ActivityCommit.h" />
+    <ClInclude Include="CameraUI.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ConsoleApplication1.rc" />
