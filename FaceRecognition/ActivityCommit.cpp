@@ -68,7 +68,6 @@ void ActivityCommit::runActivity()
 
 			while (!select.done())
 			{
-
 				select.execute();
 				FTPClientSession _ftp("202.103.191.73", FTPClientSession::FTP_PORT, "ftpalert", "1");
 				ActiveUploader ur(_ftp);

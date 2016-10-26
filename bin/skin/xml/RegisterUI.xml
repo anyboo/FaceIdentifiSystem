@@ -9,7 +9,7 @@
 		</HorizontalLayout>
 		<VerticalLayout height="600"  padding="10,0,10,0">
 		<HorizontalLayout >
-			<VerticalLayout width="430" height="520" padding="60,20,0,0"  bkimage="file='skin/personInfo.png'" bordersize="3" bordercolor="0x12345678">
+			<VerticalLayout width="430" height="520" padding="40,20,0,0"  bkimage="file='skin/personInfo.png'" bordersize="3" bordercolor="0x12345678">
 				<Label text="请在此处输入您的信息" font="1" width="410" textcolor="#FFFFFFFF" height="50" align="center" padding="0,0,0,0" />
 				<HorizontalLayout>
 					<VerticalLayout width="120">
@@ -47,8 +47,11 @@
 					</VerticalLayout>
 				</HorizontalLayout>
 			</VerticalLayout>
-			<VerticalLayout width="400" height="500" padding="50,40,0,0" >
-				<CameraUI name="camera" visible="true" width="391" height="421" inset="2,2,2,2" bordersize="2" bordercolor="0x88888888" />
+			<VerticalLayout width="600" height="500" padding="20,22,0,0" >
+				<HorizontalLayout>
+					<CameraUI name="camera" visible="true" width="391" height="421" inset="2,2,2,2" bordersize="2" bordercolor="0x88888888" />
+					<HorizontalLayout name="photo_for_user" width="105" height="130" inset="2,2,2,2" bordersize="2" padding="7,0,0,0" bordercolor="0x88888888" />
+				</HorizontalLayout>
 				<Button name="photo" width="140" height="60" padding="120,18,0,0" text="拍照" font="1" textcolor="#FFFFFFFF" pushedimage="file='skin/push_photo.png'" normalimage="skin/normol_photo.png" hotimage="skin/hot_photo.png"/>
 			</VerticalLayout>
 		</HorizontalLayout>

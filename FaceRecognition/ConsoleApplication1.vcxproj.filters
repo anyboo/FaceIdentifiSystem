@@ -72,6 +72,9 @@
     <ClCompile Include="ActiveUploader.cpp" />
     <ClCompile Include="ActivityCommit.cpp" />
     <ClCompile Include="CameraUI.cpp" />
+    <ClCompile Include="SignInUI.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -160,6 +163,9 @@
     <ClInclude Include="ActiveUploader.h" />
     <ClInclude Include="ActivityCommit.h" />
     <ClInclude Include="CameraUI.h" />
+    <ClInclude Include="SignInUI.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ConsoleApplication1.rc" />

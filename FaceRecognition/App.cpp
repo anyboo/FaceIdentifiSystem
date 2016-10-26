@@ -30,9 +30,9 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 	Loggering::Logger_initiation();
 
 	THFI_Param param;
-	ValueSetting set;
-	param.nMinFaceSize = std::stoi(set.GetFaceSize());
-	param.nRollAngle = 145;
+	//ValueSetting set;
+	param.nMinFaceSize = 50;
+	param.nRollAngle = 45;
 	param.bOnlyDetect = true;
 	THFI_Create(1, &param);
 

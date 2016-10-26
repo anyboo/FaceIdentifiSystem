@@ -20,8 +20,7 @@
 struct alert_table;
 
 class CMonitoringUI :
-	public WindowImplBase,
-	public CaptureNotify
+	public WindowImplBase
 {
 public:
 	CMonitoringUI();
@@ -29,7 +28,7 @@ public:
 	virtual void InitWindow();
 	virtual void OnFinalMessage(HWND hWnd);
 	virtual void Notify(TNotifyUI& msg);
-	virtual void handle1(Poco::Notification* pNf);
+	//virtual void handle1(Poco::Notification* pNf);
 	DUI_DECLARE_MESSAGE_MAP();
 
 	void OnCloseWnd(TNotifyUI& msg);
@@ -64,8 +63,7 @@ private:
 	Poco::BasicEvent<bool>				 m_theEvent;
 	BitMapCompare*						 m_pCompare;
 	std::queue<CapBitmapData>			 m_capdata;
-	Recorder							 r;
-	//ActivityDispatcher					 example;
+
 	long								 m_count;
 	time_t								 m_lastTime;
 	time_t								 m_nowTime;

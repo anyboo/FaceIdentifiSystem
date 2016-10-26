@@ -21,6 +21,11 @@
 #include <Poco/Path.h>
 #include <Poco/File.h>
 #include <Poco/Timestamp.h>
+#include "THFaceImage_i.h"
+#include "THFeature_i.h"
+#include <Poco/Buffer.h>
+
+using Poco::Buffer;
 
 using Poco::File;
 using Poco::Path;
@@ -28,12 +33,10 @@ using namespace rapidjson;
 
 using Poco::Data::Session;
 using Poco::Data::Statement;
+using namespace Poco::Data::Keywords;
 
 using Poco::DateTimeFormatter;
 using Poco::LocalDateTime;
-
-using namespace Poco::Data::Keywords;
-
 
 RegisterUI::RegisterUI()
 :m_photo_agin(false)
@@ -43,7 +46,8 @@ _license_id(0),
 _identify_id(0),
 _photo_id(0),
 _unit_id(0),
-_userinfo_id(0)
+_userinfo_id(0),
+_pCameraUI(0)
 {
 	m_closeApp = true;
 }
@@ -85,14 +89,16 @@ CControlUI* RegisterUI::CreateControl(LPCTSTR pstrClass)
 	if (_tcscmp(pstrClass, DUI_CTR_CLIP) == 0)
 		return new CClipUI;
 	if (_tcscmp(pstrClass, DUI_CTR_CAMERAUI) == 0)
-		return new CameraUI;
+	{
+		_pCameraUI = new CameraUI;
+		return _pCameraUI;
+	}
+		 
 	return NULL;
 }
 
 void RegisterUI::OnFinalMessage(HWND hWnd)
 {
-	removeObserver(*this);
-	//r.stop();
 
 	WindowImplBase::OnFinalMessage(hWnd);
 }
@@ -112,8 +118,6 @@ void RegisterUI::OnCloseRWnd(TNotifyUI& msg)
 
 void RegisterUI::InitWindow()
 {
-	addObserver(*this);
-	//r.start();
 	BandingSubControl();
 }
 
@@ -132,7 +136,8 @@ void RegisterUI::BandingSubControl()
 	_issue_date = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_issue_date")));
 	_license_image = dynamic_cast<CEditUI*>(m_PaintManager.FindControl(_T("Edit_license_image")));
 	_prompt = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("lab_Prompt")));
-
+	_photo_for_user = dynamic_cast<CHorizontalLayoutUI*>(m_PaintManager.FindControl(_T("photo_for_user")));
+	
 	_shutter = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("photo")));
 }
 
@@ -162,32 +167,14 @@ void RegisterUI::SignUp(TNotifyUI& msg)
 		return _prompt->SetText(str.c_str());
 	}
 
-	Path path(_value_photo_path);
-	path.makeAbsolute();
+	Close();
 
-	File photo(path);
-	if (!photo.exists())
-	{
-		std::string str = LangueConfig::GetShowText(2);
-		return _prompt->SetText(str.c_str());
-	}
-	
-	LocalDateTime now;
-	std::string newName = path.parent().toString();
-	newName.append(DateTimeFormatter::format(now, "%Y%n%d%H%M%S")).append(".").append(path.getExtension());
-
-	photo.renameTo(newName);
-	_value_photo_path = photo.path();
-
-	//RegUserInfo::addUserInfo(m_userInfo);
 	try
 	{
 		SaveRegisterInformation();
 
 		PlaySoundA(_T("ZC.wav"), NULL, SND_FILENAME | SND_ASYNC);
 		m_closeApp = false;
-
-		Close();
 	}
 	catch (Poco::Data::SQLite::ConstraintViolationException& e)
 	{
@@ -239,31 +226,110 @@ void RegisterUI::GetDataFromUI()
 	_value_license_code = _license_code->GetText();
 	_value_issue_date = _issue_date->GetText();
 	_value_identify_code = _identify->GetText();
-	_value_photo_path = "photoshop/regiter.jpg";
+	//_value_photo_path = "photoshop/regiter.jpg";
 	_value_sex = _sex->GetCurSel();
 	_value_level = _license_level->GetCurSel() + 1;
 }
 
-void RegisterUI::TakePhoto(TNotifyUI& msg)
+#include <Poco/File.h>
+#include <Poco/FileStream.h>
+#include <Poco/BinaryWriter.h>
+#include <Poco/Buffer.h>
+
+using Poco::Buffer;
+using Poco::File;
+using Poco::FileOutputStream;
+using Poco::BinaryWriter;
+
+void RegisterUI::Extract(IplImage *image, std::string datafile)
 {
-	if (!isValidInformation())
+	if (!image) return; 
+
+	THFI_FacePos ptfp[3];
+	ptfp[0].dwReserved = (DWORD)new BYTE[512];
+	int nFace = THFI_DetectFace(0, (BYTE*)image->imageData, /*image->depth*/24, image->width, image->height, ptfp, 3);
+	if (nFace <= 0)
 	{
-		std::string str = LangueConfig::GetShowText(1);
-		return _prompt->SetText(str.c_str());
+		DUITRACE("nFace <= 0");
+		return;
 	}
 
-	if (bAlreadyTaked)
+	//取最大的一张人脸位置图
+	int nMaxIndex = 0;
+	int nMaxSize = 0;
+	RECT* pFace = new RECT[nFace];
+	for (int i = 0; i <nFace; ++i)
 	{
-		std::string str = LangueConfig::GetShowText(3);
-		_shutter->SetText(str.c_str());
-		bAlreadyTaked = false;
+		pFace[i] = ptfp[i].rcFace;
+		int w = pFace[i].right - pFace[i].left;
+		if (w > nMaxSize)
+		{
+			nMaxSize = w;
+			nMaxIndex = i;
+
+		}
 	}
-	else
+
+	delete[]pFace;
+
+	ptfp[nMaxIndex];
+
+	int m_nFeatureSize = EF_Size();
+	Buffer<BYTE> pFeature(m_nFeatureSize);
+	if (EF_Extract(0, (BYTE*)image->imageData, image->width, image->height,3, (DWORD)&ptfp[nMaxIndex], pFeature.begin()))
 	{
-		std::string str = LangueConfig::GetShowText(4);
-		_shutter->SetText(str.c_str());
+		File file(datafile);
+		FileOutputStream fout(datafile);
+		BinaryWriter writer(fout);
+		writer.writeRaw((char*)pFeature.begin(), pFeature.size());
+	}
+}
+
+void RegisterUI::TakePhoto(TNotifyUI& msg)
+{
+	if (!bAlreadyTaked)
+	{
+		Path photoshop;
+		photoshop.makeAbsolute();
+		LocalDateTime now;
+		std::string jpg = photoshop.toString()
+			.append("photoshop/")
+			.append(DateTimeFormatter::format(now, "%Y%n%d%H%M%S"))
+			.append(".jpg");
+
+		_pCameraUI->ScreenSnapshot(jpg);
+
+		_value_photo_path = jpg;
+		//判断是否有人脸，有则提取照片特征,保存到路径
+		_value_feather_path = jpg + ".dat";
+		IplImage *image = cvLoadImage(jpg.c_str());
+		Extract(image, _value_feather_path);
+		cvReleaseImage(&image);
+
+		DisplayPhoto(_value_photo_path);
 		bAlreadyTaked = true;
+		/*std::string str = LangueConfig::GetShowText(4);
+		_shutter->SetText(str.c_str());
+		bAlreadyTaked = true;*/
 	}
+	//else
+	//{
+	//	//拍照
+	//	DisplayCameraUI();
+	//	std::string str = LangueConfig::GetShowText(3);
+	//	_shutter->SetText(str.c_str());
+	//	bAlreadyTaked = false;
+	//}
+}
+
+void RegisterUI::DisplayPhoto(const std::string& photo_file_path)
+{
+	//显示拍照照片到界面上
+	_photo_for_user->SetBkImage(photo_file_path.c_str());
+}
+
+void RegisterUI::DisplayCameraUI()
+{
 }
 
 bool RegisterUI::isValidInformation()
@@ -283,8 +349,36 @@ void RegisterUI::SaveRegisterInformation()
 	add_user_license();
 	add_user_identify();
 	add_user_info();
-
+	
 	commit_to_server();
+}
+
+void RegisterUI::add_user_to_onduty(int server_id)
+{
+	//将注册用户增加到onduty排班表的userid字段并设置onduty=0
+	struct duty
+	{
+		int id;
+		int userid;
+		int onduty;
+	};
+
+	duty status = { 0, server_id, 0 };
+
+	Session session("SQLite", "facerecog.db");
+	session << "SELECT max(id) FROM duty",
+		into(status.id),
+		now;
+
+	status.id += 1;
+	
+	Statement insert(session);
+
+	insert << "INSERT INTO duty VALUES(?, ?, ?)",
+		use(status.id),
+		use(status.userid),
+		use(status.onduty),
+		now;
 }
 
 void RegisterUI::commit_to_server()
@@ -347,6 +441,8 @@ void RegisterUI::commit_to_server()
 					bind(std::stoi(server_id)),
 					bind(_userinfo_id),
 					now;
+
+				add_user_to_onduty(std::stoi(server_id));
 			}
 		}
 	}
@@ -442,6 +538,7 @@ void RegisterUI::add_user_info()
 		int photo_id;
 		bool authorized;
 		std::string photo_file_path;
+		std::string facefeatherpath;
 	};
 
 
@@ -467,11 +564,12 @@ void RegisterUI::add_user_info()
 		_photo_id,
 		false,
 		_value_photo_path,
+		_value_feather_path,
 	};
 
 	Statement insert(session);
 
-	insert << "INSERT INTO UserInfo VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+	insert << "INSERT INTO UserInfo VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
 		use(user_info.id),
 		use(user_info.name),
 		use(user_info.sex),
@@ -484,30 +582,6 @@ void RegisterUI::add_user_info()
 		use(user_info.photo_id),
 		use(user_info.authorized),
 		use(user_info.photo_file_path),
+		use(user_info.facefeatherpath),
 		now;
-}
-
-void RegisterUI::handle1(Poco::Notification* pNf)
-{
-	poco_check_ptr(pNf);
-	if (!bAlreadyTaked)
-	{
-		CaptureNotification* nf = dynamic_cast<CaptureNotification*>(pNf);
-		if (nf)
-		{
-			/*Poco::Data::CLOB saveImage((const char*)pic->data(), pic->len());
-			m_userInfo.set<8>(saveImage);*/
-
-			CControlUI* Image = m_PaintManager.FindControl(_T("photo_wnd"));
-			Util::DrawSomething(nf->data(), Image, GetHWND());
-		}
-	}
-
-	pNf->release();
-}
-
-LRESULT RegisterUI::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
-{
-	bHandled = FALSE;
-	return 0;
 }

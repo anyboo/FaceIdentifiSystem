@@ -6,6 +6,7 @@
 #include "MonitoringUI.h"
 #include "SettingUI.h"
 #include "SignOutUI.h"
+#include "SignInUI.h"
 
 
 //#include "RegisterInfo.h"
@@ -78,7 +79,7 @@ void CMainWnd::OnRegisterWnd(TNotifyUI& msg)
 
 void CMainWnd::OnMatchWnd(TNotifyUI& msg)
 {
-	std::auto_ptr<MatchUI> pDlg(new MatchUI());
+	std::auto_ptr<CSignInUI> pDlg(new CSignInUI());
 	assert(pDlg.get());
 	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_FRAME, 0L, 1024, 768, 0, 0);
 	pDlg->CenterWindow();

@@ -121,6 +121,7 @@
     <ClInclude Include="RegUserInfo.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SettingUI.h" />
+    <ClInclude Include="SignInUI.h" />
     <ClInclude Include="SignOutUI.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="SystemUI.h" />
@@ -160,6 +161,7 @@
     <ClCompile Include="RegisterUI.cpp" />
     <ClCompile Include="RegUserInfo.cpp" />
     <ClCompile Include="SettingUI.cpp" />
+    <ClCompile Include="SignInUI.cpp" />
     <ClCompile Include="SignOutUI.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

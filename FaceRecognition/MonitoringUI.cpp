@@ -25,7 +25,7 @@ using Poco::Data::Statement;
 using namespace Poco::Data::Keywords;
 
 CMonitoringUI::CMonitoringUI()
-:r(new Camera), t(100, 2000), tc(*this, &CMonitoringUI::onTimer),
+:t(100, 2000), tc(*this, &CMonitoringUI::onTimer),
 _notify_status(0)
 {
 	m_closeApp = true;
@@ -64,29 +64,41 @@ bool CMonitoringUI::is_need_report()
 		int opcode;
 		std::string comment;
 		int status;
+		std::string json;
 	};
 
 	try
 	{
 		Session session("SQLite", "facerecog.db");
 		notify_main notify;
-		session << "SELECT id, opcode, comment, status FROM notify_main",
+		session << "SELECT id, opcode, comment, status, json_param FROM notify_main",
 			into(notify.id),
 			into(notify.opcode),
 			into(notify.comment),
 			into(notify.status),
+			into(notify.json),
 			now;
 
 		//DUITRACE("%d,%d,%s,%d\n", notify.id, notify.opcode, notify.comment, notify.status);
 
-		_notify_status = notify.status;
+		if (notify.status)
+		{
+			//解析json
+			Document d;
+			if (d.Parse(notify.json.c_str()).HasParseError())
+				return false;
+			if (d.HasMember("open"))
+			{
+				return (d["open"].GetInt() == 1);
+			}
+		}
+		
+		return false;
 	}
 	catch (Poco::Exception& e)
 	{
 		DUITRACE(e.displayText().c_str());
 	}
-
-	return _notify_status;
 }
 
 void CMonitoringUI::report_to_user()
@@ -115,10 +127,6 @@ CDuiString CMonitoringUI::GetSkinFile()
 
 void CMonitoringUI::OnFinalMessage(HWND hWnd)
 {
-	removeObserver(*this);
-	r.stop();
-	//example.stop();
-
 	WindowImplBase::OnFinalMessage(hWnd);
 }
 
@@ -151,10 +159,6 @@ void CMonitoringUI::OnRemoveAlarm()
 
 void CMonitoringUI::InitWindow()
 {
-	//SetTimer(GetHWND(), 1, m_timeInterval, nullptr);
-	addObserver(*this);
-	r.start();
-	//example.start();
 	m_count = 0;
 }
 
@@ -164,43 +168,20 @@ std::queue<CapBitmapData>& CMonitoringUI::getCapDataQueue()
 	return m_capdata;
 }
 
-
+/*
 void CMonitoringUI::handle1(Poco::Notification* pNf)
 {
 	poco_check_ptr(pNf);
 	CaptureNotification* nf = dynamic_cast<CaptureNotification*>(pNf);
 	if (nf)
 	{
-		/*Poco::Data::CLOB saveImage((const char*)pic->data(), pic->len());
-		m_userInfo.set<8>(saveImage);*/
 
 		CControlUI* Image = m_PaintManager.FindControl(_T("photo_video"));
 		Util::DrawSomething(nf->data(), Image, GetHWND());
 	}
 	pNf->release();
-	/*
-	poco_check_ptr(pNf);
-
-	Notification::Ptr pf(pNf);
-	poco_check_ptr(pf.get());
-	if (m_bSendMsg && m_count % 10 == 0)
-	{	
-		//example.enqueueNotification(pf);	
-		m_count++;
-	}
-	
-	CaptureNotification::Ptr nf = pf.cast<CaptureNotification>();
-	poco_check_ptr(nf.get());
-	Picture::Ptr pic(nf->data());
-	poco_check_ptr(pic.get());
-
-	Util::DrawSomething(pic, m_photo_Ctrl, GetHWND());
-
-
-	CControlUI* Image = m_PaintManager.FindControl(_T("photo_video"));
-	Util::DrawSomething(pic, Image, GetHWND());
-	*/
 }
+*/
 
 LRESULT CMonitoringUI::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {

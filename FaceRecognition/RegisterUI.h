@@ -5,7 +5,9 @@
 #include "CaptureNotify.h"
 #include "QMFileSqlite.h"
 #include "RegUserInfo.h"
-
+#include <cv.h>  
+#include <cxcore.h>  
+#include <highgui.h>
 
 
 #define BT_CLOSERWND		(_T("close_btn"))
@@ -13,11 +15,10 @@
 #define BT_OK_REGISTER		(_T("btn_ok"))
 
 
-
+class CameraUI;
 class CClipUI;
 class RegisterUI :
-	public WindowImplBase,
-	public CaptureNotify
+	public WindowImplBase
 {
 public:
 	RegisterUI();
@@ -28,7 +29,6 @@ public:
 	virtual void Notify(TNotifyUI& msg);
 
 	virtual CControlUI* CreateControl(LPCTSTR pstrClass);
-	virtual void handle1(Poco::Notification* pNf);
 	DUI_DECLARE_MESSAGE_MAP();
 
 	void OnCloseRWnd(TNotifyUI& msg);
@@ -36,7 +36,6 @@ public:
 	void OnRegister(TNotifyUI& msg);*/
 
 	bool SaveRegisterInfo();
-	virtual LRESULT HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
 private:
 	bool				m_closeApp;
@@ -70,11 +69,14 @@ protected:
 	void add_user_info();
 	void add_user_license();
 	void add_user_identify();
+	void Extract(IplImage *image, std::string datafile);
+	void DisplayPhoto(const std::string& photo_file_path);
+	void DisplayCameraUI();
+	void add_user_to_onduty(int server_id);
 private:
 	bool   m_photo_agin;
 	Recorder r;
 	CClipUI* customizedImage;
-//	writeUserInfo	m_userInfo;
 
 	CEditUI*	_name;
 	CEditUI*	_age;
@@ -86,7 +88,8 @@ private:
 	CComboUI*	_license_level;
 	CEditUI*	_issue_date;
 	CEditUI*	_license_image;
-			   
+	CHorizontalLayoutUI*	_photo_for_user;
+
 	CComboUI*	_sex;
 	CLabelUI*	_prompt;
 	CButtonUI* _shutter;
@@ -108,6 +111,9 @@ private:
 	std::string _value_issue_date;
 	std::string _value_identify_code;
 	std::string _value_photo_path;
+	std::string _value_feather_path;
 	int _value_sex;
 	int _value_level;
+
+	CameraUI* _pCameraUI;
 };
