@@ -289,10 +289,8 @@ void RegisterUI::TakePhoto(TNotifyUI& msg)
 {
 	if (!bAlreadyTaked)
 	{
-		Path photoshop;
-		photoshop.makeAbsolute();
 		LocalDateTime now;
-		std::string jpg = photoshop.toString()
+		std::string jpg = Path::current()
 			.append("photoshop/")
 			.append(DateTimeFormatter::format(now, "%Y%n%d%H%M%S"))
 			.append(".jpg");

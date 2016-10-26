@@ -91,6 +91,7 @@ bool CMonitoringUI::is_need_report()
 			{
 				return (d["open"].GetInt() == 1);
 			}
+			return false;
 		}
 		
 		return false;
@@ -98,6 +99,7 @@ bool CMonitoringUI::is_need_report()
 	catch (Poco::Exception& e)
 	{
 		DUITRACE(e.displayText().c_str());
+		return false;
 	}
 }
 

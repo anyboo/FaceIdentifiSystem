@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "SignOutUI.h"
 #include <vector>
 #include "SettingConfig.h"
@@ -173,14 +173,17 @@ void CSignOutUI::ShowMatchInfo()
 	PlaySoundA(_T("QT.wav"), NULL, SND_FILENAME | SND_ASYNC);
 }
 
+#include <Poco/Path.h>
+
 void CSignOutUI::onTimer(Poco::Timer& timer)
 {
 	if (_StopWatchdog) return;
 	//获取一张摄像头图片，判断是否有人脸，并提取人脸特征
-	if (!_pCameraUI->ScreenSnapshot("signout.jpg"))
+	std::string path(Poco::Path::current().append("signout.jpg"));
+	if (!_pCameraUI->ScreenSnapshot(path))
 		return;
 
-	Mat im1 = imread("signout.jpg");
+	Mat im1 = imread(path);
 	if (im1.empty())
 	{
 		DUITRACE("imread");
@@ -232,7 +235,7 @@ void CSignOutUI::onTimer(Poco::Timer& timer)
 				//从数据库通过id获取数据信息，上报注册用户信息到UI，同时停止比较
 				std::stringstream ss;
 				ss << precent;
-				DUITRACE("id : %d ,precent : %s", var.id, ss.str().c_str();
+				DUITRACE("id : %d ,precent : %s", var.id, ss.str().c_str());
 				_StopWatchdog = true;
 				_id_from_detected = var.id;
 				popData2UI(_id_from_detected);

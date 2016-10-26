@@ -17,7 +17,8 @@
 #include "THFeature_i.h"
 
 #include "AppInitialize.h"
-
+//#include <Poco/arg
+//#include <Poco/Process.h>
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpCmdLine*/, int nCmdShow)
 {
@@ -42,7 +43,10 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 		cout << "Feature init ok" << endl;
 	}
 
-
+	//启动后台服务进程
+	//std::string command("faceMonitorServer.exe");
+	//Poco::Args args;
+	//Poco::Process::launch("faceMonitorServer.exe");
 	//init database
 	QFileSqlite *pDb = QFileSqlite::getInstance();
 	pDb->createTable(CREATE_USER_INFO_TABLE);

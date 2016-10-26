@@ -89,7 +89,7 @@ void CameraUI::Prepare()
 	cameraParam.szCap.cx = _width;
 	cameraParam.szCap.cy = _height;
 	cameraParam.eType = CAP_WDM;
-	cameraParam.lIndex = 0;
+	cameraParam.lIndex = 1;
 
 	_camera = CCapture::Create(&cameraParam);
 	assert(_camera);
@@ -138,7 +138,10 @@ bool CameraUI::ScreenSnapshot(const std::string& jpegPath)
 	BYTE* data = new BYTE[len];
 	_camera->GetFrame(data, len);
 
-	std::string temp("photoshop/TemporaryFile.bmp");
+	/*Path p(Path::current());
+	std::string temp(p.parent().toString());*/
+	
+	std::string temp(Path::current().append("photoshop/TemporaryFile.bmp"));
 	SaveBmp((char*)data, _width, _height, temp);
 	
 	IplImage *image = cvLoadImage(temp.c_str());

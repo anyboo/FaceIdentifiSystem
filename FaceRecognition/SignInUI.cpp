@@ -8,6 +8,7 @@
 #include <Poco/Data/SQLite/Connector.h>
 #include <Poco/Data/SQLite/SQLiteException.h>
 #include <Poco/File.h>
+#include <Poco/Path.h>
 #include <Poco/FileStream.h>
 #include <Poco/BinaryReader.h>
 #include <Poco/Buffer.h>
@@ -75,6 +76,7 @@ CControlUI* CSignInUI::CreateControl(LPCTSTR pstrClass)
 		
 	return NULL;
 }
+
 
 void CSignInUI::InitWindow()
 {
@@ -173,14 +175,18 @@ void CSignInUI::ShowMatchInfo()
 	PlaySoundA(_T("QD.wav"), NULL, SND_FILENAME | SND_ASYNC);
 }
 
+#include <Poco/Path.h>
+using Poco:: Path;
+
 void CSignInUI::onTimer(Poco::Timer& timer)
 {
 	if (_StopWatchdog) return;
 	//获取一张摄像头图片，判断是否有人脸，并提取人脸特征
-	if (!_pCameraUI->ScreenSnapshot("signin.jpg"))
+	std::string path = Poco::Path::current().append("signin.jpg");
+	if (!_pCameraUI->ScreenSnapshot(path))
 		return;
 
-	Mat im1 = imread("signin.jpg");
+	Mat im1 = imread(path);
 	if (im1.empty())
 	{
 		DUITRACE("imread");
