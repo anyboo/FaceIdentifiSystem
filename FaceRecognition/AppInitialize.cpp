@@ -2,46 +2,47 @@
 #include "AppInitialize.h"
 #include "THFaceImage_i.h"
 #include "THFeature_i.h"
-#include "QMFileSqlite.h"
-#include "RegUserInfo.h"
-#include "log.h"
-/*
-#include <windows.h>
-#include <objbase.h>
-#include <shellapi.h>
-*/
-
+#include <Poco/Exception.h>
 
 CAppInitialize::CAppInitialize()
 {
-	AttatchSDK();
-	
-	PrepareCamera();
-	PrepareRegisteredFace();
+	HRESULT Hr = ::CoInitialize(NULL);
+	if (FAILED(Hr))
+		throw Poco::Exception("CoInitialize is failed!");
 
-	LoadUserConfig();
+	AttatchSDK();
+	_commit.start();
+	LaunchMonitorServer();
 }
 
 CAppInitialize::~CAppInitialize()
 {
 	DetachedSDK();
+	_commit.stop();
+	::CoUninitialize();
+}
+
+void CAppInitialize::LaunchMonitorServer()
+{
+	//启动后台服务进程
+	//std::string command("faceMonitorServer.exe");
+	//Poco::Args args;
+	//Poco::Process::launch("faceMonitorServer.exe");
 }
 
 void CAppInitialize::AttatchSDK()
 {
-	//THFaceImageSDK();
-	//TiCapture2SDK();
+	THFaceImageSDK();
 }
 
 void CAppInitialize::DetachedSDK()
 {
-	//THFI_Release();
-	//EF_Release();
+	THFI_Release();
+	EF_Release();
 }
 
 void CAppInitialize::THFaceImageSDK()
 {
-	//init face
 	THFI_Param param;
 	param.nMinFaceSize = 150;
 	param.nRollAngle = 145;
@@ -52,31 +53,6 @@ void CAppInitialize::THFaceImageSDK()
 	short ret = EF_Init(1);
 	if (ret == 1)
 	{
-		cout << "Feature init ok" << endl;
+		DUITRACE("Feature init ok");
 	}
 }
-
-void CAppInitialize::TiCapture2SDK()
-{
-
-}
-
-void CAppInitialize::PrepareCamera()
-{
-
-}
-
-void CAppInitialize::PrepareRegisteredFace()
-{
-	//init database
-	/*QFileSqlite *pDb = QFileSqlite::getInstance();
-	pDb->createTable(CREATE_USER_INFO_TABLE);
-	RegUserInfo::init();*/
-}
-
-void CAppInitialize::LoadUserConfig()
-{
-
-}
-
-

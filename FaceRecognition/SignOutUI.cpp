@@ -11,6 +11,7 @@
 #include <Poco/FileStream.h>
 #include <Poco/BinaryReader.h>
 #include <Poco/Buffer.h>
+#include <Poco/Path.h>
 
 #include "THFaceImage_i.h"
 #include "THFeature_i.h"
@@ -96,7 +97,7 @@ void CSignOutUI::InitWindow()
 
 			File file(var.path);
 			FileInputStream fin(var.path);
-			size_t size = file.getSize();
+			Poco::UInt64 size = file.getSize();
 			var.feather.resize(size);
 			fin.read(&var.feather[0], size);
 			_fgroup.push_back(var);
@@ -144,12 +145,12 @@ void CSignOutUI::ShowMatchInfo()
 	CLabelUI* edit_address = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("Edit_Address")));
 	CLabelUI* edit_phone = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("Edit_Phone")));
 	CLabelUI* edit_CertID = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("Edit_IDnumber")));
-	CLabelUI* edit_identify = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("identify_id"))); 
+	CLabelUI* edit_identify = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("identify_id")));
 	CLabelUI* edit_level = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("Edit_grade")));
 	CLabelUI* edit_issue_date = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("Edit_time")));
 	CButtonUI* button = dynamic_cast<CButtonUI*>(m_PaintManager.FindControl(_T("Sign_out")));
 	button->SetEnabled(true);
-	
+
 	edit_name->SetText(_value_name.c_str());
 	std::string sex;
 	if (_value_sex)
@@ -172,8 +173,6 @@ void CSignOutUI::ShowMatchInfo()
 	photo->SetBkImage(_value_photo_path.c_str());
 	PlaySoundA(_T("QT.wav"), NULL, SND_FILENAME | SND_ASYNC);
 }
-
-#include <Poco/Path.h>
 
 void CSignOutUI::onTimer(Poco::Timer& timer)
 {

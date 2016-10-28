@@ -1,8 +1,8 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "RegisterUI.h"
-#include "CaptureNotification.h"
-#include "Camera.h"
-#include "Util.h"
+//#include "CaptureNotification.h"
+//#include "Camera.h"
+//#include "Util.h"
 #include "SettingConfig.h"
 #include "ClipUI.h"
 #include "CameraUI.h"
@@ -11,32 +11,39 @@
 
 #include "Employee.h"
 
-#include "Poco/Data/Session.h"
-#include "Poco/Data/SQLite/Connector.h"
-#include <Poco/Data/SQLite/SQLiteException.h>
 #include "ActiveUploader.h"
 #include "ActiveReporter.h"
+#include "document.h"
 #include "prettywriter.h"
 #include "stringbuffer.h"
-#include <Poco/Path.h>
-#include <Poco/File.h>
-#include <Poco/Timestamp.h>
 #include "THFaceImage_i.h"
 #include "THFeature_i.h"
 #include <Poco/Buffer.h>
+#include <Poco/BinaryWriter.h>
+#include <Poco/Path.h>
+#include <Poco/File.h>
+#include <Poco/FileStream.h>
+#include <Poco/Timestamp.h>
+#include <Poco/Data/Session.h>
+#include <Poco/Data/SQLite/Connector.h>
+#include <Poco/Data/SQLite/SQLiteException.h>
+
 
 using Poco::Buffer;
+using Poco::File;
+using Poco::FileOutputStream;
+using Poco::BinaryWriter;
 
+using Poco::Buffer;
 using Poco::File;
 using Poco::Path;
-using namespace rapidjson;
-
 using Poco::Data::Session;
 using Poco::Data::Statement;
-using namespace Poco::Data::Keywords;
-
 using Poco::DateTimeFormatter;
 using Poco::LocalDateTime;
+
+using namespace Poco::Data::Keywords;
+using namespace rapidjson;
 
 RegisterUI::RegisterUI()
 :m_photo_agin(false)
@@ -230,16 +237,6 @@ void RegisterUI::GetDataFromUI()
 	_value_sex = _sex->GetCurSel();
 	_value_level = _license_level->GetCurSel() + 1;
 }
-
-#include <Poco/File.h>
-#include <Poco/FileStream.h>
-#include <Poco/BinaryWriter.h>
-#include <Poco/Buffer.h>
-
-using Poco::Buffer;
-using Poco::File;
-using Poco::FileOutputStream;
-using Poco::BinaryWriter;
 
 void RegisterUI::Extract(IplImage *image, std::string datafile)
 {

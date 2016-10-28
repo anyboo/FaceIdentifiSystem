@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "SignInUI.h"
 #include <vector>
 #include "SettingConfig.h"
@@ -23,6 +23,7 @@
 using namespace cv;
 
 using Poco::Buffer;
+using Poco::Path;
 using Poco::File;
 using Poco::FileInputStream;
 using Poco::BinaryReader;
@@ -98,7 +99,7 @@ void CSignInUI::InitWindow()
 
 			File file(var.path);
 			FileInputStream fin(var.path);
-			size_t size = file.getSize();
+			Poco::UInt64 size = file.getSize();
 			var.feather.resize(size);
 			fin.read(&var.feather[0], size);
 			_fgroup.push_back(var);
@@ -174,9 +175,6 @@ void CSignInUI::ShowMatchInfo()
 	photo->SetBkImage(_value_photo_path.c_str());
 	PlaySoundA(_T("QD.wav"), NULL, SND_FILENAME | SND_ASYNC);
 }
-
-#include <Poco/Path.h>
-using Poco:: Path;
 
 void CSignInUI::onTimer(Poco::Timer& timer)
 {

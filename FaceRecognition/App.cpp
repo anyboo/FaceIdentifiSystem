@@ -5,56 +5,31 @@
 #include "MainWnd.h"
 
 
-#include <windows.h>
-#include <objbase.h>
-#include <shellapi.h>
-#include "QMFileSqlite.h"
-#include "RegUserInfo.h"
+//#include <windows.h>
+//#include <objbase.h>
+//#include <shellapi.h>
+//#include "QMFileSqlite.h"
+//#include "RegUserInfo.h"
 #include "log.h"
-#include "SettingConfig.h"
-
-#include "THFaceImage_i.h"
-#include "THFeature_i.h"
+//#include "SettingConfig.h"
+//
+//#include "THFaceImage_i.h"
+//#include "THFeature_i.h"
 
 #include "AppInitialize.h"
-//#include <Poco/arg
-//#include <Poco/Process.h>
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpCmdLine*/, int nCmdShow)
 {
 	CPaintManagerUI::SetInstance(hInstance);
 	CPaintManagerUI::SetResourcePath(CPaintManagerUI::GetInstancePath() + _T("skin"));
 
-	HRESULT Hr = ::CoInitialize(NULL);
-	if (FAILED(Hr)) return 0;
+	CAppInitialize  initial;
+	
+	/*HRESULT Hr = ::CoInitialize(NULL);
+	if (FAILED(Hr)) return 0;*/
 
 	Loggering::Logger_initiation();
 
-	THFI_Param param;
-	//ValueSetting set;
-	param.nMinFaceSize = 50;
-	param.nRollAngle = 45;
-	param.bOnlyDetect = true;
-	THFI_Create(1, &param);
-
-	short ret = EF_Init(1);
-	if (ret == 1)
-	{
-		cout << "Feature init ok" << endl;
-	}
-
-	//启动后台服务进程
-	//std::string command("faceMonitorServer.exe");
-	//Poco::Args args;
-	//Poco::Process::launch("faceMonitorServer.exe");
-	//init database
-	QFileSqlite *pDb = QFileSqlite::getInstance();
-	pDb->createTable(CREATE_USER_INFO_TABLE);
-	
-	RegUserInfo::init();
-
-	CAppInitialize  initial;
-	
 	std::auto_ptr<CMainWnd> pFrame(new CMainWnd);
 	assert(pFrame.get());
 	pFrame->Create(NULL, NULL, UI_WNDSTYLE_DIALOG, WS_EX_WINDOWEDGE | WS_EX_ACCEPTFILES);
@@ -64,11 +39,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 
 	CPaintManagerUI::MessageLoop();
 
-	THFI_Release();
-	EF_Release();
-
-
-	::CoUninitialize();
+	//::CoUninitialize();
 
 	return 0;
 }

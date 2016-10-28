@@ -1,4 +1,5 @@
 #pragma once
+#include "ActivityCommit.h"
 class CAppInitialize
 {
 public:
@@ -6,12 +7,13 @@ public:
 	~CAppInitialize();
 
 protected:
-	void PrepareCamera();
-	void PrepareRegisteredFace();
-	void LoadUserConfig();
 	void TiCapture2SDK();
 	void THFaceImageSDK();
 	void AttatchSDK();
 	void DetachedSDK();
+	void LaunchMonitorServer();
+
+private:
+	ActivityCommit _commit;
 };
 

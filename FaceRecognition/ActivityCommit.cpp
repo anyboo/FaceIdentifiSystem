@@ -2,17 +2,21 @@
 #include "ActivityCommit.h"
 #include "ActiveReporter.h"
 #include "ActiveUploader.h"
-#include "Poco/Data/Session.h"
-#include "Poco/Data/SQLite/Connector.h"
+
 #include "document.h" 
 #include "prettywriter.h"
 #include "stringbuffer.h"
+#include <Poco/Data/Session.h>
+#include <Poco/Data/SQLite/Connector.h>
+#include <Poco/Exception.h>
+#include <Poco/Path.h>
 
-using namespace rapidjson;
+using Poco::Path;
 using Poco::Data::Session;
 using Poco::Data::Statement;
 
 using namespace Poco::Data::Keywords;
+using namespace rapidjson;
 
 struct alert_table
 {
@@ -25,7 +29,8 @@ struct alert_table
 };
 
 ActivityCommit::ActivityCommit():
-_activity(this, &ActivityCommit::runActivity)
+_activity(this, &ActivityCommit::runActivity),
+_dbSession(Session("SQLite", "facerecog.db"))
 {
 }
 
@@ -43,7 +48,6 @@ void ActivityCommit::stop()
 {
 	_activity.stop();
 	_activity.wait();
-//	_ftp.close();
 }
 #include <Poco/Data/SQLite/SQLiteException.h>
 
@@ -54,8 +58,11 @@ void ActivityCommit::runActivity()
 		DUITRACE("ActivityCommit::runActivity");
 		try
 		{
-			Session session("SQLite", "facerecog.db");
-			Statement select(session);
+			//Session session("SQLite", "facerecog.db");
+			if (!_dbSession.isConnected())
+				_dbSession.reconnect();
+
+			Statement select(_dbSession);
 			alert_table alert;
 			select << "SELECT id, filepath, type, timestamp, UserInfoID, DeviceID FROM alert WHERE hasUpload = 0",
 				into(alert.id),
@@ -64,35 +71,19 @@ void ActivityCommit::runActivity()
 				into(alert.timestamp),
 				into(alert.userid),
 				into(alert.deviceid),
-				range(1, 1);
+				range(0, 1);
 
 			while (!select.done())
 			{
-				select.execute();
-				FTPClientSession _ftp("202.103.191.73", FTPClientSession::FTP_PORT, "ftpalert", "1");
-				ActiveUploader ur(_ftp);
-				ActiveResult<bool> result = ur.upload(alert.filepath);
-				post_alert_data(alert);
-
-				try
+				if (select.execute())
 				{
-					Statement update(session);
-					update << "UPDATE alert SET hasUpload = 1 WHERE id = ?",
-						use(alert.id),
-						now;
+					FTPClientSession _ftp("202.103.191.73", FTPClientSession::FTP_PORT, "ftpalert", "1");
+					ActiveUploader ur(_ftp);
+					ActiveResult<bool> result = ur.upload(alert.filepath);
+					post_alert_data(alert);
+					update_alert_upload_status(alert.id);
+					result.wait();
 				}
-				catch (Poco::Data::SQLite::DBLockedException& e)
-				{
-					DUITRACE(e.displayText().c_str());
-					Thread::sleep(1000);
-					Statement update(session);
-					update << "UPDATE alert SET hasUpload = 1 WHERE id = ?",
-						use(alert.id),
-						now;
-				}
-
-				result.wait();
-
 			}
 		}
 		catch (Poco::Exception& e)
@@ -103,9 +94,25 @@ void ActivityCommit::runActivity()
 	}
 }
 
-#include <Poco/Exception.h>
-#include <Poco/Path.h>
-using Poco::Path;
+void ActivityCommit::update_alert_upload_status(int uid)
+{
+	try
+	{
+		Statement update(_dbSession);
+		update << "UPDATE alert SET hasUpload = 1 WHERE id = ?",
+			use(uid),
+			now;
+	}
+	catch (Poco::Data::SQLite::DBLockedException& e)
+	{
+		DUITRACE(e.displayText().c_str());
+		Thread::sleep(1000);
+		Statement update(_dbSession);
+		update << "UPDATE alert SET hasUpload = 1 WHERE id = ?",
+			use(uid),
+			now;
+	}
+}
 
 void ActivityCommit::post_alert_data(alert_table& alert)
 {

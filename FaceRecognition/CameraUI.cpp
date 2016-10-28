@@ -89,7 +89,7 @@ void CameraUI::Prepare()
 	cameraParam.szCap.cx = _width;
 	cameraParam.szCap.cy = _height;
 	cameraParam.eType = CAP_WDM;
-	cameraParam.lIndex = 1;
+	cameraParam.lIndex = 0;
 
 	_camera = CCapture::Create(&cameraParam);
 	assert(_camera);
