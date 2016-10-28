@@ -230,13 +230,14 @@ void CSignInUI::onTimer(Poco::Timer& timer)
 		{
 			DUITRACE("compare");
 			double precent = EF_Compare(&pFeature[0], (BYTE*)&(var.feather[0])) * 100 + 20;
-			
+
+			std::stringstream ss;
+			ss << precent;
+			DUITRACE("id : %d ,precent : %s", var.id, ss.str().c_str());
+
 			if (precent > 70)
 			{
 				//从数据库通过id获取数据信息，上报注册用户信息到UI，同时停止比较
-				std::stringstream ss;
-				ss << precent;
-				DUITRACE("id : %d ,precent : %s", var.id, ss.str().c_str());
 				_StopWatchdog = true;
 				_id_from_detected = var.id;
 				popData2UI(_id_from_detected);
