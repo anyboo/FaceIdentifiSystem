@@ -7,7 +7,7 @@
 
 
 struct alert_table;
-
+struct alert_image;
 class CMonitoringUI :
 	public WindowImplBase
 {
@@ -30,6 +30,8 @@ protected:
 
 	bool is_need_report();
 	void report_to_user();
+	void report_image_to_user();
+	void pushImage(const alert_image& image);
 
 private:
 	Poco::Timer _monitor;
@@ -41,4 +43,5 @@ private:
 	CControlUI*							m_photo_Ctrl;
 	CLabelUI*							m_Prompt_lab;
 	bool								 m_closeApp;
+	int left_image_pos;
 };

@@ -8,6 +8,7 @@
 #include "stringbuffer.h"
 #include <Poco/Data/Session.h>
 #include <Poco/Data/SQLite/Connector.h>
+#include <Poco/Data/SQLite/SQLiteException.h>
 #include <Poco/Exception.h>
 #include <Poco/Path.h>
 
@@ -49,7 +50,13 @@ void ActivityCommit::stop()
 	_activity.stop();
 	_activity.wait();
 }
-#include <Poco/Data/SQLite/SQLiteException.h>
+
+bool check_network_status()
+{
+	//检查网络是否正常状态
+	//ping 202.103.191.73 是否正常
+	return false;
+}
 
 void ActivityCommit::runActivity()
 {
@@ -77,12 +84,16 @@ void ActivityCommit::runActivity()
 			{
 				if (select.execute())
 				{
-					FTPClientSession _ftp("202.103.191.73", FTPClientSession::FTP_PORT, "ftpalert", "1");
-					ActiveUploader ur(_ftp);
-					ActiveResult<bool> result = ur.upload(alert.filepath);
-					post_alert_data(alert);
-					update_alert_upload_status(alert.id);
-					result.wait();
+					if (check_network_status())
+					{
+						//仅当网络正常时，上传数据
+						FTPClientSession _ftp("202.103.191.73", FTPClientSession::FTP_PORT, "ftpalert", "1");
+						ActiveUploader ur(_ftp);
+						ActiveResult<bool> result = ur.upload(alert.filepath);
+						post_alert_data(alert);
+						update_alert_upload_status(alert.id);
+						result.wait();
+					}
 				}
 			}
 		}

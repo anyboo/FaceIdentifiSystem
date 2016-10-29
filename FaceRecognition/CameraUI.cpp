@@ -2,6 +2,10 @@
 #include "CameraUI.h"
 #include "TiCapture2.h"
 
+/*
+优化：将摄像头的捕获采用opencv
+*/
+
 CameraUI::CameraUI() :
 _camera(0),
 _width(640),

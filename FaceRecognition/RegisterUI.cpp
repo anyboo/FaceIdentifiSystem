@@ -284,37 +284,23 @@ void RegisterUI::Extract(IplImage *image, std::string datafile)
 
 void RegisterUI::TakePhoto(TNotifyUI& msg)
 {
-	if (!bAlreadyTaked)
-	{
-		LocalDateTime now;
-		std::string jpg = Path::current()
-			.append("photoshop/")
-			.append(DateTimeFormatter::format(now, "%Y%n%d%H%M%S"))
-			.append(".jpg");
+	LocalDateTime now;
+	std::string jpg = Path::current()
+		.append("photoshop/")
+		.append(DateTimeFormatter::format(now, "%Y%n%d%H%M%S"))
+		.append(".jpg");
 
-		_pCameraUI->ScreenSnapshot(jpg);
+	_pCameraUI->ScreenSnapshot(jpg);
 
-		_value_photo_path = jpg;
-		//判断是否有人脸，有则提取照片特征,保存到路径
-		_value_feather_path = jpg + ".dat";
-		IplImage *image = cvLoadImage(jpg.c_str());
-		Extract(image, _value_feather_path);
-		cvReleaseImage(&image);
+	_value_photo_path = jpg;
+	//判断是否有人脸，有则提取照片特征,保存到路径
+	_value_feather_path = jpg + ".dat";
+	IplImage *image = cvLoadImage(jpg.c_str());
+	Extract(image, _value_feather_path);
+	cvReleaseImage(&image);
 
-		DisplayPhoto(_value_photo_path);
-		bAlreadyTaked = true;
-		/*std::string str = LangueConfig::GetShowText(4);
-		_shutter->SetText(str.c_str());
-		bAlreadyTaked = true;*/
-	}
-	//else
-	//{
-	//	//拍照
-	//	DisplayCameraUI();
-	//	std::string str = LangueConfig::GetShowText(3);
-	//	_shutter->SetText(str.c_str());
-	//	bAlreadyTaked = false;
-	//}
+	DisplayPhoto(_value_photo_path);
+	bAlreadyTaked = true;
 }
 
 void RegisterUI::DisplayPhoto(const std::string& photo_file_path)

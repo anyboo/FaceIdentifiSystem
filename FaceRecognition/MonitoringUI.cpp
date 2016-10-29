@@ -25,7 +25,8 @@ using namespace rapidjson;
 
 CMonitoringUI::CMonitoringUI():
 _notify_status(0), _monitor(100,2000),
-_callback(*this, &CMonitoringUI::onTimer)
+_callback(*this, &CMonitoringUI::onTimer),
+left_image_pos(0)
 {
 	m_closeApp = true;
 	_monitor.start(_callback);
@@ -100,11 +101,72 @@ bool CMonitoringUI::is_need_report()
 	}
 }
 
+struct alert_image
+{
+	int id;
+	std::string alert;
+	std::string predefine;
+	int precent;
+	std::string pos;
+};
+
+void CMonitoringUI::report_image_to_user()
+{
+	alert_image img;
+
+	try
+	{
+		Session session("SQLite", "facerecog.db");
+		Statement select(session);
+		select << "SELECT max(id), filepath, registerfilepath, percent FROM alert",
+			into(img.id),
+			into(img.alert),
+			into(img.predefine),
+			into(img.precent),
+			now;
+
+		left_image_pos++;
+		int pos = left_image_pos %4;
+
+		//image_1
+		img.pos = "image_";
+		img.pos.append(std::to_string(pos));
+		DUITRACE("image pos string : %s", img.pos.c_str());
+		pushImage(img);
+	}
+	catch (Poco::Data::DataException& e)
+	{
+		DUITRACE(e.displayText().c_str());
+	}
+}
+
+#include "SettingConfig.h"
+
+void CMonitoringUI::pushImage(const alert_image& image)
+{
+	std::string imagePos(image.pos);
+	CHorizontalLayoutUI* parent = dynamic_cast<CHorizontalLayoutUI*>(m_PaintManager.FindControl(imagePos.c_str()));
+	if (parent)
+	{
+		parent->GetItemAt(0)->SetBkImage(image.predefine.c_str());
+		parent->GetItemAt(1)->SetBkImage(image.alert.c_str());
+	}
+	imagePos.append("_text");	
+	CLabelUI* text = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(imagePos.c_str()));
+	if (text)
+	{
+		std::string paintText = LangueConfig::GetShowText(14);
+		paintText.append(std::to_string(image.precent)).append("%");
+		text->SetText(paintText.c_str());
+	}
+}
+
 void CMonitoringUI::report_to_user()
 {
 	PlaySoundA(_T("ALARM7.wav"), NULL, SND_FILENAME | SND_ASYNC);
 	//更新报警图片 将alert中的registerfilepath和filepath分别显示在界面上
 	//alert db - filepath vs registerfilepath
+	report_image_to_user();
 	//改变报警窗口背景颜色
 }
 

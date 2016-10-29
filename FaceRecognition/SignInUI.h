@@ -65,5 +65,6 @@ private:
 	CameraUI* _pCameraUI;
 	FeatherGroup _fgroup;
 	int _id_from_detected;
+	int _simility_precent;
 };
 

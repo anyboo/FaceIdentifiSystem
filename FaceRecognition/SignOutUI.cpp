@@ -35,7 +35,8 @@ CSignOutUI::CSignOutUI()
 _callback(*this,&CSignOutUI::onTimer),
 _pCameraUI(0),
 _StopWatchdog(false),
-_id_from_detected(0)
+_id_from_detected(0),
+_simility_precent(60)
 {
 	m_closeApp = true;
 }
@@ -233,7 +234,7 @@ void CSignOutUI::onTimer(Poco::Timer& timer)
 			ss << precent;
 			DUITRACE("id : %d ,precent : %s", var.id, ss.str().c_str());
 
-			if (precent > 70)
+			if (precent > _simility_precent)
 			{
 				//从数据库通过id获取数据信息，上报注册用户信息到UI，同时停止比较
 

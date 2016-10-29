@@ -3,6 +3,10 @@
 #include "THFaceImage_i.h"
 #include "THFeature_i.h"
 #include <Poco/Exception.h>
+#include <Poco/Process.h>
+
+using Poco::Process;
+using Poco::ProcessHandle;
 
 CAppInitialize::CAppInitialize()
 {
@@ -25,9 +29,12 @@ CAppInitialize::~CAppInitialize()
 void CAppInitialize::LaunchMonitorServer()
 {
 	//启动后台服务进程
-	//std::string command("faceMonitorServer.exe");
-	//Poco::Args args;
-	//Poco::Process::launch("faceMonitorServer.exe");
+	std::string command("faceMonitorServer.exe");
+	Process::Args args;
+#ifndef _DEBUG
+	ProcessHandle ph = Process::launch("faceMonitorServer.exe", args);
+	poco_assert(Process::isRunning(ph));
+#endif
 }
 
 void CAppInitialize::AttatchSDK()
