@@ -286,7 +286,7 @@ void RegisterUI::TakePhoto(TNotifyUI& msg)
 {
 	LocalDateTime now;
 	std::string jpg = Path::current()
-		.append("photoshop/")
+		.append("photoshop\\")
 		.append(DateTimeFormatter::format(now, "%Y%n%d%H%M%S"))
 		.append(".jpg");
 

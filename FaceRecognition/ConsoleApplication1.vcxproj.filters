@@ -71,9 +71,14 @@
     <ClCompile Include="ActiveReporter.cpp" />
     <ClCompile Include="ActiveUploader.cpp" />
     <ClCompile Include="ActivityCommit.cpp" />
-    <ClCompile Include="CameraUI.cpp" />
     <ClCompile Include="SignInUI.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraUI.cpp">
+      <Filter>Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="IPCameraUI.cpp">
+      <Filter>Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -162,9 +167,14 @@
     <ClInclude Include="ActiveReporter.h" />
     <ClInclude Include="ActiveUploader.h" />
     <ClInclude Include="ActivityCommit.h" />
-    <ClInclude Include="CameraUI.h" />
     <ClInclude Include="SignInUI.h">
       <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraUI.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="IPCameraUI.h">
+      <Filter>Camera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -186,6 +196,9 @@
     </Filter>
     <Filter Include="SettingUI">
       <UniqueIdentifier>{1caadb65-32d0-4cbf-b838-e22e5ff14e91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Camera">
+      <UniqueIdentifier>{72b61409-155b-431b-9616-6ad0a34a6658}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -34,6 +34,7 @@ void CAppInitialize::LaunchMonitorServer()
 #ifndef _DEBUG
 	ProcessHandle ph = Process::launch("faceMonitorServer.exe", args);
 	poco_assert(Process::isRunning(ph));
+	DUITRACE("faceMonitorServer pid : %d ", ph.id());
 #endif
 }
 

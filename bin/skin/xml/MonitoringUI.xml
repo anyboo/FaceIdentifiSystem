@@ -1,40 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Window size="1024,768" caption="0,0,0,0" roundcorner="4,4" showdirty="false">
-	<Font shared="true" id="1" name="微软雅黑" size="18" bold="false" />
-	<Font shared="true" id="7" name="微软雅黑" size="26" bold="false" />
-	<Font shared="true" id="3" name="微软雅黑" size="14" bold="false" />
-	<Font shared="true" id="2" name="宋体" size="14" bold="false" />
-	<VerticalLayout bkimage="file='skin/RegBJ.png'" height="765" inset="3,3,3,3" bordersize="3" bordercolor="0x12345678">
-		<HorizontalLayout width="1024" height="70">
-			<Button name="close_btn2" width="44" height="44" padding="10,10,0,0" tooltip="返回" normalimage="file='skin/back_normal.png'" hotimage="file='skin/back_hot.png'" pushedimage="file='skin/back_push.png'"/>
-			<Label text="信息监控" font="7" padding="400,0,0,0" textcolor="#FFFFFFFF" align="center" />
-		</HorizontalLayout>
-		<VerticalLayout name="vLyt_" height="698">
-			<HorizontalLayout>
-				<HorizontalLayout  width="600" height="550" inset="2,2,2,2" bordersize="2" bordercolor="0x88888888" padding="20,30,10,0">
-					<CameraUI name="photo_video" visible="true" width="600" height="500" bkimage="file='skin/bsbj.png'"/>
-				</HorizontalLayout>
-				<VerticalLayout>
-					<!--显示控件 -->
-				<HorizontalLayout  name="image_1" width="360" height="160" visible="true" inset="2,2,2,2" bordersize="2" bordercolor="0x88888888" padding="2,30,0,0">
-					<Button name="1" width="180" height="160" text="1" visible="true" padding="0,0,0,0" textcolor="#88888888" font="1" bkimage="file='skin/aobama.png'"/>
-					<Button name="2" width="180" height="160" text="2" visible="true" padding="2,0,0,0" textcolor="#88888888" font="1" bkimage="file='skin/current.jpg'"/>
-				</HorizontalLayout>
-				<Label name="image_1_text" width="180" height="14" text="相似度 90%" />
-				<HorizontalLayout  name="image_2" width="360" height="160" inset="2,2,2,2" bordersize="2" bordercolor="0x88888888" padding="2,10,10,0">
-					<Button name="1" width="180" height="160" text="1" visible="true" padding="0,0,0,0" textcolor="#88888888" font="1" bkimage="file='skin/aobama.png'"/>
-					<Button name="2" width="180" height="160" text="2" visible="true" padding="2,0,0,0" textcolor="#88888888" font="1" bkimage="file='skin/current.jpg'"/>
-				</HorizontalLayout>
-				<Label name="image_2_text" width="180" height="14" text="相似度 70%"/>
-				<HorizontalLayout  name="image_3" width="360" height="160" inset="2,2,2,2" bordersize="2" bordercolor="0x88888888" padding="2,10,10,0">
-					<Button name="1" width="180" height="160" text="1" visible="true" padding="0,0,0,0" textcolor="#88888888" font="1" bkimage="file='skin/aobama.png'"/>
-					<Button name="2" width="180" height="160" text="2" visible="true" padding="2,0,0,0" textcolor="#88888888" font="1" bkimage="file='skin/current.jpg'"/>
-				</HorizontalLayout>
-				<Label name="image_3_text" width="180" height="14" text="相似度 60%"/>
-			</VerticalLayout>
-			</HorizontalLayout>
-			<Label name="result" text="信息匹配成功！" visible="false" font="7" width="200" height="40" textcolor="#FFFF0000" padding="400,20,0,0"/>
-			<Button name="btm_remove" width="140" height="60" text="解除警报" visible="false" padding="400,10,0,0" textcolor="#FFFFFFFF" font="1" normalimage="file='skin/regok_normal.png'" hotimage="file='skin/regok_hot.png'" pushedimage="file='skin/regok_push.png'"/>
-		</VerticalLayout>
-	</VerticalLayout>
+  <Font shared="true" id="1" name="微软雅黑" size="18" bold="false" />
+  <Font shared="true" id="7" name="微软雅黑" size="26" bold="false" />
+  <Font shared="true" id="3" name="微软雅黑" size="14" bold="false" />
+  <Font shared="true" id="2" name="宋体" size="14" bold="false" />
+  <VerticalLayout bkimage="file='skin/RegBJ.png'" height="765" inset="3,3,3,3" bordersize="3" bordercolor="0x12345678">
+    <HorizontalLayout width="1024" height="70">
+      <Button name="close_btn2" width="44" height="44" padding="10,10,0,0" tooltip="返回" normalimage="file='skin/back_normal.png'" hotimage="file='skin/back_hot.png'" pushedimage="file='skin/back_push.png'"/>
+      <Label text="信息监控" font="7" padding="400,0,0,0" textcolor="#FFFFFFFF" align="center" />
+    </HorizontalLayout>
+    <VerticalLayout name="vLyt_" height="698">
+      <HorizontalLayout>
+        <HorizontalLayout  width="600" height="550" inset="2,2,2,2" bordersize="2" bordercolor="0x88888888" padding="20,30,10,0">
+          <IPCameraUI name="photo_video" visible="true" width="600" height="500" bkimage="file='skin/bsbj.png'"/>
+        </HorizontalLayout>
+        <VerticalLayout>
+          <!--显示控件 -->
+          <HorizontalLayout  name="image_1" width="360" height="160" visible="true" inset="2,2,2,2" bordersize="2" bordercolor="0x88888888" padding="2,30,0,0">
+            <Button name="1" width="180" height="160" text="1" visible="true" padding="0,0,0,0" textcolor="#88888888" font="1" bkimage="file='skin/aobama.png'"/>
+            <Button name="2" width="180" height="160" text="2" visible="true" padding="2,0,0,0" textcolor="#88888888" font="1" bkimage="file='skin/current.jpg'"/>
+          </HorizontalLayout>
+          <Label name="image_1_text" width="180" height="14" text="相似度 90%" />
+          <HorizontalLayout  name="image_2" width="360" height="160" inset="2,2,2,2" bordersize="2" bordercolor="0x88888888" padding="2,10,10,0">
+            <Button name="1" width="180" height="160" text="1" visible="true" padding="0,0,0,0" textcolor="#88888888" font="1" bkimage="file='skin/aobama.png'"/>
+            <Button name="2" width="180" height="160" text="2" visible="true" padding="2,0,0,0" textcolor="#88888888" font="1" bkimage="file='skin/current.jpg'"/>
+          </HorizontalLayout>
+          <Label name="image_2_text" width="180" height="14" text="相似度 70%"/>
+          <HorizontalLayout  name="image_3" width="360" height="160" inset="2,2,2,2" bordersize="2" bordercolor="0x88888888" padding="2,10,10,0">
+            <Button name="1" width="180" height="160" text="1" visible="true" padding="0,0,0,0" textcolor="#88888888" font="1" bkimage="file='skin/aobama.png'"/>
+            <Button name="2" width="180" height="160" text="2" visible="true" padding="2,0,0,0" textcolor="#88888888" font="1" bkimage="file='skin/current.jpg'"/>
+          </HorizontalLayout>
+          <Label name="image_3_text" width="180" height="14" text="相似度 60%"/>
+        </VerticalLayout>
+      </HorizontalLayout>
+      <Label name="result" text="信息匹配成功！" visible="false" font="7" width="200" height="40" textcolor="#FFFF0000" padding="400,20,0,0"/>
+      <Button name="btm_remove" width="140" height="60" text="解除警报" visible="false" padding="400,10,0,0" textcolor="#FFFFFFFF" font="1" normalimage="file='skin/regok_normal.png'" hotimage="file='skin/regok_hot.png'" pushedimage="file='skin/regok_push.png'"/>
+    </VerticalLayout>
+  </VerticalLayout>
 </Window>

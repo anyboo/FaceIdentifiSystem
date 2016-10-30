@@ -1,7 +1,17 @@
 #include "stdafx.h"
 #include "CameraUI.h"
 #include "TiCapture2.h"
+#include <cv.h>  
+#include <cxcore.h>  
+#include <highgui.h>
+#include <Poco/Path.h>
+#include <Poco/Exception.h>
+#include <Poco/TemporaryFile.h>
+#include <Poco/FileStream.h>
 
+using Poco::TemporaryFile;
+using Poco::FileOutputStream;
+using Poco::Path;
 /*
 优化：将摄像头的捕获采用opencv
 */
@@ -124,13 +134,6 @@ void CameraUI::DoEvent(TEventUI& event)
 		ScreenSnapshot();*/
 }
 
-#include <cv.h>  
-#include <cxcore.h>  
-#include <highgui.h>
-#include <Poco/Path.h>
-
-using Poco::Path;
-
 bool CameraUI::ScreenSnapshot(const std::string& jpegPath)
 {
 	if (!_captured || _camera == NULL)
@@ -145,7 +148,7 @@ bool CameraUI::ScreenSnapshot(const std::string& jpegPath)
 	/*Path p(Path::current());
 	std::string temp(p.parent().toString());*/
 	
-	std::string temp(Path::current().append("photoshop/TemporaryFile.bmp"));
+	std::string temp(Path::current().append("photoshop\\TemporaryFile.bmp"));
 	SaveBmp((char*)data, _width, _height, temp);
 	
 	IplImage *image = cvLoadImage(temp.c_str());
@@ -157,7 +160,6 @@ bool CameraUI::ScreenSnapshot(const std::string& jpegPath)
 	return true;
 }
 
-#include <Poco/Exception.h>
 BYTE* CameraUI::beginSnapshot()
 {
 	if (_captured || _camera == NULL)
@@ -198,11 +200,6 @@ void CameraUI::ScreenSnapshot(BYTE* framebuffer, long len)
 		throw Poco::Exception("ScreenSnapshot failed!");
 	}
 }
-
-#include <Poco/TemporaryFile.h>
-#include <Poco/FileStream.h>
-using Poco::TemporaryFile;
-using Poco::FileOutputStream;
 
 void CameraUI::SaveBmp(char* data, int width, int height, const std::string& path)
 {

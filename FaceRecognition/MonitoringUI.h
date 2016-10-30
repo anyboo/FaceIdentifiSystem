@@ -18,7 +18,7 @@ public:
 	virtual void OnFinalMessage(HWND hWnd);
 	virtual void Notify(TNotifyUI& msg);
 	DUI_DECLARE_MESSAGE_MAP();
-
+	CControlUI* CreateControl(LPCTSTR pstrClass);
 	void OnCloseWnd(TNotifyUI& msg);
 	void OnInitCtrl();
 
@@ -31,6 +31,7 @@ protected:
 	bool is_need_report();
 	void report_to_user();
 	void report_image_to_user();
+	void report_success_user();
 	void pushImage(const alert_image& image);
 
 private:

@@ -11,6 +11,7 @@
 //#include "CaptureNotification.h"
 //#include "WaittingUI.h"
 //#include "SettingConfig.h"
+#include "IPCameraUI.h"
 #include "document.h"
 #include "prettywriter.h"
 #include "stringbuffer.h"
@@ -24,12 +25,11 @@ using namespace Poco::Data::Keywords;
 using namespace rapidjson;
 
 CMonitoringUI::CMonitoringUI():
-_notify_status(0), _monitor(100,2000),
+_notify_status(0), _monitor(1000,2000),
 _callback(*this, &CMonitoringUI::onTimer),
 left_image_pos(0)
 {
 	m_closeApp = true;
-	_monitor.start(_callback);
 }
 
 
@@ -42,13 +42,25 @@ DUI_BEGIN_MESSAGE_MAP(CMonitoringUI, WindowImplBase)
 DUI_ON_CLICK_CTRNAME(BT_CLOSE_MonWnd, OnCloseWnd)
 DUI_END_MESSAGE_MAP()
 
+CControlUI* CMonitoringUI::CreateControl(LPCTSTR pstrClass)
+{
+	if (_tcscmp(pstrClass, DUI_CTR_IPCameraUI) == 0)
+	{
+		IPCameraUI* tmp = new IPCameraUI; 
+		_monitor.start(_callback);
+		return tmp;
+	}
+
+	return NULL;
+}
 void CMonitoringUI::onTimer(Poco::Timer& timer)
 {
 	DUITRACE("CMonitoringUI::onTimer");
 	if (is_need_report())
 	{
-		report_to_user();
+		return report_to_user();
 	}
+	report_success_user();
 }
 
 bool CMonitoringUI::is_need_report()
@@ -144,6 +156,7 @@ void CMonitoringUI::report_image_to_user()
 
 void CMonitoringUI::pushImage(const alert_image& image)
 {
+	DUITRACE("pushImage:%s", image.pos.c_str());
 	std::string imagePos(image.pos);
 	CHorizontalLayoutUI* parent = dynamic_cast<CHorizontalLayoutUI*>(m_PaintManager.FindControl(imagePos.c_str()));
 	if (parent)
@@ -158,6 +171,36 @@ void CMonitoringUI::pushImage(const alert_image& image)
 		std::string paintText = LangueConfig::GetShowText(14);
 		paintText.append(std::to_string(image.precent)).append("%");
 		text->SetText(paintText.c_str());
+	}
+}
+
+void CMonitoringUI::report_success_user()
+{
+	alert_image img;
+
+	try
+	{
+		Session session("SQLite", "facerecog.db");
+		Statement select(session);
+		select << "SELECT max(id), photo_path, registerfilepath, percent FROM sucess_photo",
+			into(img.id),
+			into(img.alert),
+			into(img.predefine),
+			into(img.precent),
+			now;
+
+		left_image_pos++;
+		int pos = left_image_pos % 4;
+
+		//image_1
+		img.pos = "image_";
+		img.pos.append(std::to_string(pos));
+		DUITRACE("image pos string : %s", img.pos.c_str());
+		pushImage(img);
+	}
+	catch (Poco::Data::DataException& e)
+	{
+		DUITRACE(e.displayText().c_str());
 	}
 }
 
