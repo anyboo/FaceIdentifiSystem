@@ -10,13 +10,13 @@
 //#include <shellapi.h>
 //#include "QMFileSqlite.h"
 //#include "RegUserInfo.h"
-#include "log.h"
+//#include "log.h"
 //#include "SettingConfig.h"
 //
 //#include "THFaceImage_i.h"
 //#include "THFeature_i.h"
-
 #include "AppInitialize.h"
+#include <Poco/Logger.h>
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpCmdLine*/, int nCmdShow)
 {
@@ -28,7 +28,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 	/*HRESULT Hr = ::CoInitialize(NULL);
 	if (FAILED(Hr)) return 0;*/
 
-	Loggering::Logger_initiation();
+	Poco::Logger::get("FileLogger").information("Start App message");
 
 	std::auto_ptr<CMainWnd> pFrame(new CMainWnd);
 	assert(pFrame.get());

@@ -12,6 +12,7 @@
 #include <Poco/BinaryReader.h>
 #include <Poco/Buffer.h>
 #include <Poco/Path.h>
+#include <Poco/Logger.h>
 
 #include "THFaceImage_i.h"
 #include "THFeature_i.h"
@@ -21,7 +22,7 @@
 #include <highgui.h>
 
 using namespace cv;
-
+using Poco::Logger;
 using Poco::Buffer;
 using Poco::File;
 using Poco::FileInputStream;

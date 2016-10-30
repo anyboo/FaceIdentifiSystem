@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "ActivityCommit.h"
 #include "ActiveReporter.h"
 #include "ActiveUploader.h"

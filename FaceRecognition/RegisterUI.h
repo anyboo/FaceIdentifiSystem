@@ -1,10 +1,10 @@
 #pragma once
 #include <DuiLib/UIlib.h>
-#include "RegisterInfo.h"
-#include "Recorder.h"
-#include "CaptureNotify.h"
-#include "QMFileSqlite.h"
-#include "RegUserInfo.h"
+//#include "RegisterInfo.h"
+//#include "Recorder.h"
+//#include "CaptureNotify.h"
+//#include "QMFileSqlite.h"
+//#include "RegUserInfo.h"
 #include <cv.h>  
 #include <cxcore.h>  
 #include <highgui.h>
@@ -39,7 +39,7 @@ public:
 
 private:
 	bool				m_closeApp;
-	writeUserInfo	m_userInfo;
+	//writeUserInfo	m_userInfo;
 
 	const int width = 640;
 	const int height = 480;
@@ -75,8 +75,8 @@ protected:
 	void add_user_to_onduty(int server_id);
 private:
 	bool   m_photo_agin;
-	Recorder r;
-	CClipUI* customizedImage;
+	//Recorder r;
+	//CClipUI* customizedImage;
 
 	CEditUI*	_name;
 	CEditUI*	_age;

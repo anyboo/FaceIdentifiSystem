@@ -4,12 +4,12 @@
 //#include "Camera.h"
 //#include "Util.h"
 #include "SettingConfig.h"
-#include "ClipUI.h"
+//#include "ClipUI.h"
 #include "CameraUI.h"
 
 #include "Mmsystem.h"
 
-#include "Employee.h"
+//#include "Employee.h"
 
 #include "ActiveUploader.h"
 #include "ActiveReporter.h"
@@ -47,7 +47,7 @@ using namespace rapidjson;
 
 RegisterUI::RegisterUI()
 :m_photo_agin(false)
-, r(new Camera)
+//, r(new Camera)
 , bAlreadyTaked(false),
 _license_id(0),
 _identify_id(0),
@@ -93,8 +93,8 @@ CDuiString RegisterUI::GetSkinFile()
 
 CControlUI* RegisterUI::CreateControl(LPCTSTR pstrClass)
 {
-	if (_tcscmp(pstrClass, DUI_CTR_CLIP) == 0)
-		return new CClipUI;
+	/*if (_tcscmp(pstrClass, DUI_CTR_CLIP) == 0)
+		return new CClipUI;*/
 	if (_tcscmp(pstrClass, DUI_CTR_CAMERAUI) == 0)
 	{
 		_pCameraUI = new CameraUI;

@@ -12,7 +12,7 @@
 #include <windows.h>
 #include <fstream>
 
-#include "log.h"
+//#include "log.h"
 using namespace rapidjson;
 
 class LangueConfig

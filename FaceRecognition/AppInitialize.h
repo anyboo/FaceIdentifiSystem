@@ -12,6 +12,8 @@ protected:
 	void AttatchSDK();
 	void DetachedSDK();
 	void LaunchMonitorServer();
+	void SetupLogger(const std::string& path);
+	void ShutdownLogger();
 
 private:
 	ActivityCommit _commit;

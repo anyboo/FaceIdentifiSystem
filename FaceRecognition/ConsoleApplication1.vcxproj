@@ -55,7 +55,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>D:\workstation\code\GitHub\FaceIdentifiSystem\ffmpeg\include;$(ProjectDir)..\duilib;$(ProjectDir)..\include-mt;$(ProjectDir)..\poco\Net\include;$(ProjectDir)..\poco\Foundation\include;$(SolutionDir)\poco\Data\SQLite\include;$(SolutionDir)\poco\Data\include;$(SolutionDir)\opencv231\build\include;$(SolutionDir)\opencv231\build\include\opencv;$(SolutionDir)\JSON\include\rapidjson</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\ffmpeg\include;$(ProjectDir)..\duilib;$(ProjectDir)..\include-mt;$(ProjectDir)..\poco\Net\include;$(ProjectDir)..\poco\Foundation\include;$(SolutionDir)\poco\Data\SQLite\include;$(SolutionDir)\poco\Data\include;$(SolutionDir)\opencv231\build\include;$(SolutionDir)\opencv231\build\include\opencv;$(SolutionDir)\JSON\include\rapidjson</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -71,8 +71,8 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>D:\workstation\code\GitHub\FaceIdentifiSystem\ffmpeg\include;$(ProjectDir)..\duilib;$(ProjectDir)..\include-mt;$(ProjectDir)..\poco\Net\include;$(ProjectDir)..\poco\Foundation\include;$(SolutionDir)\poco\Data\SQLite\include;$(SolutionDir)\poco\Data\include;$(SolutionDir)\opencv231\build\include;$(SolutionDir)\opencv231\build\include\opencv;$(SolutionDir)\JSON\include\rapidjson</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)\ffmpeg\include;$(ProjectDir)..\duilib;$(ProjectDir)..\include-mt;$(ProjectDir)..\poco\Net\include;$(ProjectDir)..\poco\Foundation\include;$(SolutionDir)\poco\Data\SQLite\include;$(SolutionDir)\poco\Data\include;$(SolutionDir)\opencv231\build\include;$(SolutionDir)\opencv231\build\include\opencv;$(SolutionDir)\JSON\include\rapidjson</AdditionalIncludeDirectories>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
     </ClCompile>
     <Link>
@@ -92,36 +92,18 @@
     <ClInclude Include="ActiveReporter.h" />
     <ClInclude Include="ActiveUploader.h" />
     <ClInclude Include="ActivityCommit.h" />
-    <ClInclude Include="ActivityDispatcher.h" />
     <ClInclude Include="AppInitialize.h" />
-    <ClInclude Include="Camera.h" />
     <ClInclude Include="CameraUI.h" />
-    <ClInclude Include="CaptureNotification.h" />
-    <ClInclude Include="CaptureNotify.h" />
-    <ClInclude Include="ClipUI.h" />
     <ClInclude Include="DeviceManage.h" />
     <ClInclude Include="DeviceUI.h" />
-    <ClInclude Include="Employee.h" />
-    <ClInclude Include="FaceImage.h" />
-    <ClInclude Include="FaceMatch.h" />
-    <ClInclude Include="FacePosition.h" />
-    <ClInclude Include="FaceFeature.h" />
     <ClInclude Include="InitDevice.h" />
-    <ClInclude Include="DatabaseException.h" />
     <ClInclude Include="IPCameraUI.h" />
     <ClInclude Include="ScheduleUI.h" />
     <ClInclude Include="SettingConfig.h" />
-    <ClInclude Include="log.h" />
     <ClInclude Include="LogInUI.h" />
     <ClInclude Include="MainWnd.h" />
-    <ClInclude Include="MatchUI.h" />
     <ClInclude Include="MonitoringUI.h" />
-    <ClInclude Include="Picture.h" />
-    <ClInclude Include="QMFileSqlite.h" />
-    <ClInclude Include="Recorder.h" />
-    <ClInclude Include="RegisterInfo.h" />
     <ClInclude Include="RegisterUI.h" />
-    <ClInclude Include="RegUserInfo.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SettingUI.h" />
     <ClInclude Include="SignInUI.h" />
@@ -130,40 +112,21 @@
     <ClInclude Include="SystemUI.h" />
     <ClInclude Include="UserUI.h" />
     <ClInclude Include="WaittingUI.h" />
-    <ClInclude Include="Util.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ActiveReporter.cpp" />
     <ClCompile Include="ActiveUploader.cpp" />
     <ClCompile Include="ActivityCommit.cpp" />
-    <ClCompile Include="ActivityDispatcher.cpp" />
     <ClCompile Include="App.cpp" />
     <ClCompile Include="AppInitialize.cpp" />
-    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CameraUI.cpp" />
-    <ClCompile Include="CaptureNotification.cpp" />
-    <ClCompile Include="CaptureNotify.cpp" />
-    <ClCompile Include="ClipUI.cpp" />
     <ClCompile Include="DeviceManage.cpp" />
-    <ClCompile Include="Employee.cpp" />
-    <ClCompile Include="FaceImage.cpp" />
-    <ClCompile Include="FaceMatch.cpp" />
-    <ClCompile Include="FacePosition.cpp" />
-    <ClCompile Include="FaceFeature.cpp" />
     <ClCompile Include="InitDevice.cpp" />
-    <ClCompile Include="DatabaseException.cpp" />
     <ClCompile Include="IPCameraUI.cpp" />
-    <ClCompile Include="log.cpp" />
     <ClCompile Include="LogInUI.cpp" />
     <ClCompile Include="MainWnd.cpp" />
-    <ClCompile Include="MatchUI.cpp" />
     <ClCompile Include="MonitoringUI.cpp" />
-    <ClCompile Include="Picture.cpp" />
-    <ClCompile Include="QMFileSqlite.cpp" />
-    <ClCompile Include="Recorder.cpp" />
-    <ClCompile Include="RegisterInfo.cpp" />
     <ClCompile Include="RegisterUI.cpp" />
-    <ClCompile Include="RegUserInfo.cpp" />
     <ClCompile Include="SettingUI.cpp" />
     <ClCompile Include="SignInUI.cpp" />
     <ClCompile Include="SignOutUI.cpp" />
@@ -172,7 +135,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="WaittingUI.cpp" />
-    <ClCompile Include="Util.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="ConsoleApplication1.ico" />

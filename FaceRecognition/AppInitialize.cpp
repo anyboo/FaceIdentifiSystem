@@ -4,6 +4,21 @@
 #include "THFeature_i.h"
 #include <Poco/Exception.h>
 #include <Poco/Process.h>
+#include <Poco/Logger.h>
+#include <Poco/AutoPtr.h>
+#include <Poco/PatternFormatter.h>
+#include <Poco/FormattingChannel.h>
+#include <Poco/FileChannel.h>
+#include <Poco/Message.h>
+#include <Poco/Path.h>
+
+using Poco::Path;
+using Poco::Logger;
+using Poco::AutoPtr;
+using Poco::PatternFormatter;
+using Poco::FormattingChannel;
+using Poco::FileChannel;
+using Poco::Message;
 
 using Poco::Process;
 using Poco::ProcessHandle;
@@ -17,13 +32,34 @@ CAppInitialize::CAppInitialize()
 	AttatchSDK();
 	_commit.start();
 	LaunchMonitorServer();
+	SetupLogger("log\\facerecognition.log");
 }
 
 CAppInitialize::~CAppInitialize()
 {
 	DetachedSDK();
 	_commit.stop();
+	ShutdownLogger();
 	::CoUninitialize();
+}
+
+void CAppInitialize::SetupLogger(const std::string& path)
+{
+	Path::current().append(path);
+	AutoPtr<PatternFormatter> pPatternFormatter2(new PatternFormatter("%Y-%m-%d %H:%M:%S.%c %N[%P]:%s:%q:%t"));
+	AutoPtr<FormattingChannel> pFCFile(new FormattingChannel(pPatternFormatter2));
+	AutoPtr<FileChannel> pFileChannel(new FileChannel(path));
+	pFileChannel->setProperty("rotation", "10M");
+	pFileChannel->setProperty("archive", "timestamp");
+	pFCFile->setChannel(pFileChannel);
+	pFCFile->open();
+
+	Logger& fileLogger = Logger::create("FileLogger", pFCFile, Message::PRIO_INFORMATION);
+}
+
+void CAppInitialize::ShutdownLogger()
+{
+	Logger::shutdown();
 }
 
 void CAppInitialize::LaunchMonitorServer()

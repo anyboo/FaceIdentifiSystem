@@ -12,6 +12,7 @@
 #include <Poco/FileStream.h>
 #include <Poco/BinaryReader.h>
 #include <Poco/Buffer.h>
+#include <Poco/Logger.h>
 
 #include "THFaceImage_i.h"
 #include "THFeature_i.h"
@@ -21,7 +22,7 @@
 #include <highgui.h>
 
 using namespace cv;
-
+using Poco::Logger;
 using Poco::Buffer;
 using Poco::Path;
 using Poco::File;
@@ -182,6 +183,7 @@ void CSignInUI::onTimer(Poco::Timer& timer)
 	if (_StopWatchdog) return;
 	//获取一张摄像头图片，判断是否有人脸，并提取人脸特征
 	std::string path = Poco::Path::current().append("signin.jpg");
+	poco_information_f1(Poco::Logger::get("FileLogger"), "singin path : %s", path);
 	if (!_pCameraUI->ScreenSnapshot(path))
 		return;
 
@@ -198,6 +200,7 @@ void CSignInUI::onTimer(Poco::Timer& timer)
 	if (nFace <= 0)
 	{
 		DUITRACE("nFace <= 0");
+		poco_information(Poco::Logger::get("FileLogger"), "CSignInUI THFI_DetectFace nFace <= 0");
 		return;
 	}
 
@@ -235,7 +238,7 @@ void CSignInUI::onTimer(Poco::Timer& timer)
 			std::stringstream ss;
 			ss << precent;
 			DUITRACE("id : %d ,precent : %s", var.id, ss.str().c_str());
-
+			poco_information_f2(Poco::Logger::get("FileLogger"), "id : %d ,precent : %s", var.id, ss.str());
 			if (precent > _simility_precent)
 			{
 				//从数据库通过id获取数据信息，上报注册用户信息到UI，同时停止比较
