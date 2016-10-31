@@ -183,7 +183,7 @@ void RegisterUI::SignUp(TNotifyUI& msg)
 		PlaySoundA(_T("ZC.wav"), NULL, SND_FILENAME | SND_ASYNC);
 		m_closeApp = false;
 	}
-	catch (Poco::Data::SQLite::ConstraintViolationException& e)
+	catch (Poco::Exception& e)
 	{
 		DUITRACE("ConstraintViolationException: class_name %s, display: %s", e.className(), e.displayText().c_str());
 		std::string str = LangueConfig::GetShowText(11);
@@ -414,16 +414,27 @@ void RegisterUI::commit_to_server()
 		{
 			if (document.HasMember("id"))
 			{
-				std::string server_id = document["id"].GetString();
+				int server_id = std::stoi(document["id"].GetString());
 
 				Session session("SQLite", "facerecog.db");
-				Statement update(session);
-				update << "UPDATE UserInfo SET id = ? WHERE id = ?",
-					bind(std::stoi(server_id)),
-					bind(_userinfo_id),
-					now;
+				
+				{
+					Statement update(session);
+					update << "UPDATE UserInfo SET id = ? WHERE id = ?",
+						use(server_id),
+						use(_userinfo_id),
+						now;
+				}
+				
 
-				add_user_to_onduty(std::stoi(server_id));
+				{
+					Statement update(session);
+					update << "UPDATE duty SET userid = ? WHERE userid = ?",
+						use(server_id),
+						use(_userinfo_id),
+						now;
+				}
+				
 			}
 		}
 	}
@@ -565,4 +576,6 @@ void RegisterUI::add_user_info()
 		use(user_info.photo_file_path),
 		use(user_info.facefeatherpath),
 		now;
+
+	add_user_to_onduty(user_info.id);
 }

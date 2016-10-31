@@ -155,7 +155,7 @@ void CSignOutUI::ShowMatchInfo()
 
 	edit_name->SetText(_value_name.c_str());
 	std::string sex;
-	if (_value_sex)
+	if (!_value_sex)
 		sex = LangueConfig::GetShowText(12);
 	else
 		sex = LangueConfig::GetShowText(13);
@@ -184,16 +184,15 @@ void CSignOutUI::onTimer(Poco::Timer& timer)
 	if (!_pCameraUI->ScreenSnapshot(path))
 		return;
 
-	Mat im1 = imread(path);
-	if (im1.empty())
-	{
-		DUITRACE("imread");
-	}
+	IplImage *image = cvLoadImage(path.c_str());
+	if (image == NULL) return;
+
+	poco_information_f2(Poco::Logger::get("FileLogger"), "IplImage w : %d h : %d!", image->width, image->height);
 
 	THFI_FacePos ptfp[3];
 	ptfp[0].dwReserved = (DWORD)new BYTE[512];
 
-	int nFace = THFI_DetectFace(0, im1.data, 24, im1.cols, im1.rows, ptfp, 3);
+	int nFace = THFI_DetectFace(0, (BYTE*)image->imageData, 24, image->width, image->height, ptfp, 3);
 	if (nFace <= 0)
 	{
 		DUITRACE("nFace <= 0");
@@ -222,7 +221,7 @@ void CSignOutUI::onTimer(Poco::Timer& timer)
 	
 	int m_nFeatureSize = EF_Size();
 	Buffer<BYTE> pFeature(m_nFeatureSize);
-	if (EF_Extract(0, im1.data, im1.cols, im1.rows, 3, (DWORD)&ptfp[nMaxIndex], pFeature.begin()))
+	if (EF_Extract(0, (BYTE*)image->imageData, image->width, image->height, 3, (DWORD)&ptfp[nMaxIndex], pFeature.begin()))
 	{
 		DUITRACE("EF_Extract");
 		//与内存中的特征组逐一比对，成功则获取ID
@@ -234,6 +233,7 @@ void CSignOutUI::onTimer(Poco::Timer& timer)
 			std::stringstream ss;
 			ss << precent;
 			DUITRACE("id : %d ,precent : %s", var.id, ss.str().c_str());
+			poco_information_f2(Poco::Logger::get("FileLogger"), "id : %d ,precent : %s", var.id, ss.str());
 
 			if (precent > _simility_precent)
 			{
@@ -247,6 +247,7 @@ void CSignOutUI::onTimer(Poco::Timer& timer)
 		}
 		
 	}
+	cvReleaseImage(&image);
 }
 
 void CSignOutUI::popData2UI(int id)

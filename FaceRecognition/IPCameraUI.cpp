@@ -8,32 +8,87 @@
 #include <Poco/Exception.h>
 #include <Poco/TemporaryFile.h>
 #include <Poco/FileStream.h>
-
+#include <Poco/Data/Session.h>
+#include <Poco/Data/SQLite/Connector.h>
+#include <Poco/Data/SQLite/SQLiteException.h>
+#include <Poco/Logger.h>
 //#pragma comment(lib, "avcodec.lib")
 //#pragma comment(lib, "avformat.lib")
 //#pragma comment(lib, "avutil.lib")
 //#pragma comment(lib, "swscale.lib")
-
+using Poco::Logger;
 using Poco::TemporaryFile;
 using Poco::FileOutputStream;
 using Poco::Path;
-
+using Poco::Data::Session;
+using Poco::Data::Statement;
+using namespace Poco::Data::Keywords;
 
 IPCameraUI::IPCameraUI() :
 _captured(false),
-_url("rtsp://192.168.1.180:554/user=admin&password=&channel=1&stream=0.sdp"),
-pixfmt(AVPixelFormat::AV_PIX_FMT_BGR24)
+_paint(false),
+pixfmt(AVPixelFormat::AV_PIX_FMT_BGR24),
+_FormatCtx(0),
+_Frame(0),
+_FrameRGB(0),
+packet(0),
+context(0)
 {
 	try
 	{
+		load();
 		Prepare();
+		_paint = true;
+	}
+	catch (Poco::Exception& e)
+	{
+		poco_information_f1(Poco::Logger::get("FileLogger"), "IPCameraUI : %s", e.displayText());
+	}
+}
+
+void IPCameraUI::load()
+{
+	struct ipc
+	{
+		int id;
+		std::string ip;
+		int port;
+		std::string user;
+		std::string passwd;
+		int channel;
+	};
+
+	ipc config;
+
+	try
+	{
+		Session session("SQLite", "facerecog.db");
+		Statement select(session);
+
+		select << "SELECT id, ip, port, user, passwd, channel FROM ipcamerasetting",
+			into(config.id),
+			into(config.ip),
+			into(config.port),
+			into(config.user),
+			into(config.passwd),
+			into(config.channel),
+			now;
+
+		_url = (Poco::format("rtsp://%s:%d/user=%s&password=%s&channel=%d&stream=0.sdp", 
+			config.ip, 
+			config.port, 
+			config.user,
+			config.passwd,
+			config.channel
+			));
+
+		poco_information(Poco::Logger::get("FileLogger"), _url);
 	}
 	catch (Poco::Exception& e)
 	{
 		DUITRACE("IPCameraUI :%s", e.displayText());
 	}
 }
-
 
 IPCameraUI::~IPCameraUI()
 {
@@ -42,11 +97,16 @@ IPCameraUI::~IPCameraUI()
 
 void IPCameraUI::Release()
 {
-	av_packet_unref(packet);
-	avcodec_close(context);
-	av_free(_Frame);
-	av_free(_FrameRGB);
-	avformat_close_input(&_FormatCtx);
+	if (packet)
+		av_packet_unref(packet);
+	if (context)
+		avcodec_close(context);
+	if (_Frame)
+		av_free(_Frame);
+	if (_FrameRGB)
+		av_free(_FrameRGB);
+	if (_FormatCtx)
+		avformat_close_input(&_FormatCtx);
 }
 
 LPCTSTR	IPCameraUI::GetClass() const
@@ -75,7 +135,7 @@ void IPCameraUI::SetVisible(bool bVisible)
 
 void IPCameraUI::StartCapture()
 {
-	if (_captured)
+	if (_captured || !_paint)
 		return;
 	
 	m_pManager->SetTimer(this, EVENT_IPCAMER_TIEM_ID, 30);
@@ -84,7 +144,7 @@ void IPCameraUI::StartCapture()
 
 void IPCameraUI::StopCapture()
 {
-	if (!_captured)
+	if (!_captured || !_paint)
 		return;
 
 	m_pManager->KillTimer(this, EVENT_IPCAMER_TIEM_ID);
@@ -181,7 +241,7 @@ void IPCameraUI::DoEvent(TEventUI& event)
 
 void IPCameraUI::DrawFrame(HDC PaintDC)
 {
-	if (!_captured) return;
+	if (!_captured || !_paint) return;
 
 	int res = 0;
 	if (res = av_read_frame(_FormatCtx, packet) >= 0)

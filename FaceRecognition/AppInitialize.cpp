@@ -46,7 +46,7 @@ CAppInitialize::~CAppInitialize()
 void CAppInitialize::SetupLogger(const std::string& path)
 {
 	Path::current().append(path);
-	AutoPtr<PatternFormatter> pPatternFormatter2(new PatternFormatter("%Y-%m-%d %H:%M:%S.%c %N[%P]:%s:%q:%t"));
+	AutoPtr<PatternFormatter> pPatternFormatter2(new PatternFormatter("%Y-%m-%d %H:%M:%S.%c - %s:%q:%t"));
 	AutoPtr<FormattingChannel> pFCFile(new FormattingChannel(pPatternFormatter2));
 	AutoPtr<FileChannel> pFileChannel(new FileChannel(path));
 	pFileChannel->setProperty("rotation", "10M");

@@ -38,8 +38,10 @@ private:
 	void StopCapture();
 	void Prepare();
 	void Release();
+	void load();
 
 	bool _captured;
+	bool _paint;
 
 	std::string _url;
 	int video_stream_index;
