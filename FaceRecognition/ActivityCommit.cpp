@@ -11,10 +11,13 @@
 #include <Poco/Data/SQLite/SQLiteException.h>
 #include <Poco/Exception.h>
 #include <Poco/Path.h>
+#include <Poco/Logger.h>
+#include <Poco/Net/ICMPClient.h>
 
 using Poco::Path;
 using Poco::Data::Session;
 using Poco::Data::Statement;
+using Poco::Net::ICMPClient;
 
 using namespace Poco::Data::Keywords;
 using namespace rapidjson;
@@ -31,7 +34,8 @@ struct alert_table
 
 ActivityCommit::ActivityCommit():
 _activity(this, &ActivityCommit::runActivity),
-_dbSession(Session("SQLite", "facerecog.db"))
+_dbSession(Session("SQLite", "facerecog.db")),
+_server_addr("202.103.191.73")
 {
 }
 
@@ -51,11 +55,17 @@ void ActivityCommit::stop()
 	_activity.wait();
 }
 
-bool check_network_status()
+#include <Poco/Net/IPAddress.h>
+using Poco::Net::IPAddress;
+
+bool ActivityCommit::check_network_status()
 {
 	//检查网络是否正常状态
 	//ping 202.103.191.73 是否正常
-	return false;
+	/*ICMPClient imcp(IPAddress::IPv4);
+	bool ret = (imcp.ping("localhost") > 0);
+	poco_information_f1(Poco::Logger::get("FileLogger"), "check_network_status %d", ret);*/
+	return true;
 }
 
 void ActivityCommit::runActivity()
@@ -63,6 +73,7 @@ void ActivityCommit::runActivity()
 	while (!_activity.isStopped())
 	{
 		DUITRACE("ActivityCommit::runActivity");
+		poco_information(Poco::Logger::get("FileLogger"), "ActivityCommit::runActivity");
 		try
 		{
 			//Session session("SQLite", "facerecog.db");
@@ -87,6 +98,7 @@ void ActivityCommit::runActivity()
 					if (check_network_status())
 					{
 						//仅当网络正常时，上传数据
+						poco_information(Poco::Logger::get("FileLogger"), "runActivity : login to 202.103.191.73");
 						FTPClientSession _ftp("202.103.191.73", FTPClientSession::FTP_PORT, "ftpalert", "1");
 						ActiveUploader ur(_ftp);
 						ActiveResult<bool> result = ur.upload(alert.filepath);
@@ -99,7 +111,8 @@ void ActivityCommit::runActivity()
 		}
 		catch (Poco::Exception& e)
 		{
-			DUITRACE(e.displayText().c_str());
+			poco_information_f1(Poco::Logger::get("FileLogger"), "ActivityCommit::runActivity::Exception %s", e.displayText());
+			DUITRACE("ActivityCommit::runActivity::Exception : %s",e.displayText().c_str());
 		}
 		Thread::sleep(2000);
 	}
@@ -116,12 +129,13 @@ void ActivityCommit::update_alert_upload_status(int uid)
 	}
 	catch (Poco::Data::SQLite::DBLockedException& e)
 	{
-		DUITRACE(e.displayText().c_str());
+		poco_information_f1(Poco::Logger::get("FileLogger"), "update_alert_upload_status %s", e.displayText().c_str());
+		/*DUITRACE(e.displayText().c_str());
 		Thread::sleep(1000);
 		Statement update(_dbSession);
 		update << "UPDATE alert SET hasUpload = 1 WHERE id = ?",
 			use(uid),
-			now;
+			now;*/
 	}
 }
 
@@ -156,6 +170,7 @@ void ActivityCommit::post_alert_data(alert_table& alert)
 	result.wait();
 	std::string received = result.data();
 	DUITRACE("HTTP RECEIVED : %s", received);
+	poco_information_f1(Poco::Logger::get("FileLogger"), "HTTP RECEIVED : %s", received);
 
 	if (received.empty())
 		throw Poco::Exception("HTTP RECEIVED FAILED - NO RECEIVED!");

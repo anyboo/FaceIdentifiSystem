@@ -81,7 +81,9 @@ void IPCameraUI::load()
 			config.passwd,
 			config.channel
 			));
-
+#ifdef _DEBUG
+		_url = "rtsp://192.168.1.224:554/user=admin&password=&channel=1&stream=0.sdp?";
+#endif
 		poco_information(Poco::Logger::get("FileLogger"), _url);
 	}
 	catch (Poco::Exception& e)
@@ -289,7 +291,7 @@ void IPCameraUI::DrawFrame(HDC PaintDC)
 	memcpy(&(bi.bmiHeader), &bih, sizeof(BITMAPINFOHEADER));
 	int iWidth = bih.biWidth;
 	int iHeight = bih.biHeight;
-
+	
 	::StretchDIBits(PaintDC, GetX(), GetY(), GetWidth(), GetHeight(),
 		0, 0, _Frame->width/3, _Frame->height/3, _FrameRGB->data[0], &bi,
 		DIB_RGB_COLORS, SRCCOPY);

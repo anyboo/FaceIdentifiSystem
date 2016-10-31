@@ -28,11 +28,11 @@ CAppInitialize::CAppInitialize()
 	HRESULT Hr = ::CoInitialize(NULL);
 	if (FAILED(Hr))
 		throw Poco::Exception("CoInitialize is failed!");
-
+	SetupLogger("log\\facerecognition.log");
 	AttatchSDK();
 	_commit.start();
 	LaunchMonitorServer();
-	SetupLogger("log\\facerecognition.log");
+	
 }
 
 CAppInitialize::~CAppInitialize()
@@ -54,7 +54,7 @@ void CAppInitialize::SetupLogger(const std::string& path)
 	pFCFile->setChannel(pFileChannel);
 	pFCFile->open();
 
-	Logger& fileLogger = Logger::create("FileLogger", pFCFile, Message::PRIO_INFORMATION);
+	Logger::create("FileLogger", pFCFile, Message::PRIO_INFORMATION);
 }
 
 void CAppInitialize::ShutdownLogger()

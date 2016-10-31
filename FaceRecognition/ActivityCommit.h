@@ -23,8 +23,10 @@ protected:
 	void runActivity();
 	void post_alert_data(alert_table& alert);
 	void update_alert_upload_status(int uid);
+	bool check_network_status();
 private:
 	Activity<ActivityCommit> _activity;
 	Session _dbSession;
+	std::string _server_addr;
 };
 

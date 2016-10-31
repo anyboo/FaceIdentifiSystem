@@ -17,6 +17,7 @@
 #include "stringbuffer.h"
 #include <Poco/Data/Session.h>
 #include <Poco/Data/SQLite/Connector.h>
+#include <Poco/Logger.h>
 
 using Poco::Data::Session;
 using Poco::Data::Statement;
@@ -98,7 +99,7 @@ bool CMonitoringUI::is_need_report()
 			if (d.HasMember("open"))
 			{
 				int result = d["open"].GetInt();
-				DUITRACE("check notify_main open : %d", result);
+				poco_information_f1(Poco::Logger::get("FileLogger"), "check notify_main open : %d", result);
 				return (result == 1);
 			}
 			return false;

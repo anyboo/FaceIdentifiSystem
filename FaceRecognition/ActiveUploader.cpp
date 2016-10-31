@@ -5,6 +5,7 @@
 #include <Poco/FileStream.h>
 #include <Poco/Path.h>
 #include <sstream>
+#include <Poco/Logger.h>
 
 using Poco::Net::FTPClientSession;
 using Poco::StreamCopier;
@@ -28,6 +29,9 @@ bool ActiveUploader::uploadImp(const std::string& file)
 	DUITRACE(_session.getWorkingDirectory().c_str());
 	Path p(file);
 	DUITRACE("upload file : %s -> Remote WorkingDirectory %s", p.getFileName().c_str(), _session.getWorkingDirectory().c_str());
+	poco_information_f2(Poco::Logger::get("FileLogger"), "upload file : %s -> Remote WorkingDirectory %s", 
+		p.getFileName().c_str(), _session.getWorkingDirectory().c_str());
+
 	FileInputStream fis(file);
 	std::ostream& ostr = _session.beginUpload(p.getFileName());
 	StreamCopier::copyStream(fis, ostr);
