@@ -16,6 +16,7 @@
 //#pragma comment(lib, "avformat.lib")
 //#pragma comment(lib, "avutil.lib")
 //#pragma comment(lib, "swscale.lib")
+
 using Poco::Logger;
 using Poco::TemporaryFile;
 using Poco::FileOutputStream;
@@ -23,6 +24,7 @@ using Poco::Path;
 using Poco::Data::Session;
 using Poco::Data::Statement;
 using namespace Poco::Data::Keywords;
+using namespace cv;
 
 IPCameraUI::IPCameraUI() :
 _captured(false),
@@ -257,7 +259,7 @@ void IPCameraUI::DrawFrame(HDC PaintDC)
 
 			if (_Frame->height <= 0 || _Frame->width <= 0)
 				return;
-
+			
 			sws_scale(img_convert_ctx,
 				_Frame->data,
 				_Frame->linesize,
@@ -268,6 +270,19 @@ void IPCameraUI::DrawFrame(HDC PaintDC)
 				);
 		}
 	}
+
+	// Mat(int _rows, int _cols, int _type, void* _data, size_t _step=AUTO_STEP);
+	/*
+	int width = context->width / 3;
+	int height = context->height / 3;
+
+	Mat img1(width, height, CV_8UC1, _FrameRGB->data);
+	Mat img2(width, height, CV_8UC3);
+	*/
+	
+	//transpose(img1, img2);
+	//flip(img1, img2, 0);
+	//cvFlip(dest, );
 	//cv::Mat img(_Frame->height, _Frame->width, CV_8UC3, _FrameRGB->data[0]);
 	//
 	::SetStretchBltMode(PaintDC, COLORONCOLOR);
@@ -293,6 +308,6 @@ void IPCameraUI::DrawFrame(HDC PaintDC)
 	int iHeight = bih.biHeight;
 	
 	::StretchDIBits(PaintDC, GetX(), GetY(), GetWidth(), GetHeight(),
-		0, 0, _Frame->width/3, _Frame->height/3, _FrameRGB->data[0], &bi,
+		0, 0, img2.cols, img2.rows, img2.data, &bi,
 		DIB_RGB_COLORS, SRCCOPY);
 }

@@ -30,7 +30,7 @@ bool ActiveUploader::uploadImp(const std::string& file)
 	Path p(file);
 	DUITRACE("upload file : %s -> Remote WorkingDirectory %s", p.getFileName().c_str(), _session.getWorkingDirectory().c_str());
 	poco_information_f2(Poco::Logger::get("FileLogger"), "upload file : %s -> Remote WorkingDirectory %s", 
-		p.getFileName().c_str(), _session.getWorkingDirectory().c_str());
+		p.getFileName(), _session.getWorkingDirectory());
 
 	FileInputStream fis(file);
 	std::ostream& ostr = _session.beginUpload(p.getFileName());

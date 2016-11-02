@@ -29,7 +29,9 @@ CAppInitialize::CAppInitialize()
 	if (FAILED(Hr))
 		throw Poco::Exception("CoInitialize is failed!");
 	SetupLogger("log\\facerecognition.log");
+#ifndef _DEBUG
 	AttatchSDK();
+#endif
 	_commit.start();
 	LaunchMonitorServer();
 	
@@ -37,7 +39,9 @@ CAppInitialize::CAppInitialize()
 
 CAppInitialize::~CAppInitialize()
 {
+#ifndef _DEBUG
 	DetachedSDK();
+#endif
 	_commit.stop();
 	ShutdownLogger();
 	::CoUninitialize();

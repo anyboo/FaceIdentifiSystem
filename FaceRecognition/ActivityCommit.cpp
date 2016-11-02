@@ -52,7 +52,7 @@ void ActivityCommit::start()
 void ActivityCommit::stop()
 {
 	_activity.stop();
-	_activity.wait();
+	_activity.wait(3000);//15s 中止时间
 }
 
 #include <Poco/Net/IPAddress.h>
@@ -93,6 +93,8 @@ void ActivityCommit::runActivity()
 
 			while (!select.done())
 			{
+				if (_activity.isStopped()) break;
+
 				if (select.execute())
 				{
 					if (check_network_status())
@@ -129,7 +131,7 @@ void ActivityCommit::update_alert_upload_status(int uid)
 	}
 	catch (Poco::Data::SQLite::DBLockedException& e)
 	{
-		poco_information_f1(Poco::Logger::get("FileLogger"), "update_alert_upload_status %s", e.displayText().c_str());
+		poco_information_f1(Poco::Logger::get("FileLogger"), "update_alert_upload_status %s", e.displayText());
 		/*DUITRACE(e.displayText().c_str());
 		Thread::sleep(1000);
 		Statement update(_dbSession);
