@@ -4,7 +4,7 @@
   <Font shared="false" id="2" name="微软雅黑" size="26" bold="false" />
   <VerticalLayout height="765" inset="3,3,3,3" bkimage="file='skin/RegBJ.png'" bordersize="3" bordercolor="0x12345678">
     <HorizontalLayout width="1024" height="70" >
-      <Button name="close_btn" width="44" height="44" padding="10,10,0,0" tooltip="返回" normalimage="file='skin/back_normal.png'" hotimage="file='skin/back_hot.png'" pushedimage="file='skin/back_push.png'"/>
+      <Button name="close_btn2" width="44" height="44" padding="10,10,0,0" tooltip="返回" normalimage="file='skin/back_normal.png'" hotimage="file='skin/back_hot.png'" pushedimage="file='skin/back_push.png'"/>
       <Label text="系统管理" font="2" padding="0,0,0,0" textcolor="#FFFFFFFF" align="center" />
     </HorizontalLayout>
     <HorizontalLayout padding="10,10,0,0" width="1000" height="80">
