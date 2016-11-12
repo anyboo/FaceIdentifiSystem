@@ -308,6 +308,6 @@ void IPCameraUI::DrawFrame(HDC PaintDC)
 	int iHeight = bih.biHeight;
 	
 	::StretchDIBits(PaintDC, GetX(), GetY(), GetWidth(), GetHeight(),
-		0, 0, img2.cols, img2.rows, img2.data, &bi,
+		0, 0, _Frame->width, _Frame->height, _FrameRGB, &bi,
 		DIB_RGB_COLORS, SRCCOPY);
 }

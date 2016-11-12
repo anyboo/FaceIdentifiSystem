@@ -41,6 +41,7 @@ protected:
 	void onTimer(Poco::Timer& timer);
 	void popData2UI(int id);
 	void update_db_onduty(int id);
+	void commit_to_server(int id);
 private:
 	Poco::Timer _watch_dog;
 	Poco::TimerCallback<CSignInUI> _callback;

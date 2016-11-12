@@ -14,6 +14,7 @@
 #include <Poco/Path.h>
 #include <Poco/Logger.h>
 
+#include "ActiveReporter.h"
 #include "THFaceImage_i.h"
 #include "THFeature_i.h"
 
@@ -135,8 +136,37 @@ void CSignOutUI::OnFilishMatch(TNotifyUI& msg)
 {
 	//发送数据到服务端
 	update_db_onduty(_id_from_detected);
+	commit_to_server(_id_from_detected);
 	m_closeApp = false;
 	Close();
+}
+
+
+void CSignOutUI::commit_to_server(int id)
+{
+	HTTPClientSession session("202.103.191.73");
+	ActiveReporter rp(session);
+
+	/*
+	body:{"api":"user_signed_status", "user_id":"42", "status":"0"}
+	*/
+
+	Document d;
+	d.SetObject();
+
+	d.AddMember("api", "user_signed_status", d.GetAllocator());
+	d.AddMember("user_id", "0", d.GetAllocator());
+	d.AddMember("status", id, d.GetAllocator());
+
+	StringBuffer sb;
+	Writer<StringBuffer> writer(sb);
+	d.Accept(writer);
+
+	ActiveResult<std::string> result = rp.report(sb.GetString());
+
+	result.wait();
+	std::string received = result.data();
+	DUITRACE("HTTP RECEIVED : %s", received);
 }
 
 void CSignOutUI::ShowMatchInfo()

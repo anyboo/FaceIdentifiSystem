@@ -8,23 +8,25 @@
         <Text text="所属区域" font="1" width="110" height="40" align="left" padding="10,10,0,0"/>
         <Text text="单位名称" font="1" width="110" height="40" align="left" padding="10,10,0,0"/>
         <Text text="设备名称" font="1" width="110" height="40" align="left" padding="10,10,0,0"/>
+        <Text text="建筑名称" font="1" width="110" height="40" align="left" padding="10,10,0,0"/>
         <Text text="详细地址" font="1" width="110" height="40" align="left" padding="10,10,0,0"/>
         <Text text="设备IP" font="1" width="110" height="40" align="left" padding="10,10,0,0"/>
         <Text text="负责人1" font="1" width="110" height="40" align="left" padding="10,10,0,0"/>
         <Text text="联系电话" font="1" width="110" height="40" align="left" padding="10,10,0,0"/>
       </VerticalLayout>
       <VerticalLayout width="310">
-        <Edit name="" width="290" height="40" font="1"  padding="0,10,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
-        <Edit name="" width="290" height="40" font="1"  padding="0,10,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
-        <Edit name="" width="290" height="40" font="1"  padding="0,10,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
-        <Edit name="" width="290" height="40" font="1"  padding="0,10,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
-        <Edit name="" width="290" height="40" font="1"  padding="0,10,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
-        <Edit name="" width="290" height="40" font="1"  padding="0,10,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
-        <Edit name="" width="290" height="40" font="1"  padding="0,10,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
-        <Edit name="" width="290" height="40" font="1"  padding="0,10,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
+        <Edit name="devType" width="290" height="40" font="1"  padding="0,10,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
+        <Edit name="devArea" width="290" height="40" font="1"  padding="0,10,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
+        <Edit name="devUnit" width="290" height="40" font="1"  padding="0,10,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
+        <Edit name="devName" width="290" height="40" font="1"  padding="0,10,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
+        <Edit name="building" width="290" height="40" font="1"  padding="0,10,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
+        <Edit name="devDetailAddress" width="290" height="40" font="1"  padding="0,10,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
+        <Edit name="devIP" width="290" height="40" font="1"  padding="0,10,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
+        <Edit name="devRespon" width="290" height="40" font="1"  padding="0,10,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
+        <Edit name="devResponPhone" width="290" height="40" font="1"  padding="0,10,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
       </VerticalLayout>
       <VerticalLayout width="400" height="500" padding="50,40,0,0" >
-        <Button name="photo" width="140" height="60" padding="120,18,0,0" text="注册" font="1" textcolor="#FFFFFFFF" pushedimage="file='skin/push_photo.png'" normalimage="skin/normol_photo.png" hotimage="skin/hot_photo.png"/>
+        <Button name="register" width="140" height="60" padding="120,18,0,0" text="注册" font="1" textcolor="#FFFFFFFF" pushedimage="file='skin/push_photo.png'" normalimage="skin/normol_photo.png" hotimage="skin/hot_photo.png"/>
     </VerticalLayout>
     </HorizontalLayout>
 </Window>

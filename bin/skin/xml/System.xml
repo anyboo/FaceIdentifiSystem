@@ -11,14 +11,14 @@
         <Text text="面部捕获大小" font="1" width="200" height="40" align="left" padding="10,10,0,0"/>
       </VerticalLayout>
       <VerticalLayout width="310">
-        <Edit name="" width="290" height="40" font="1"  padding="0,10,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
-        <Edit name="" width="290" height="40" font="1"  padding="0,10,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
-        <Edit name="" width="290" height="40" font="1"  padding="0,10,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
-        <Edit name="" width="290" height="40" font="1"  padding="0,10,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
-        <Edit name="" width="290" height="40" font="1"  padding="0,10,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
+        <Edit name="duty" width="290" height="40" font="1"  padding="0,10,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
+        <Edit name="monitor" width="290" height="40" font="1"  padding="0,10,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
+        <Edit name="alarm" width="290" height="40" font="1"  padding="0,10,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
+        <Edit name="percent" width="290" height="40" font="1"  padding="0,10,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
+        <Edit name="facesize" width="290" height="40" font="1"  padding="0,10,0,0" normalimage="file='skin/edit.png'" focusedimage="file='skin/edit_hot.png'"/>
       </VerticalLayout>
       <VerticalLayout width="400" height="500" padding="50,40,0,0" >
-        <Button name="photo" width="140" height="60" padding="120,18,0,0" text="保存" font="1" textcolor="#FFFFFFFF" pushedimage="file='skin/push_photo.png'" normalimage="skin/normol_photo.png" hotimage="skin/hot_photo.png"/>
+        <Button name="save" width="140" height="60" padding="120,18,0,0" text="保存" font="1" textcolor="#FFFFFFFF" pushedimage="file='skin/push_photo.png'" normalimage="skin/normol_photo.png" hotimage="skin/hot_photo.png"/>
     </VerticalLayout>
     </HorizontalLayout>
 </Window>
