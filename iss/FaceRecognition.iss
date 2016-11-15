@@ -2,7 +2,7 @@
 ; 有关创建 Inno Setup 脚本文件的详细资料请查阅帮助文档！
 
 #define MyAppName "FaceRecognition"
-#define MyAppVersion "v1.0.1"
+#define MyAppVersion "v1.0.2"
 #define MyAppPublisher "龙脉安信"
 #define MyAppURL "http://www.rmax.com/"
 #define MyAppExeName "FaceRecognition.exe"
@@ -51,14 +51,13 @@ Source: "..\bin\*.dll"; 												DestDir: "{app}"; Flags: ignoreversion; Excl
 Source: "..\bin\facerecog.db"; 										DestDir: "{app}"; Flags: ignoreversion
 Source: "..\bin\feadb.db1"; 										DestDir: "{app}"; Flags: ignoreversion
 Source: "..\bin\feadb.db3"; 										DestDir: "{app}"; Flags: ignoreversion
-Source: "..\bin\no_body_show.jpg"; 										DestDir: "{app}"; Flags: ignoreversion
+Source: "..\bin\*.jpg"; 										DestDir: "{app}"; Flags: ignoreversion
 Source: "..\bin\*.json"; 										DestDir: "{app}"; Flags: ignoreversion
 Source: "..\bin\*.wav"; 										DestDir: "{app}"; Flags: ignoreversion
 Source: "..\bin\*.ini"; 										DestDir: "{app}"; Flags: ignoreversion
 Source: "..\bin\facerecog.db"; 										DestDir: "{app}"; Flags: ignoreversion
 Source: "..\bin\FaceRecognition.exe"; 								DestDir: "{app}"; Flags: ignoreversion
 Source: "..\bin\faceMonitorServer.exe"; 								DestDir: "{app}"; Flags: ignoreversion
-	
 
 Source: "..\bin\sqldrivers\*"; 					  						DestDir: "{app}\sqldrivers"; 	Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "..\bin\skins\*"; 		Excludes:"*.lib;*.pdb";				DestDir: "{app}\skins"; 		Flags: ignoreversion recursesubdirs createallsubdirs
